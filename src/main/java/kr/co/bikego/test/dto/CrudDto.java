@@ -13,20 +13,20 @@ public class CrudDto {
     private Long id;
     private String title;
     private String contents;
-    private String id_attach;
-    private String id_writer;
-    private LocalDateTime date_write;
-    private String id_modifier;
-    private LocalDateTime date_modify;
+    private String attachId;
+    private String writerId;
+    private LocalDateTime writeDate;
+    private String modifierId;
+    private LocalDateTime modifyDate;
 
     public CrudEntity toEntity() {
         CrudEntity crudEntity = CrudEntity.builder()
                 .id(id)
                 .title(title)
                 .contents(contents)
-                .id_attach(id_attach)
-                .id_writer(id_writer)
-                .id_modifier(id_modifier)
+                .id_attach(attachId)
+                .id_writer(writerId)
+                .id_modifier(modifierId)
                 .build();
         return crudEntity;
     }
@@ -36,10 +36,10 @@ public class CrudDto {
         this.id = id;
         this.title = title;
         this.contents = contents;
-        this.id_attach = id_attach;
-        this.id_writer = id_writer;
-        this.date_write = date_write;
-        this.id_modifier = id_modifier;
-        this.date_modify = date_modify;
+        this.attachId = id_attach;
+        this.writerId = id_writer;
+        this.writeDate = date_write;
+        this.modifierId = id_modifier;
+        this.modifyDate = date_modify;
     }
 }

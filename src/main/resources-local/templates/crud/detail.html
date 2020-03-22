@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2 th:text="${crudDto.title}"></h2>
-<p th:inline="text">작성일 : [[${#temporals.format(crudDto.date_write, 'yyyy-MM-dd HH:mm')}]]</p>
+<p th:inline="text">작성일 : [[${#temporals.format(crudDto.writeDate, 'yyyy-MM-dd HH:mm')}]]</p>
 
 <p th:text="${crudDto.contents}"></p>
 
