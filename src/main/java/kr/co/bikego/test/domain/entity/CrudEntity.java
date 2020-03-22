@@ -1,6 +1,6 @@
 package kr.co.bikego.test.domain.entity;
 
-import javafx.scene.NodeBuilder;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
