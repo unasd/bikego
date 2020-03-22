@@ -1,4 +1,4 @@
-package kr.co.bikego.Controller;
+package kr.co.bikego.controller;
 
 public class MainController {
 }
