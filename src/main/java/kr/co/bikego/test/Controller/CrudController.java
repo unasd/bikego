@@ -11,27 +11,28 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
+@RequestMapping("/crud")
 public class CrudController {
     private CrudService crudService;
 
-    @GetMapping("/")
+    @GetMapping("/list")
     public String list(Model model){
         List<CrudDto> crudList = crudService.getCrudList();
 
         model.addAttribute("crudList", crudList);
-        return "crud/list.html";
+        return "crud/list";
     }
 
     @GetMapping("/post")
     public String write() {
-        return "crud/write.html";
+        return "crud/write";
     }
 
     @PostMapping("/post")
     public String write(CrudDto crudDto) {
         crudService.savePost(crudDto);
 
-        return "redirect:/";
+        return "redirect:/crud/list";
     }
 
     @GetMapping("/post/{no}")
@@ -39,7 +40,7 @@ public class CrudController {
         CrudDto crudDto = crudService.getPost(no);
 
         model.addAttribute("crudDto", crudDto);
-        return "crud/detail.html";
+        return "crud/detail";
     }
 
     @GetMapping("/post/edit/{no}")
@@ -47,20 +48,20 @@ public class CrudController {
         CrudDto crudDto = crudService.getPost(no);
 
         model.addAttribute("crudDto", crudDto);
-        return "crud/update.html";
+        return "crud/update";
     }
 
     @PutMapping("/post/edit/{no}")
     public String update(CrudDto crudDto) {
         crudService.savePost(crudDto);
 
-        return "redirect:/";
+        return "redirect:/crud/list";
     }
 
     @DeleteMapping("/post/{no}")
     public String delete(@PathVariable("no") Long no) {
         crudService.deletePost(no);
 
-        return "redirect:/";
+        return "redirect:/crud/list";
     }
 }

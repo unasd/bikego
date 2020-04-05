@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+    <head th:replace="../fragments/config :: configFragment">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+        <title layout:title-pattern="$LAYOUT_TITLE : $CONTENT_TITLE">BikeGo</title>
+    </head>
+    <header th:replace="../fragments/header :: headerFragment"></header>
+    <div layout:fragment="content"></div>
+    <footer th:replace="../fragments/footer:: footerFragment"></footer>
+
+</html>
