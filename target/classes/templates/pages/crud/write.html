@@ -10,20 +10,28 @@
     <script src="/static/lib/ckeditor/ckeditor.js"></script>
     <script>
         $(document).ready(function(){
-            // Replace the <textarea id="editor1"> with a CKEditor
-            // instance, using default configuration.
-            CKEDITOR.replace( 'contents' );
+            CKEDITOR.replace( 'contents',{
+                filebrowserUploadUrl: '/upload/ckEditorImage'
+            } );
         })
 
     </script>
+    <script th:inline="javascript" th:src="@{/static/js/crud.js}"></script>
 </th:block>
 
 <div layout:fragment="content" >
     <form action="/crud/post" method="post">
-        제목 : <input type="text" name="title"><br>
-        작성자 : <input type="text" name="writerId"><br>
+        <div class="input-field col s12">
+            <input type="text" id="title" name="title">
+            <label for="title">제목</label>
+        </div>
+        <div class="input-field col s12">
+            <input type="text" id="writerId" name="writerId"><br>
+            <label for="writerId">작성자</label>
+        </div>
         <textarea name="contents"></textarea><br>
-        <input type="submit" value="등록">
+
+        <a class="waves-effect waves-light btn-small">등록</a>
     </form>
 </div>
 </html>
