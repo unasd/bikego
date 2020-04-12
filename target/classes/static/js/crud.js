@@ -1,1 +1,3 @@
-console.log(crudDto);
+$(document).ready(function(){
+
+});

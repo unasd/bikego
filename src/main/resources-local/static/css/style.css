@@ -9,14 +9,11 @@
 .icon-block {
   padding: 0 15px;
 }
+
 .icon-block .material-icons {
 	font-size: inherit;
 }
 
 table {
     border-collapse: collapse;
-}
-
-table, th, td {
-    border: 1px solid black;
 }
