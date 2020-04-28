@@ -29,9 +29,8 @@ public class CrudController {
     }
 
     @PostMapping("/post")
-    public String write(CrudDto crudDto) {
-        crudService.savePost(crudDto);
-
+    public String write(CrudDto crudDto, String[] image, String[] imageName, String[] imageSize) {
+        crudService.savePost(crudDto, image, imageName, imageSize);
         return "redirect:/crud/list";
     }
 
@@ -53,7 +52,7 @@ public class CrudController {
 
     @PutMapping("/post/edit/{no}")
     public String update(CrudDto crudDto) {
-        crudService.savePost(crudDto);
+        crudService.savePost(crudDto, null, null, null);
 
         return "redirect:/crud/list";
     }

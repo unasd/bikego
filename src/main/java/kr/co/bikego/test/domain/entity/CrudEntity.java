@@ -23,8 +23,8 @@ public class CrudEntity extends TimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String contents;
 
-    @Column(length = 11, nullable = true)
-    private String id_attach;
+    @Column(length = 30, nullable = true)
+    private String attach_id;
 
     @Column(length = 20, nullable = false)
     private String id_writer;
@@ -33,11 +33,11 @@ public class CrudEntity extends TimeEntity {
     private String id_modifier;
 
     @Builder
-    public CrudEntity(Long id, String title, String contents, String id_attach, String id_writer, String id_modifier) {
+    public CrudEntity(Long id, String title, String contents, String attach_id, String id_writer, String id_modifier) {
         this.id = id;
         this.title = title;
         this.contents = contents;
-        this.id_attach = id_attach;
+        this.attach_id = attach_id;
         this.id_writer = id_writer;
         this.id_modifier = id_modifier;
     }

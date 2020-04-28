@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="../layout/default">
+
+<!-- page CSS -->
+<th:block layout:fragment="css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Position the image container (needed to position the left and right arrows) */
+        .container {
+            position: relative;
+        }
+
+        /* Hide the images by default */
+        .largeSlide {
+            display: block;
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            background-size: contain;
+            -moz-background-size: contain;
+            background-color: #9e9e9e;
+            background-position: center center;
+            background-repeat: no-repeat;
+            border: 1px solid #000;
+            margin-bottom: 5px;
+        }
+
+        /* Add a pointer when hovering over the thumbnail images */
+        .cursor {
+            cursor: pointer;
+        }
+
+        /* Next & previous buttons */
+        .prev,
+        .next {
+            cursor: pointer;
+            position: absolute;
+            top: 40%;
+            width: auto;
+            padding: 16px;
+            margin-top: -50px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* Position the "next button" to the right */
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        /* On hover, add a black background color with a little bit see-through */
+        .prev:hover,
+        .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Number text (1/3 etc) */
+        .numbertext {
+            color: #f2f2f2;
+            font-size: 12px;
+            padding: 8px 12px;
+            position: absolute;
+            top: 0;
+        }
+
+        /* Container for image text */
+        .caption-container {
+            text-align: center;
+            background-color: #222;
+            padding: 2px 16px;
+            color: white;
+        }
+
+        .row {
+            height: 100px;
+            display: grid;
+            grid-template-columns: repeat(6,minmax(0,1fr));
+            grid-template-rows: repeat(1,minmax(0,1fr));
+            grid-gap: 4px;
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Six columns side by side */
+        .column {
+            float: left;
+            height: 100%;
+            background-color: #9e9e9e;
+        }
+
+        /* Add a transparency effect for thumnbail images */
+        .slideImg {
+            opacity: 0.6;
+            width: 100%;
+            height: 100%;
+        }
+        .active,
+        .slideImg:hover {
+            opacity: 1;
+        }
+    </style>
+</th:block>
+
+<!-- page 스크립트 -->
+<th:block layout:fragment="script">
+    <script src="/static/lib/ckeditor/ckeditor.js"></script>
+    <script>
+        let slideIndex = 0;
+        function plusSlides(n) {
+            slideIndex += n
+            console.info(slideIndex)
+            // 이미지가 존재하는 범위내에 있는지 체크
+            if(slideIndex > 5) {
+                slideIndex = 0;
+            } else if(slideIndex < 0) {
+                slideIndex = 5;
+            }
+            showSlides(slideIndex);
+        }
+
+        function showSlides(n) {
+            slideIndex = Number(n);
+            var dots = $('.slideImg');
+            if(dots.length > 0) {
+                dots.removeClass('active');
+                $('.largeSlide').eq(0).css({'background-image' : 'url('+ dots.eq(n).attr('src') +')'});
+                dots.eq(n).addClass('active');
+                $('#numbertext').text((Number(n)+1) + '/ 6');
+            }
+        }
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                var columnIndex = $(input).attr('data-columnIndex');
+
+                reader.onload = function (e) {
+                    var slideImg = document.createElement('img');
+                    slideImg.setAttribute('class', 'slideImg cursor');
+                    slideImg.setAttribute('src', e.target.result);
+                    $('.column').eq(columnIndex).html(slideImg)
+                    showSlides(columnIndex);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $(document).ready(function(){
+            CKEDITOR.replace( 'contents',{
+                filebrowserUploadUrl: '/upload/ckEditorImage'
+            });
+
+            showSlides(slideIndex);
+
+            $('#imgInput').change(function(){
+                readURL(this);
+            });
+
+            $('.column').click(function(){
+                var columnIndex = $(this).index('.column');
+                slideIndex = columnIndex;
+                showSlides(columnIndex);
+                $('#imgInput').attr('data-columnIndex', columnIndex);
+                $('#imgInput').click();
+            });
+        });
+    </script>
+    <script th:inline="javascript" th:src="@{/static/js/crud.js}"></script>
+</th:block>
+
+<div layout:fragment="content" >
+    <form action="/crud/post" method="post">
+        <div class="input-field col s12">
+            <input type="text" id="title" name="title">
+            <label for="title">제목</label>
+        </div>
+        <div class="input-field col s12">
+            <input type="text" id="writerId" name="writerId"><br>
+            <label for="writerId">작성자</label>
+        </div>
+        <textarea name="contents"></textarea><br>
+
+        <div class="container">
+            <div class="largeSlide">
+                <div id="numbertext" class="numbertext"></div>
+            </div>
+
+            <a class="prev" onclick="plusSlides(-1)">❮</a>
+            <a class="next" onclick="plusSlides(1)">❯</a>
+
+            <div class="row">
+                <div class="column">
+                </div>
+                <div class="column">
+                </div>
+                <div class="column">
+                </div>
+                <div class="column">
+                </div>
+                <div class="column">
+                </div>
+                <div class="column">
+                </div>
+            </div>
+        </div>
+        <input type="file" id="imgInput" multiple accept="image/*"/>
+        <img id="image_section" src="#" alt="your image"/>
+
+        <a class="waves-effect waves-light btn-small">등록</a>
+    </form>
+</div>
+</html>

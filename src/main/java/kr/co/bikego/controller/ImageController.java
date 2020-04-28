@@ -26,10 +26,10 @@ public class ImageController {
     private ImageService imageService;
 
     @GetMapping(
-            value = "/resizeImgView"
+            value = "/imgView.do"
     )
-    public void resizeImgView(HttpServletResponse response) throws IOException {
-        String orgFileNm = "C:\\Users\\jsh\\Pictures\\SW1_0840.JPG";
+    public void imgView(HttpServletResponse response) throws IOException {
+        String orgFileNm = "C:\\Users\\user\\Pictures\\IMG_4199.jpg";
         response.setContentType("image/jpeg");
         response.setHeader("Content-Disposition","filename=\"" + orgFileNm + "\"");
 
@@ -50,12 +50,12 @@ public class ImageController {
         }
     }
 
-    @GetMapping(value = "/view.do", headers = "Accept=image/jpeg, image/jpg, image/png, image/gif")
-    public @ResponseBody byte[] getImage() throws Exception {
+    @GetMapping(value = "/resizeImgView.do", headers = "Accept=image/jpeg, image/jpg, image/png, image/gif")
+    public @ResponseBody byte[] resizeImgView() throws Exception {
         try {
-            String orgFileNm = "C:\\Users\\jsh\\Pictures\\SW1_0840.JPG";
+            String orgFileNm = "C:\\Users\\user\\Pictures\\우체국마스크.PNG";
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ImageIO.write( imageService.getResizeImg(orgFileNm, 1000)  , "jpg", byteArrayOutputStream);
+            ImageIO.write( imageService.getResizeImg(orgFileNm, 0)  , "JPEG", byteArrayOutputStream);
             return byteArrayOutputStream.toByteArray();
 
         } catch (IOException e) {

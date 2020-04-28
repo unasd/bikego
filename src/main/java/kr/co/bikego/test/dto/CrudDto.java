@@ -24,7 +24,7 @@ public class CrudDto {
                 .id(id)
                 .title(title)
                 .contents(contents)
-                .id_attach(attachId)
+                .attach_id(attachId)
                 .id_writer(writerId)
                 .id_modifier(modifierId)
                 .build();

@@ -20,7 +20,7 @@ import java.util.UUID;
 @RequestMapping("/upload")
 public class UploadController {
 
-    @PostMapping(value="/ckImg"
+    @PostMapping(value="/imgUpload.do"
                 , produces = MediaType.IMAGE_JPEG_VALUE)
     public @ResponseBody byte[] ckImg(HttpServletRequest req, HttpServletResponse resp,
                                               MultipartHttpServletRequest multiFile) throws Exception {
