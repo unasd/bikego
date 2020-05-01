@@ -52,8 +52,8 @@ public class AttachService {
         return attachDto;
     }
 
-    public List<AttachDto> getAttachInfoList(String attachId) {
-        List<AttachEntity> attachEntities = attachRepository.findByIdAttach(attachId);
+    public List<AttachDto> getAttachInfoList(String idAttach) {
+        List<AttachEntity> attachEntities = attachRepository.findByIdAttach(idAttach);
 
         List<AttachDto> attachDtoList = new ArrayList<>();
 

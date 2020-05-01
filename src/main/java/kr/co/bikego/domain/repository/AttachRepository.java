@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface AttachRepository extends JpaRepository<AttachEntity, AttachId> {
-    List<AttachEntity> findByIdAttach(String attachId);
+    List<AttachEntity> findByIdAttach(String idAttach);
 
-    AttachEntity findByIdAttachAndSnFileAttach(String attachId, int attachFileSn);
+    AttachEntity findByIdAttachAndSnFileAttach(String idAttach, int snFileAttach);
 }
