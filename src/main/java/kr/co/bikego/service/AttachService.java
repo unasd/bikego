@@ -33,6 +33,12 @@ public class AttachService {
         return attachRepository.save(attachDto.toEntity()).getIdAttach();
     }
 
+    /**
+     * 첨부파일 단건조회
+     * @param idAttach
+     * @param snFileAttach
+     * @return
+     */
     public AttachDto getAttachInfo(String idAttach, int snFileAttach) {
         AttachEntity attachEntity = attachRepository.findByIdAttachAndSnFileAttach(idAttach, snFileAttach);
         AttachDto attachDto = AttachDto.builder()
