@@ -13,7 +13,7 @@ public class CrudDto {
     private Long id;
     private String title;
     private String contents;
-    private String attachId;
+    private String idAttach;
     private String writerId;
     private LocalDateTime writeDate;
     private String modifierId;
@@ -24,7 +24,7 @@ public class CrudDto {
                 .id(id)
                 .title(title)
                 .contents(contents)
-                .attach_id(attachId)
+                .attach_id(idAttach)
                 .id_writer(writerId)
                 .id_modifier(modifierId)
                 .build();
@@ -32,11 +32,11 @@ public class CrudDto {
     }
 
     @Builder
-    public CrudDto (Long id, String title, String contents, String id_attach, String id_writer, LocalDateTime date_write, String id_modifier, LocalDateTime date_modify) {
+    public CrudDto (Long id, String title, String contents, String idAttach, String id_writer, LocalDateTime date_write, String id_modifier, LocalDateTime date_modify) {
         this.id = id;
         this.title = title;
         this.contents = contents;
-        this.attachId = id_attach;
+        this.idAttach = idAttach;
         this.writerId = id_writer;
         this.writeDate = date_write;
         this.modifierId = id_modifier;

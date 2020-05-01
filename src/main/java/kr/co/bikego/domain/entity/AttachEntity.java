@@ -20,11 +20,10 @@ public class AttachEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    private String attach_id;
+    private String attachId;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int attach_file_sn;
+    private int attachFileSn;
 
     @Column(length = 300, nullable = false)
     private String attach_file_org_nm;
@@ -58,12 +57,12 @@ public class AttachEntity implements Serializable {
     private LocalDateTime attach_moddt;
 
     @Builder
-    public AttachEntity(String attach_id, int attach_file_sn, String attach_file_org_nm, String attach_file_srv_nm
+    public AttachEntity(String attachId, int attachFileSn, String attach_file_org_nm, String attach_file_srv_nm
                         , String attach_file_path, Long attach_file_size, String attach_extends
                         , String del_yn, String attach_register, LocalDateTime attach_regdt
                         , String attach_modifier, LocalDateTime attach_moddt) {
-        this.attach_id = attach_id;
-        this.attach_file_sn = attach_file_sn;
+        this.attachId = attachId;
+        this.attachFileSn = attachFileSn;
         this.attach_file_org_nm = attach_file_org_nm;
         this.attach_file_srv_nm = attach_file_srv_nm;
         this.attach_file_path = attach_file_path;

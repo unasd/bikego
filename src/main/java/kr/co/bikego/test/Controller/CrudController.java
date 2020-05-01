@@ -1,5 +1,7 @@
 package kr.co.bikego.test.Controller;
 
+import kr.co.bikego.dto.AttachDto;
+import kr.co.bikego.service.AttachService;
 import kr.co.bikego.test.dto.CrudDto;
 import kr.co.bikego.test.service.CrudService;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequestMapping("/crud")
 public class CrudController {
     private CrudService crudService;
+    private AttachService attachService;
 
     @GetMapping("/list")
     public String list(Model model){
@@ -37,8 +40,10 @@ public class CrudController {
     @GetMapping("/post/{no}")
     public String detail(@PathVariable("no") Long no, Model model) {
         CrudDto crudDto = crudService.getPost(no);
+        List<AttachDto> attachDtoList = attachService.getAttachInfoList(crudDto.getIdAttach());
 
         model.addAttribute("crudDto", crudDto);
+        model.addAttribute("attachDtoList", attachDtoList);
         return "crud/detail";
     }
 

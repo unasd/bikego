@@ -27,7 +27,8 @@ public class AttachDto {
 
     public AttachEntity toEntity() {
         AttachEntity attachEntity = AttachEntity.builder()
-                .attach_id(idAttach)
+                .attachId(idAttach)
+                .attachFileSn(snFileAttach)
                 .attach_file_org_nm(nmOrgFileAttach)
                 .attach_file_srv_nm(nmSrvFileAttach)
                 .attach_file_path(pathFileAttach)
@@ -43,12 +44,12 @@ public class AttachDto {
     }
 
     @Builder
-    public AttachDto(String attach_id, int attach_file_sn, String attach_file_org_nm, String attach_file_srv_nm
+    public AttachDto(String attach_id, int attachFileSn, String attach_file_org_nm, String attach_file_srv_nm
                         , String attach_file_path, Long attach_file_size, String attach_extends
                         , String del_yn, String attach_register, LocalDateTime attach_regdt
                         , String attach_modifier, LocalDateTime attach_moddt) {
         this.idAttach = attach_id;
-        this.snFileAttach = attach_file_sn;
+        this.snFileAttach = attachFileSn;
         this.nmOrgFileAttach = attach_file_org_nm;
         this.nmSrvFileAttach = attach_file_srv_nm;
         this.pathFileAttach = attach_file_path;

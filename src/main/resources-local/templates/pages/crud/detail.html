@@ -3,6 +3,112 @@
 
 <!-- page CSS -->
 <th:block layout:fragment="css">
+    <style>
+        /* Position the image container (needed to position the left and right arrows) */
+        .container {
+            position: relative;
+        }
+
+        /* Hide the images by default */
+        .largeSlide {
+            display: block;
+            width: 100%;
+            height: 100%;
+            min-height: 360px;
+            background-size: contain;
+            -moz-background-size: contain;
+            background-color: #9e9e9e;
+            background-position: center center;
+            background-repeat: no-repeat;
+            border: 1px solid #000;
+            margin-bottom: 5px;
+        }
+
+        /* Add a pointer when hovering over the thumbnail images */
+        .cursor {
+            cursor: pointer;
+        }
+
+        /* Next & previous buttons */
+        .prev,
+        .next {
+            cursor: pointer;
+            position: absolute;
+            top: 40%;
+            width: auto;
+            padding: 16px;
+            margin-top: -50px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* Position the "next button" to the right */
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        /* On hover, add a black background color with a little bit see-through */
+        .prev:hover,
+        .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Number text (1/3 etc) */
+        .numbertext {
+            color: #f2f2f2;
+            font-size: 12px;
+            padding: 8px 12px;
+            position: absolute;
+            top: 0;
+        }
+
+        /* Container for image text */
+        .caption-container {
+            text-align: center;
+            background-color: #222;
+            padding: 2px 16px;
+            color: white;
+        }
+
+        .imgRow {
+            height: 50px;
+            display: grid;
+            grid-template-columns: repeat(6,minmax(0,1fr));
+            grid-template-rows: repeat(1,minmax(0,1fr));
+            grid-gap: 4px;
+        }
+
+        .imgRow:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Six columns side by side */
+        .column {
+            position: relative;
+            float: left;
+            height: 100%;
+            background-color: #9e9e9e;
+        }
+
+        /* Add a transparency effect for thumnbail images */
+        .slideImg {
+            opacity: 0.6;
+            width: 100%;
+            height: 100%;
+        }
+        .active,
+        .slideImg:hover {
+            opacity: 1;
+        }
+
+    </style>
 </th:block>
 
 <!-- page 스크립트 -->
@@ -23,6 +129,14 @@
     <p th:inline="text">작성일 : [[${#temporals.format(crudDto.writeDate, 'yyyy-MM-dd HH:mm')}]]</p>
 
     <p th:text="${crudDto.contents}"></p>
+
+    <div class="container">
+        <div class="imgRow">
+            <div th:each="attachDto : ${attachDtoList}" class="column">
+                <img class="slideImg curosr" th:src="@{'/attach/resizeImgView.do/' + ${attachDto.idAttach} + '/' + ${attachDto.snFileAttach}}"/>
+            </div>
+        </div>
+    </div>
 
     <!-- 수정/삭제 -->
     <div>

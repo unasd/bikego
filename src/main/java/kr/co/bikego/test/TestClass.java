@@ -130,28 +130,30 @@ public class TestClass {
     @Transactional
     @Rollback(false)
     public void insertTest(){
-        LocalDateTime localDateTime = LocalDateTime.now();
-        String time = localDateTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS"));
-        String type = "as";
-        String randomValue = String.valueOf(10000 + new Random().nextInt(90000));;
-
-        AttachId attachId = new AttachId();
+//        LocalDateTime localDateTime = LocalDateTime.now();
+//        String time = localDateTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS"));
+//        String type = "as";
+//        String randomValue = String.valueOf(10000 + new Random().nextInt(90000));;
+//
+//        AttachId attachId = new AttachId();
 //        attachId.setAttach_id(time + "_" + type + "_"  + randomValue);
-        attachId.setAttach_id("20200425170878_as_82081");
+//        attachId.setAttach_id("20200425170878_as_82081");
+//
+//        AttachDto attachDto = new AttachDto();
+//        attachDto.setIdAttach("20200501085688_crud_35928");
+//        attachDto.setNmOrgFileAttach("test");
+//        attachDto.setNmSrvFileAttach("test");
+//        attachDto.setPathFileAttach("test");
+//        attachDto.setSizeFileAttach((long) 5000);
+//        attachDto.setExtendsAttach("jpg");
+//        attachDto.setRegisterAttach("tester");
+//        attachDto.setRegdtAttach(LocalDateTime.now());
+//        attachDto.setYnDel("N");
 
-        AttachDto attachDto = new AttachDto();
-        attachDto.setIdAttach(time + "_" + type + "_"  + randomValue);
-        attachDto.setNmOrgFileAttach("test");
-        attachDto.setNmSrvFileAttach("test");
-        attachDto.setPathFileAttach("test");
-        attachDto.setSizeFileAttach((long) 5000);
-        attachDto.setExtendsAttach("jpg");
-        attachDto.setRegisterAttach("tester");
-        attachDto.setRegdtAttach(LocalDateTime.now());
-        attachDto.setYnDel("N");
+//        List<AttachEntity> attachId2 = attachRepository.findByAttachId("20200501085688_crud_35928");
 
-        String attachId2 = attachRepository.save(attachDto.toEntity()).getAttach_id();
+        AttachEntity attachEntity = attachRepository.findByAttachIdAndAttachFileSn("20200501085688_crud_35928", 1);
 
-        System.out.println(attachId2);
+        System.out.println(attachEntity);
     }
 }

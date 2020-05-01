@@ -13,8 +13,8 @@ public class AttachId implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "attach_id")
-    private String attach_id;
+    private String attachId;
 
     @Column(name = "attach_file_sn")
-    private int attach_file_sn;
+    private int attachFileSn;
 }
