@@ -20,58 +20,59 @@ public class AttachEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    private String attachId;
+    private String idAttach;
 
     @Id
-    private int attachFileSn;
+    private int snFileAttach;
 
-    @Column(length = 300, nullable = false)
-    private String attach_file_org_nm;
+    @Column(length = 300, nullable = false, name = "attach_file_org_nm")
+    private String nmOrgFileAttach;
 
-    @Column(length = 300, nullable = false)
-    private String attach_file_srv_nm;
+    @Column(length = 300, nullable = false, name = "attach_file_srv_nm")
+    private String nmSrvFileAttach;
 
-    @Column(length = 300, nullable = false)
-    private String attach_file_path;
+    @Column(length = 300, nullable = false, name = "attach_file_path")
+    private String pathFileAttach;
 
-    @Column(nullable = false)
-    private Long attach_file_size;
+    @Column(nullable = false, name = "attach_file_size")
+    private Long sizeFileAttach;
 
-    @Column(length = 20, nullable = false)
-    private String attach_extends;
+    @Column(length = 20, nullable = false, name = "attach_extends")
+    private String extendsAttach;
 
-    @Column(length = 1, nullable = false)
-    private String del_yn;
+    @Column(length = 1, nullable = false, name = "del_yn")
+    private String ynDel;
 
-    @Column(length = 20, nullable = false)
-    private String attach_register;
+    @Column(length = 20, nullable = false, name = "attach_register")
+    private String registerAttach;
 
     @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime attach_regdt;
+    @Column(updatable = false, name = "attach_regdt")
+    private LocalDateTime regdtAttach;
 
-    @Column(length = 20, nullable = true)
-    private String attach_modifier;
+    @Column(length = 20, nullable = true, name = "attach_modifier")
+    private String modifierAttach;
 
     @LastModifiedDate
-    private LocalDateTime attach_moddt;
+    @Column(name = "attach_moddt")
+    private LocalDateTime moddtAttach;
 
     @Builder
-    public AttachEntity(String attachId, int attachFileSn, String attach_file_org_nm, String attach_file_srv_nm
-                        , String attach_file_path, Long attach_file_size, String attach_extends
-                        , String del_yn, String attach_register, LocalDateTime attach_regdt
-                        , String attach_modifier, LocalDateTime attach_moddt) {
-        this.attachId = attachId;
-        this.attachFileSn = attachFileSn;
-        this.attach_file_org_nm = attach_file_org_nm;
-        this.attach_file_srv_nm = attach_file_srv_nm;
-        this.attach_file_path = attach_file_path;
-        this.attach_file_size = attach_file_size;
-        this.attach_extends = attach_extends;
-        this.del_yn = del_yn;
-        this.attach_register = attach_register;
-        this.attach_regdt = attach_regdt;
-        this.attach_modifier = attach_modifier;
-        this.attach_moddt = attach_moddt;
+    public AttachEntity(String idAttach, int snFileAttach, String nmOrgFileAttach, String nmSrvFileAttach
+                        , String pathFileAttach, Long sizeFileAttach, String extendsAttach
+                        , String ynDel, String registerAttach, LocalDateTime regdtAttach
+                        , String modifierAttach, LocalDateTime moddtAttach) {
+        this.idAttach = idAttach;
+        this.snFileAttach = snFileAttach;
+        this.nmOrgFileAttach = nmOrgFileAttach;
+        this.nmSrvFileAttach = nmSrvFileAttach;
+        this.pathFileAttach = pathFileAttach;
+        this.sizeFileAttach = sizeFileAttach;
+        this.extendsAttach = extendsAttach;
+        this.ynDel = ynDel;
+        this.registerAttach = registerAttach;
+        this.regdtAttach = regdtAttach;
+        this.modifierAttach = modifierAttach;
+        this.moddtAttach = moddtAttach;
     }
 }

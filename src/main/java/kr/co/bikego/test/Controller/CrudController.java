@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -33,6 +34,7 @@ public class CrudController {
 
     @PostMapping("/post")
     public String write(CrudDto crudDto, String[] image, String[] imageName, String[] imageSize) {
+        crudDto.setWriteDate(LocalDateTime.now());
         crudService.savePost(crudDto, image, imageName, imageSize);
         return "redirect:/crud/list";
     }

@@ -1,11 +1,8 @@
 package kr.co.bikego.service;
 
 import kr.co.bikego.domain.entity.AttachEntity;
-import kr.co.bikego.domain.entity.AttachId;
 import kr.co.bikego.domain.repository.AttachRepository;
 import kr.co.bikego.dto.AttachDto;
-import kr.co.bikego.test.domain.entity.CrudEntity;
-import kr.co.bikego.test.dto.CrudDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,46 +30,46 @@ public class AttachService {
 
     @Transactional
     public String saveAttachInfo(AttachDto attachDto) {
-        return attachRepository.save(attachDto.toEntity()).getAttachId();
+        return attachRepository.save(attachDto.toEntity()).getIdAttach();
     }
 
     public AttachDto getAttachInfo(String idAttach, int snFileAttach) {
-        AttachEntity attachEntity = attachRepository.findByAttachIdAndAttachFileSn(idAttach, snFileAttach);
+        AttachEntity attachEntity = attachRepository.findByIdAttachAndSnFileAttach(idAttach, snFileAttach);
         AttachDto attachDto = AttachDto.builder()
-                .attach_id(attachEntity.getAttachId())
-                .attachFileSn(attachEntity.getAttachFileSn())
-                .attach_file_org_nm(attachEntity.getAttach_file_org_nm())
-                .attach_file_srv_nm(attachEntity.getAttach_file_srv_nm())
-                .attach_file_path(attachEntity.getAttach_file_path())
-                .attach_file_size(attachEntity.getAttach_file_size())
-                .del_yn(attachEntity.getDel_yn())
-                .attach_register(attachEntity.getAttach_register())
-                .attach_regdt(attachEntity.getAttach_regdt())
-                .attach_modifier(attachEntity.getAttach_modifier())
-                .attach_moddt(attachEntity.getAttach_moddt())
+                .idAttach(attachEntity.getIdAttach())
+                .snFileAttach(attachEntity.getSnFileAttach())
+                .nmOrgFileAttach(attachEntity.getNmOrgFileAttach())
+                .nmSrvFileAttach(attachEntity.getNmSrvFileAttach())
+                .pathFileAttach(attachEntity.getPathFileAttach())
+                .sizeFileAttach(attachEntity.getSizeFileAttach())
+                .ynDel(attachEntity.getYnDel())
+                .registerAttach(attachEntity.getRegisterAttach())
+                .regdtAttach(attachEntity.getRegdtAttach())
+                .modifierAttach(attachEntity.getModifierAttach())
+                .moddtAttach(attachEntity.getModdtAttach())
                 .build();
 
         return attachDto;
     }
 
     public List<AttachDto> getAttachInfoList(String attachId) {
-        List<AttachEntity> attachEntities = attachRepository.findByAttachId(attachId);
+        List<AttachEntity> attachEntities = attachRepository.findByIdAttach(attachId);
 
         List<AttachDto> attachDtoList = new ArrayList<>();
 
         for(AttachEntity attachEntity : attachEntities) {
             AttachDto attachDto = AttachDto.builder()
-                    .attach_id(attachEntity.getAttachId())
-                    .attachFileSn(attachEntity.getAttachFileSn())
-                    .attach_file_org_nm(attachEntity.getAttach_file_org_nm())
-                    .attach_file_srv_nm(attachEntity.getAttach_file_srv_nm())
-                    .attach_file_path(attachEntity.getAttach_file_path())
-                    .attach_file_size(attachEntity.getAttach_file_size())
-                    .del_yn(attachEntity.getDel_yn())
-                    .attach_register(attachEntity.getAttach_register())
-                    .attach_regdt(attachEntity.getAttach_regdt())
-                    .attach_modifier(attachEntity.getAttach_modifier())
-                    .attach_moddt(attachEntity.getAttach_moddt())
+                    .idAttach(attachEntity.getIdAttach())
+                    .snFileAttach(attachEntity.getSnFileAttach())
+                    .nmOrgFileAttach(attachEntity.getNmOrgFileAttach())
+                    .nmSrvFileAttach(attachEntity.getNmSrvFileAttach())
+                    .pathFileAttach(attachEntity.getPathFileAttach())
+                    .sizeFileAttach(attachEntity.getSizeFileAttach())
+                    .ynDel(attachEntity.getYnDel())
+                    .registerAttach(attachEntity.getRegisterAttach())
+                    .regdtAttach(attachEntity.getRegdtAttach())
+                    .modifierAttach(attachEntity.getModifierAttach())
+                    .moddtAttach(attachEntity.getModdtAttach())
                     .build();
 
             attachDtoList.add(attachDto);
@@ -146,13 +143,13 @@ public class AttachService {
         LocalDateTime localDateTime = LocalDateTime.now();
         String time = localDateTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS"));
         String randomValue = String.valueOf(10000 + new Random().nextInt(90000));
-        String idAttach = time + "_" + type + "_"  + randomValue;
+        String idAttach = time + "-" + type + "-"  + randomValue;
 
         // 이미지 생성관련 변수
         String data = "";
         byte[] imageBytes = null;
         StringBuffer uploadPathBuf = new StringBuffer();
-        uploadPathBuf.append("D:\\tweeks\\upload"); // todo: root 경로 properties 파일에서 받아와야 함
+        uploadPathBuf.append("C:\\Users\\jsh\\IdeaProjects\\bikego\\upload"); // todo: root 경로 properties 파일에서 받아와야 함
         uploadPathBuf.append("\\" + type);
         uploadPathBuf.append("\\" + localDateTime.getYear());
         uploadPathBuf.append("\\" + localDateTime.getMonthValue());
@@ -182,7 +179,7 @@ public class AttachService {
                 newImage.createGraphics().drawImage(originImage, 0, 0, Color.WHITE, null);
 
                 ImageWriteParam param = null;
-                if(Integer.valueOf(imageSize[i]) > 4000000) { //4메가 보다 크면 손실 압축
+                if(Integer.valueOf(imageSize[i]) > 4000000) { //todo: 4메가 보다 크면 손실 압축
                     param = imgWriter.getDefaultWriteParam();
                     param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
                     param.setCompressionQuality(0.8F);

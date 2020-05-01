@@ -1,9 +1,7 @@
 package kr.co.bikego.test;
 
 import kr.co.bikego.domain.entity.AttachEntity;
-import kr.co.bikego.domain.entity.AttachId;
 import kr.co.bikego.domain.repository.AttachRepository;
-import kr.co.bikego.dto.AttachDto;
 import kr.co.bikego.test.domain.repository.CrudRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -152,7 +150,7 @@ public class TestClass {
 
 //        List<AttachEntity> attachId2 = attachRepository.findByAttachId("20200501085688_crud_35928");
 
-        AttachEntity attachEntity = attachRepository.findByAttachIdAndAttachFileSn("20200501085688_crud_35928", 1);
+        AttachEntity attachEntity = attachRepository.findByIdAttachAndSnFileAttach("20200501085688_crud_35928", 1);
 
         System.out.println(attachEntity);
     }
