@@ -133,7 +133,7 @@ public class AttachService {
     }
 
     /**
-     *
+     * 첨부파일그룹 신규
      * @param image
      * @param imageName
      * @param imageSize
@@ -141,15 +141,33 @@ public class AttachService {
      * @return
      */
     @Transactional
-    public java.util.List<AttachEntity> saveImage(String[] image, String[] imageName, String[] imageSize, String type) {
-        // 첨부파일 DB저장 변수
-        List<AttachEntity> attachEntities = new ArrayList<>();
-        AttachDto attachDto = null;
-        String extension = "", serverFileNm = "", serverFilePath = "";
+    public List<AttachEntity> saveImage(String[] image, String[] imageName, String[] imageSize, String type) {
         LocalDateTime localDateTime = LocalDateTime.now();
         String time = localDateTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS"));
         String randomValue = String.valueOf(10000 + new Random().nextInt(90000));
         String idAttach = time + "-" + type + "-"  + randomValue;
+
+        return this.saveImage(image, imageName, imageSize, type, idAttach);
+    }
+
+    /**
+     * 첨부파일그룹 수정
+     * @param image
+     * @param imageName
+     * @param imageSize
+     * @param type
+     * @return
+     */
+    @Transactional
+    public java.util.List<AttachEntity> saveImage(String[] image, String[] imageName, String[] imageSize, String type, String idAttach) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        // 첨부파일 DB저장 변수
+        List<AttachEntity> attachEntities = new ArrayList<>();
+        AttachDto attachDto = null;
+        String extension = "", serverFileNm = "", serverFilePath = "";
+        int lastSn = 0;
+        AttachEntity lastAttach = attachRepository.findTopByIdAttachOrderBySnFileAttachDesc(idAttach);
+        if(lastAttach != null) lastSn = lastAttach.getSnFileAttach();
 
         // 이미지 생성관련 변수
         String data = "";
@@ -175,9 +193,6 @@ public class AttachService {
 
         try{
             for(int i=0; i<image.length; i++) {
-//                System.out.println("image :: " + image[i]);
-//                System.out.println("imageName :: " + imageName[i]);
-//                System.out.println("imageSize :: " + imageSize[i]);
                 data = image[i];
                 imageBytes = DatatypeConverter.parseBase64Binary(data);
                 BufferedImage originImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
@@ -202,7 +217,7 @@ public class AttachService {
                 // 첨부파일 저장 값
                 attachDto = new AttachDto();
                 attachDto.setIdAttach(idAttach);
-                attachDto.setSnFileAttach(i+1);
+                attachDto.setSnFileAttach(i+1+lastSn);
                 attachDto.setNmOrgFileAttach(imageName[i]);
                 attachDto.setNmSrvFileAttach(serverFileNm);
                 attachDto.setPathFileAttach(serverFilePath);
@@ -223,6 +238,20 @@ public class AttachService {
         } finally {
             try{imgWriter.dispose();}catch(Exception e) {}
             try{imageOutputStream.close();}catch(Exception e) {}
+        }
+    }
+
+    @Transactional
+    public void updateDelYn(String idAttach, int[] snFileAttach) {
+        for(int sn : snFileAttach) {
+            AttachEntity attachEntity = AttachEntity.builder()
+                    .idAttach(idAttach)
+                    .snFileAttach(sn)
+                    .modifierAttach("test")
+                    .moddtAttach(LocalDateTime.now())
+                    .build();
+            attachRepository.save(attachEntity);
+
         }
     }
 

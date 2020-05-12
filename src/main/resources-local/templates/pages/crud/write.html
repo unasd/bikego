@@ -3,131 +3,6 @@
 
 <!-- page CSS -->
 <th:block layout:fragment="css">
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        /* Position the image container (needed to position the left and right arrows) */
-        .container {
-            position: relative;
-        }
-
-        /* Hide the images by default */
-        .largeSlide {
-            display: block;
-            width: 100%;
-            height: 100%;
-            min-height: 360px;
-            background-size: contain;
-            -moz-background-size: contain;
-            background-color: #9e9e9e;
-            background-position: center center;
-            background-repeat: no-repeat;
-            border: 1px solid #000;
-            margin-bottom: 5px;
-        }
-
-        /* Add a pointer when hovering over the thumbnail images */
-        .cursor {
-            cursor: pointer;
-        }
-
-        /* Next & previous buttons */
-        .prev,
-        .next {
-            cursor: pointer;
-            position: absolute;
-            top: 40%;
-            width: auto;
-            padding: 16px;
-            margin-top: -50px;
-            color: white;
-            font-weight: bold;
-            font-size: 20px;
-            border-radius: 0 3px 3px 0;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        /* Position the "next button" to the right */
-        .next {
-            right: 0;
-            border-radius: 3px 0 0 3px;
-        }
-
-        /* On hover, add a black background color with a little bit see-through */
-        .prev:hover,
-        .next:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        /* Number text (1/3 etc) */
-        .numbertext {
-            color: #f2f2f2;
-            font-size: 12px;
-            padding: 8px 12px;
-            position: absolute;
-            top: 0;
-        }
-
-        /* Container for image text */
-        .caption-container {
-            text-align: center;
-            background-color: #222;
-            padding: 2px 16px;
-            color: white;
-        }
-
-        .imgRow {
-            height: 50px;
-            display: grid;
-            grid-template-columns: repeat(6,minmax(0,1fr));
-            grid-template-rows: repeat(1,minmax(0,1fr));
-            grid-gap: 4px;
-        }
-
-        .imgRow:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        /* Six columns side by side */
-        .column {
-            position: relative;
-            float: left;
-            height: 100%;
-            background-color: #9e9e9e;
-        }
-
-        /* Add a transparency effect for thumnbail images */
-        .slideImg {
-            opacity: 0.6;
-            width: 100%;
-            height: 100%;
-        }
-        .active,
-        .slideImg:hover {
-            opacity: 1;
-        }
-
-        .column .imgRemoveBtn {
-            position: absolute;
-            top: 10%;
-            left: 86%;
-            transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-            color: red;
-            font-size: 23px;
-            cursor: pointer;
-            border-radius: 10px;
-        }
-
-        .column .imgRemoveBtn:hover {
-            background-color: black;
-        }
-    </style>
 </th:block>
 
 <!-- page 스크립트 -->
@@ -146,10 +21,14 @@
         }
 
         function showSlides(n) {
-            var dots = $('.slideImg');
+            let dots = $('.slide-img');
             if(dots.length > 0) {
                 dots.removeClass('active');
-                $('.largeSlide').eq(0).css({'background-image' : 'url('+ dots.eq(n).attr('src') +')'});
+                let imgSrc = dots.eq(n).css('background-image');
+                if(typeof(imgSrc) != "undefined") {
+                    imgSrc = imgSrc.replace('url(','').replace(')','').replace(/\"/gi, "");
+                    $('.large-slide').eq(0).css({'background-image' : 'url('+ imgSrc +')'});
+                }
                 dots.eq(n).addClass('active');
                 $('#numbertext').text((Number(n)+1) + '/ 6');
             }
@@ -158,7 +37,7 @@
         function drawThumnail(input) {
             if (input.files && input.files[0]) {
                 // 현재 썸네일 이미지가 몇개인지 가져옴
-                let count = $('.slideImg').length;
+                let count = $('.slide-img').length;
                 let imgLimit = 6 - count;
                 let loopLimit = input.files.length > imgLimit ? imgLimit : input.files.length;
 
@@ -167,8 +46,8 @@
                     let reader = new FileReader();
                     reader.onload = function (e) {
                         let slideImg = document.createElement('img'); // 썸네일 이미지
-                        slideImg.setAttribute('class', 'slideImg cursor');
-                        slideImg.setAttribute('src', e.target.result);
+                        slideImg.setAttribute('class', 'slide-img cursor');
+                        slideImg.setAttribute('style', 'background-image: url('+ e.target.result +');');
                         slideImg.onclick = function(e){
                             alert('이미지 클릭');
                             e.stopPropagation();
@@ -176,7 +55,7 @@
                         $('.column').eq(count).html(slideImg);
 
                         let removeIcon = document.createElement('i'); // 삭제버튼
-                        removeIcon.setAttribute('class', 'tiny material-icons imgRemoveBtn');
+                        removeIcon.setAttribute('class', 'tiny material-icons img-remove-btn');
                         removeIcon.append(document.createTextNode('remove_circle'));
                         removeIcon.onclick = function(e){
                             // 삭제버튼 클릭
@@ -184,9 +63,9 @@
                             let emptyColumn = document.createElement('div');
                             emptyColumn.setAttribute('class', 'column');
                             emptyColumn.onclick = function(e){
-                                $('#imgInput').click();
+                                $('.img-input').click();
                             };
-                            $('.imgRow').append(emptyColumn);
+                            $('.img-row').append(emptyColumn);
                             e.stopPropagation();
                         };
                         $('.column').eq(count).append(removeIcon);
@@ -229,12 +108,12 @@
                 filebrowserUploadUrl: '/attach/ckImgUpload.do'
             });
 
-            $('#imgInput').change(function(){
+            $('.img-input').change(function(){
                 drawThumnail(this);
             });
 
             $('.column').click(function(){
-                $('#imgInput').click();
+                $('.img-input').click();
             });
 
             $('#submitBtn').click(function() {
@@ -257,15 +136,15 @@
         </div>
         <textarea name="contents"></textarea><br>
 
-        <div class="container">
-            <div class="largeSlide">
+        <div class="img-container">
+            <div class="large-slide">
                 <div id="numbertext" class="numbertext"></div>
             </div>
 
             <a class="prev" onclick="plusSlides(-1)">❮</a>
             <a class="next" onclick="plusSlides(1)">❯</a>
 
-            <div class="imgRow">
+            <div class="img-row">
                 <div class="column">
                 </div>
                 <div class="column">
@@ -280,7 +159,7 @@
                 </div>
             </div>
         </div>
-        <input type="file" id="imgInput" multiple accept="image/*" style="display: none;"/>
+            <input type="file" id="img-input" class="img-input" multiple accept="image/*" style="display: none;"/>
 
         <a class="waves-effect waves-light btn-small" id="submitBtn">등록</a>
     </form>
