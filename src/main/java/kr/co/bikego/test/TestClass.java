@@ -154,4 +154,10 @@ public class TestClass {
 
         System.out.println(attachEntity);
     }
+
+    @Test
+    public void lastRecordTest(){
+        AttachEntity attachEntity = attachRepository.findTopByIdAttachOrderBySnFileAttachDesc("20200501085688_crud_35928");
+        System.out.println(attachEntity.getSnFileAttach());
+    }
 }
