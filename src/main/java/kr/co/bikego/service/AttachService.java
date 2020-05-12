@@ -173,7 +173,7 @@ public class AttachService {
         String data = "";
         byte[] imageBytes = null;
         StringBuffer uploadPathBuf = new StringBuffer();
-        uploadPathBuf.append("C:\\Users\\jsh\\IdeaProjects\\bikego\\upload"); // todo: root 경로 properties 파일에서 받아와야 함
+        uploadPathBuf.append("C:\\Users\\sinna\\IdeaProjects\\upload"); // todo: root 경로 properties 파일에서 받아와야 함
         uploadPathBuf.append("\\" + type);
         uploadPathBuf.append("\\" + localDateTime.getYear());
         uploadPathBuf.append("\\" + localDateTime.getMonthValue());
