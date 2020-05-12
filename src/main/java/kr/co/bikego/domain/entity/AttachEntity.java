@@ -59,9 +59,9 @@ public class AttachEntity implements Serializable {
 
     @Builder
     public AttachEntity(String idAttach, int snFileAttach, String nmOrgFileAttach, String nmSrvFileAttach
-                        , String pathFileAttach, Long sizeFileAttach, String extendsAttach
-                        , String ynDel, String registerAttach, LocalDateTime regdtAttach
-                        , String modifierAttach, LocalDateTime moddtAttach) {
+            , String pathFileAttach, Long sizeFileAttach, String extendsAttach
+            , String ynDel, String registerAttach, LocalDateTime regdtAttach
+            , String modifierAttach, LocalDateTime moddtAttach) {
         this.idAttach = idAttach;
         this.snFileAttach = snFileAttach;
         this.nmOrgFileAttach = nmOrgFileAttach;

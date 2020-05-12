@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
+
 <header th:fragment="headerFragment">
     <nav class="light-blue lighten-1" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">Logo MAIN</a>
             <ul class="right hide-on-med-and-down">
                 <li><a href="/as/list">AS</a></li>
                 <li><a href="#">Board</a></li>
@@ -13,6 +14,14 @@
             </ul>
 
             <ul id="nav-mobile" class="sidenav">
+                <li><div class="user-view">
+                    <div class="background">
+                        <img th:src="@{static/image/office.jpg}">
+                    </div>
+                    <a href="#user"><img class="circle" th:src="@{static/image/yuna.jpg}"></a>
+                    <a href="#name"><span class="white-text name">John Doe</span></a>
+                    <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+                </div></li>
                 <li><a href="/as/list">AS</a></li>
                 <li><a href="#">Board</a></li>
                 <li><a href="#">FAQ</a></li>

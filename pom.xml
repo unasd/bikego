@@ -1,147 +1,293 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
+
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
+
+
     <groupId>kr.co.bikego</groupId>
+
     <artifactId>bikego</artifactId>
+
     <version>1.0-SNAPSHOT</version>
+
     <packaging>war</packaging>
 
+
+
     <profiles>
+
         <profile>
+
             <id>local</id>
+
             <activation>
+
                 <activeByDefault>true</activeByDefault>
+
             </activation>
+
             <properties>
+
                 <environment>local</environment>
+
                 <tomcatScope>compile</tomcatScope>
+
             </properties>
+
         </profile>
+
         <profile>
+
             <id>prod</id>
+
             <properties>
+
                 <environment>prod</environment>
+
                 <tomcatScope>provided</tomcatScope>
+
             </properties>
+
         </profile>
+
     </profiles>
 
+
+
     <!-- Inherit defaults from Spring Boot -->
+
     <parent>
+
         <groupId>org.springframework.boot</groupId>
+
         <artifactId>spring-boot-starter-parent</artifactId>
+
         <version>2.0.0.RELEASE</version>
+
     </parent>
 
+
+
     <!-- Add typical dependencies for a web application -->
+
     <dependencies>
+
         <dependency>
+
             <groupId>org.springframework.boot</groupId>
+
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+
         </dependency>
+
         <dependency>
+
             <groupId>org.springframework.boot</groupId>
+
             <artifactId>spring-boot-starter-web</artifactId>
+
         </dependency>
 
+
+
         <dependency>
+
             <groupId>mysql</groupId>
+
             <artifactId>mysql-connector-java</artifactId>
+
             <scope>runtime</scope>
+
         </dependency>
+
         <dependency>
+
             <groupId>org.springframework.boot</groupId>
+
             <artifactId>spring-boot-starter-test</artifactId>
+
             <scope>test</scope>
+
             <exclusions>
+
                 <exclusion>
+
                     <groupId>org.junit.vintage</groupId>
+
                     <artifactId>junit-vintage-engine</artifactId>
+
                 </exclusion>
+
             </exclusions>
+
         </dependency>
 
+
+
         <dependency>
+
             <groupId>org.springframework.boot</groupId>
+
             <artifactId>spring-boot-starter-tomcat</artifactId>
+
             <scope>${tomcatScope}</scope>
+
         </dependency>
 
+
+
         <dependency>
+
             <groupId>org.springframework.boot</groupId>
+
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+
         </dependency>
 
+
+
         <dependency>
+
             <groupId>org.springframework.boot</groupId>
+
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+
         </dependency>
 
+
+
         <dependency>
+
             <groupId>org.projectlombok</groupId>
+
             <artifactId>lombok</artifactId>
+
             <scope>compile</scope>
+
         </dependency>
 
+
+
         <dependency>
+
             <groupId>org.springframework.boot</groupId>
+
             <artifactId>spring-boot-devtools</artifactId>
-<!--            <scope>test</scope>-->
+
+            <!--            <scope>test</scope>-->
+
             <optional>true</optional>
+
         </dependency>
 
+
+
         <dependency>
+
             <groupId>nz.net.ultraq.thymeleaf</groupId>
+
             <artifactId>thymeleaf-layout-dialect</artifactId>
+
         </dependency>
 
+
+
         <dependency>
+
             <groupId>com.google.code.gson</groupId>
+
             <artifactId>gson</artifactId>
+
         </dependency>
 
+
+
         <dependency>
+
             <groupId>org.springframework</groupId>
+
             <artifactId>springloaded</artifactId>
+
             <version>1.2.6.RELEASE</version>
+
+        </dependency>
+
+
+
+        <dependency>
+
+            <groupId>commons-io</groupId>
+
+            <artifactId>commons-io</artifactId>
+
+            <version>2.6</version>
+
         </dependency>
 
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.6</version>
-        </dependency>
-        <dependency>
+
             <groupId>junit</groupId>
+
             <artifactId>junit</artifactId>
+
         </dependency>
+
         <dependency>
+
             <groupId>org.springframework</groupId>
+
             <artifactId>spring-test</artifactId>
+
         </dependency>
+
         <dependency>
+
             <groupId>org.springframework.boot</groupId>
+
             <artifactId>spring-boot-test-autoconfigure</artifactId>
+
         </dependency>
+
+
 
     </dependencies>
 
+
+
     <build>
+
         <plugins>
+
             <plugin>
+
                 <groupId>org.springframework.boot</groupId>
+
                 <artifactId>spring-boot-maven-plugin</artifactId>
+
             </plugin>
+
         </plugins>
 
+
+
         <resources>
+
             <resource>
+
                 <directory>src/main/resources-${environment}</directory>
+
             </resource>
+
         </resources>
+
     </build>
+
+
 
 </project>
