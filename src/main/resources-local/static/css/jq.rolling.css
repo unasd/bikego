@@ -29,6 +29,7 @@
 	background: #1178e9;
 }
 
+/*
 .sp01 {
 	font:18px 'tahoma';
 	text-align:center;
@@ -36,6 +37,16 @@
 	background-color:rgb(231,231,231);
 	width:890px;
 	height:490px;
+}
+*/
+
+.sp01 {
+	font:18px 'tahoma';
+	text-align:center;
+	line-height:100%;
+	background-color:rgb(231,231,231);
+	width:100%;
+	height:100%;
 }
 
 .sp02 {
