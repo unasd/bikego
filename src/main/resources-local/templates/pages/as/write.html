@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="../layout/default">
+
+<!-- page CSS -->
+<th:block layout:fragment="css">
+</th:block>
+
+<!-- page 스크립트 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript" th:src="@{/static/js/asBoard.js}"></script>
+</th:block>
+
+<div layout:fragment="content" >
+    <form id="crudForm" action="/crud/post" method="post">
+        <div class="input-field col s12">
+            <input type="text" id="title" name="title">
+            <label for="title">제목</label>
+        </div>
+        <div class="input-field col s12">
+            <input type="text" id="writerId" name="writerId"><br>
+            <label for="writerId">작성자</label>
+        </div>
+        <div class="input-field col s12">
+            <input type="password" id="pw" name="pw"><br>
+            <label for="pw">비밀번호</label>
+        </div>
+        <textarea name="contents"></textarea><br>
+
+        <div class="img-container">
+            <div class="img-row">
+                <div class="column">
+                </div>
+                <div class="column">
+                </div>
+                <div class="column">
+                </div>
+                <div class="column">
+                </div>
+                <div class="column">
+                </div>
+                <div class="column">
+                </div>
+            </div>
+        </div>
+        <input type="file" id="img-input" class="img-input" multiple accept="image/*" style="display: none;"/>
+        <div class="mapContainer">
+            <div id="map" name="map"></div>
+        </div>
+        <a class="waves-effect waves-light btn-small" id="submitBtn">등록</a>
+    </form>
+</div>
+</html>
