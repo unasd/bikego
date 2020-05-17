@@ -1,4 +1,7 @@
 package kr.co.bikego.domain.repository;
 
-public interface AsRepository {
+import kr.co.bikego.domain.entity.AsEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AsRepository extends JpaRepository<AsEntity, Long> {
 }

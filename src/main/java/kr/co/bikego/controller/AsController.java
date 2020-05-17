@@ -14,11 +14,16 @@ import java.util.List;
 @RequestMapping("/as")
 public class AsController {
 
-    @GetMapping("/list")
+    @GetMapping("/list.do")
     public String list(Model model){
         //List<CrudDto> crudList = crudService.getCrudList();
 
         //model.addAttribute("crudList", crudList);
         return "as/list";
+    }
+
+    @GetMapping("/post.do")
+    public String write() {
+        return "as/write";
     }
 }
