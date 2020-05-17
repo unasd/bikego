@@ -18,7 +18,7 @@
 
 <!--
 
-            <img width="120" src="static/image/office.jpg"/>
+            <img width="120" src="/office.jpg"/>
 
             <img width="150" th:src="@{static/image/office.jpg}"/>
 -->
@@ -26,9 +26,9 @@
 
 
         </div>
-
+<!--
         <div class="container">
-            <div id="rolling" align="center">
+            <div id="rolling" >
                 <ul>
                     <li class="sp01"><img  th:src="@{static/image/office.jpg}"/></li>
                     <li class="sp01">SAMPLE 02</li>
@@ -40,10 +40,38 @@
             <ul class="pages"></ul>
         </div>
 
-
-        <script>
+         <script>
             $("#rolling").rolling(890,490,{autoscroll:2, delay:2000});
         </script>
+
+        -->
+        <script>
+            $(document).ready(function(){$('.slider').bxSlider({
+                auto: true,speed: 500,
+                pause: 4000,
+                mode:'fade',
+                autoControls: false,
+                controls:false,
+                captions: true, //캡션사용
+                pager:true,});
+            });
+
+        </script>
+
+        <div class="container">
+            <div >
+                <ul class="slider">
+                    <li><img  th:src="@{static/image/office.jpg}" title="1st image" /></li>
+                    <li><img  th:src="@{static/image/office.jpg}" title="2th image"/></li>
+                    <li><img  th:src="@{static/image/office.jpg}" title="3rd image"/></li>
+                </ul>
+
+            </div>
+
+        </div>
+
+
+
 
         <div class="container">
             <br><br>
