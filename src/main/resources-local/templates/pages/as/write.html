@@ -43,8 +43,25 @@
             </div>
         </div>
         <input type="file" id="img-input" class="img-input" multiple accept="image/*" style="display: none;"/>
-        <div class="mapContainer">
-            <div id="map" name="map"></div>
+        <div id="map" name="map" style="width: 100%; height: 300px; border: 1px solid; right: 50%; transform: translate(50%,0%); margin: 5% 0 5% 0;">
+            <div class="search" style="position: absolute; z-index: 1000; top: 20px; left: 20px;">
+                <input id="address" type="text" placeholder="검색할 주소" value="" style="width: 150px;
+    height: 20px;
+    line-height: 20px;
+    border: solid 1px #555;
+    padding: 5px;
+    font-size: 12px;
+    box-sizing: content-box;
+    background-color: white;"/>
+                <input id="submit" type="button" value="주소 검색" style="height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    font-size: 12px;
+    border: solid 1px #555;
+    border-radius: 3px;
+    cursor: pointer;
+    box-sizing: content-box;"/>
+            </div>
         </div>
         <a class="waves-effect waves-light btn-small" id="submitBtn">등록</a>
     </form>
