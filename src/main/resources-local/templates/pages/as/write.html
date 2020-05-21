@@ -17,15 +17,58 @@
             <label for="title">제목</label>
         </div>
         <div class="input-field col s12">
-            <input type="text" id="writerId" name="writerId"><br>
+            <input type="text" id="writerId" name="writerId">
             <label for="writerId">작성자</label>
         </div>
         <div class="input-field col s12">
-            <input type="password" id="pw" name="pw"><br>
+            <input type="password" id="pw" name="pw">
             <label for="pw">비밀번호</label>
         </div>
-        <textarea name="contents"></textarea><br>
-
+        <div class="input-field col s12">
+            <textarea id="contents" class="materialize-textarea"></textarea>
+            <label for="contents">AS 요청내용</label>
+        </div>
+        <div id="kakaoMap" style="width:100%;height:300px;border: 1px solid;">
+            <input id="keyword" type="text" placeholder="검색할 주소" value="" style="width: 150px;
+    height: 20px;
+    line-height: 20px;
+    border: solid 1px #555;
+    padding: 5px;
+    font-size: 12px;
+    box-sizing: content-box;
+    background-color: white;
+    z-index: 999;
+    position: relative;
+    "/>
+            <input id="search" type="button" value="주소 검색" style="height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    font-size: 12px;
+    border: solid 1px #555;
+    border-radius: 3px;
+    cursor: pointer;
+    box-sizing: content-box;
+    z-index: 999;
+    position: relative;"/>
+            <input id="here" type="button" value="현위치" style="height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    font-size: 12px;
+    border: solid 1px #555;
+    border-radius: 3px;
+    cursor: pointer;
+    box-sizing: content-box;
+    z-index: 999;
+    position: relative;"/>
+        </div>
+        <div class="input-field col s12">
+            <input type="text" id="asLocation" name="asLocation"><br>
+            <label for="asLocation">AS 위치</label>
+        </div>
+        <div class="input-field col s12">
+            <input type="text" id="locationDetail" name="locationDetail"><br>
+            <label for="locationDetail">AS 상세위치</label>
+        </div>
         <div class="img-container">
             <div class="img-row">
                 <div class="column">
@@ -43,26 +86,6 @@
             </div>
         </div>
         <input type="file" id="img-input" class="img-input" multiple accept="image/*" style="display: none;"/>
-        <div id="map" name="map" style="width: 100%; height: 300px; border: 1px solid; right: 50%; transform: translate(50%,0%); margin: 5% 0 5% 0;">
-            <div class="search" style="position: absolute; z-index: 1000; top: 20px; left: 20px;">
-                <input id="address" type="text" placeholder="검색할 주소" value="" style="width: 150px;
-    height: 20px;
-    line-height: 20px;
-    border: solid 1px #555;
-    padding: 5px;
-    font-size: 12px;
-    box-sizing: content-box;
-    background-color: white;"/>
-                <input id="submit" type="button" value="주소 검색" style="height: 30px;
-    line-height: 30px;
-    padding: 0 10px;
-    font-size: 12px;
-    border: solid 1px #555;
-    border-radius: 3px;
-    cursor: pointer;
-    box-sizing: content-box;"/>
-            </div>
-        </div>
         <a class="waves-effect waves-light btn-small" id="submitBtn">등록</a>
     </form>
 </div>

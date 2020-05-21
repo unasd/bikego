@@ -1,4 +1,7 @@
-let map;
+let kakaoMap; // 지도객체
+let marker; // 마커
+let ps = new kakao.maps.services.Places();; // 검색 서비스
+let geocoder = new kakao.maps.services.Geocoder();// 주소-좌표 변환 객체를 생성합니다
 
 function drawThumnail(input) {
     if (input.files && input.files[0]) {
@@ -65,67 +68,64 @@ function crudSubmit(){
     $('#crudForm').submit();
 }
 
-var infowindow = new naver.maps.InfoWindow();
-function onSuccessGeolocation(position) {
-    var location = new naver.maps.LatLng(position.coords.latitude,
-                                         position.coords.longitude);
+// 키워드 검색을 요청하는 함수입니다
+function searchPlaces() {
+    var keyword = document.getElementById('keyword').value;
+    if (!keyword.replace(/^\s+|\s+$/g, '')) {
+        alert('키워드를 입력해주세요!');
+        return false;
+    }
+    // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+    ps.keywordSearch( keyword, placesSearchCB);
+}
 
-    map.setCenter(location); // 얻은 좌표를 지도의 중심으로 설정합니다.
-    map.setZoom(18); // 지도의 줌 레벨을 변경합니다.
+// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+function placesSearchCB(data, status, pagination) {
+    if (status === kakao.maps.services.Status.OK) {
+        // 정상적으로 검색이 완료됐으면
+        // 검색 목록과 마커를 표출합니다
+        var placePosition = new kakao.maps.LatLng(data[0].y, data[0].x);
+        // 지도 중심을 이동 시킵니다
+        kakaoMap.setCenter(placePosition);
+        kakaoMap.setLevel(3);
+    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        alert('검색 결과가 존재하지 않습니다.');
+        return;
+    } else if (status === kakao.maps.services.Status.ERROR) {
+        alert('검색 결과 중 오류가 발생했습니다.');
+        return;
+    }
+}
+
+function setCurrentLocation(e){
+    if (navigator.geolocation) {
+        /**
+         * navigator.geolocation 은 Chrome 50 버젼 이후로 HTTP 환경에서 사용이 Deprecate 되어 HTTPS 환경에서만 사용 가능 합니다.
+         * http://localhost 에서는 사용이 가능하며, 테스트 목적으로, Chrome 의 바로가기를 만들어서 아래와 같이 설정하면 접속은 가능합니다.
+         * chrome.exe --unsafely-treat-insecure-origin-as-secure="http://example.com"
+         */
+        navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
+    } else {
+        alert('현재위치 조회가 지원되지 않습니다.');
+    }
+}
+
+function onSuccessGeolocation(position) {
+    var currentPosition = new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    // 지도 중심을 이동 시킵니다
+    kakaoMap.setCenter(currentPosition);
+    marker.setPosition(currentPosition);
+    kakaoMap.setLevel(3);
 }
 
 function onErrorGeolocation() {
-    var center = map.getCenter();
-
-    infowindow.setContent('<div style="padding:20px;">' +
-        '<h5 style="margin-bottom:5px;color:#f00;">Geolocation failed!</h5>'+ "latitude: "+ center.lat() +"<br />longitude: "+ center.lng() +'</div>');
-
-    infowindow.open(map, center);
+   alert('현재위치 조회 오류입니다.');
 }
 
-function searchAddressToCoordinate(address) {
-  naver.maps.Service.geocode({
-    query: address
-  }, function(status, response) {
-    if (status === naver.maps.Service.Status.ERROR) {
-      if (!address) {
-        return alert('Geocode Error, Please check address');
-      }
-      return alert('Geocode Error, address:' + address);
-    }
-
-    if (response.v2.meta.totalCount === 0) {
-      return alert('No result.');
-    }
-
-    var htmlAddresses = [],
-      item = response.v2.addresses[0],
-      point = new naver.maps.Point(item.x, item.y);
-
-    if (item.roadAddress) {
-      htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
-    }
-
-    if (item.jibunAddress) {
-      htmlAddresses.push('[지번 주소] ' + item.jibunAddress);
-    }
-
-    if (item.englishAddress) {
-      htmlAddresses.push('[영문명 주소] ' + item.englishAddress);
-    }
-
-    infowindow.setContent([
-      '<div style="padding:10px;min-width:200px;line-height:150%;">',
-      '<h4 style="margin-top:5px;">검색 주소 : '+ address +'</h4><br />',
-      htmlAddresses.join('<br />'),
-      '</div>'
-    ].join('\n'));
-
-    map.setCenter(point);
-    infowindow.open(map, point);
-  });
+function searchDetailAddrFromCoords(coords, callback) {
+    // 좌표로 법정동 상세 주소 정보를 요청합니다
+    geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
 }
-
 
 $(document).ready(function(){
 //    CKEDITOR.replace( 'contents',{
@@ -143,8 +143,6 @@ $(document).ready(function(){
         var dialogName = ev.data.name;
         var dialogDefinition = ev.data.definition;
         var dialog = ev.data.definition.dialog;
-        console.info('dialogDefinition : '  + dialogDefinition);
-        console.log('dialog : '  + dialog);
 
         if (dialogName == 'image') {
             dialog.on('show', function () {
@@ -175,37 +173,59 @@ $(document).ready(function(){
         crudSubmit();
     });
 
-    //지도를 삽입할 HTML 요소 또는 HTML 요소의 id를 지정합니다.
-    var mapDiv = document.getElementById('map'); // 'map'으로 선언해도 동일
+  var container = document.getElementById('kakaoMap'); //지도를 담을 영역의 DOM 레퍼런스
+  var options = { //지도를 생성할 때 필요한 기본 옵션
+  	center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+  	level: 3 //지도의 레벨(확대, 축소 정도)
+  };
+  kakaoMap = new kakao.maps.Map(container, options);
 
-    //옵션 없이 지도 객체를 생성하면 서울 시청을 중심으로 하는 16 레벨의 지도가 생성됩니다.
-    map = new naver.maps.Map(mapDiv);
+    // 주소입력 input 엔터
+    $('#keyword').on('keydown', function(e) {
+      var keyCode = e.which;
 
-        if (navigator.geolocation) {
-            /**
-             * navigator.geolocation 은 Chrome 50 버젼 이후로 HTTP 환경에서 사용이 Deprecate 되어 HTTPS 환경에서만 사용 가능 합니다.
-             * http://localhost 에서는 사용이 가능하며, 테스트 목적으로, Chrome 의 바로가기를 만들어서 아래와 같이 설정하면 접속은 가능합니다.
-             * chrome.exe --unsafely-treat-insecure-origin-as-secure="http://example.com"
-             */
-            navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
-        } else {
-            var center = map.getCenter();
-            infowindow.setContent('<div style="padding:20px;"><h5 style="margin-bottom:5px;color:#f00;">Geolocation not supported</h5></div>');
-            infowindow.open(map, center);
-        }
+      if (keyCode === 13) { // Enter Key
+        searchPlaces();
+      }
+    });
 
+    // 주소검색 버튼
+    $('#search').on('click', function(e) {
+      e.preventDefault();
+        searchPlaces();
+    });
 
-  $('#address').on('keydown', function(e) {
-    var keyCode = e.which;
+    // 현위치
+    $('#here').on('click', function(e) {
+      e.preventDefault();
+        setCurrentLocation(e);
+    });
 
-    if (keyCode === 13) { // Enter Key
-      searchAddressToCoordinate($('#address').val());
-    }
-  });
+    // 지도를 클릭한 위치에 표출할 마커입니다
+    marker = new kakao.maps.Marker({
+        // 지도 중심좌표에 마커를 생성합니다
+        position: kakaoMap.getCenter()
+    });
+    // 지도에 마커를 표시합니다
+    marker.setMap(kakaoMap);
+    setCurrentLocation();
 
-  $('#submit').on('click', function(e) {
-    e.preventDefault();
+    // 지도에 클릭 이벤트를 등록합니다
+    // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+    kakao.maps.event.addListener(kakaoMap, 'click', function(mouseEvent) {
 
-    searchAddressToCoordinate($('#address').val());
-  });
+        // 클릭한 위도, 경도 정보를 가져옵니다
+        let latlng = mouseEvent.latLng;
+        // 클릭한 위치로 마커 이동
+        marker.setPosition(latlng);
+        let latitudeAs = latlng.getLat();
+        let longitudeAs = latlng.getLng();
+
+        searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var detailAddr = result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
+                $('#asLocation').val(detailAddr);
+            }
+        });
+    });
 });
