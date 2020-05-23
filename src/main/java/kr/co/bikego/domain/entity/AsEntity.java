@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,10 +30,16 @@ public class AsEntity {
     private String noTelAs;
 
     @Column(nullable = false, name = "as_latitude")
-    private float latitudeAs;
+    private BigDecimal latitudeAs;
 
     @Column(nullable = false, name = "as_longitude")
-    private float longitudeAs;
+    private BigDecimal longitudeAs;
+
+    @Column(nullable = false, name= "as_location")
+    private String locationAs;
+
+    @Column(nullable = true, name = "as_location_detail")
+    private String dtlLocationAs;
 
     @Column(length = 100, nullable = false, name = "as_password")
     private String passwordAs;
@@ -53,14 +60,17 @@ public class AsEntity {
     private LocalDateTime moddtAs;
 
     @Builder
-    public AsEntity(Long seqAs, String titleAs, String contentsAs, String noTelAs, float latitudeAs, float longitudeAs, String passwordAs,
-                    String idAttach, String writerAs, LocalDateTime regdtAs, String modifierAs, LocalDateTime moddtAs) {
+    public AsEntity(Long seqAs, String titleAs, String contentsAs, String noTelAs, BigDecimal latitudeAs, BigDecimal longitudeAs,
+                    String locationAs, String dtlLocationAs, String passwordAs, String idAttach, String writerAs,
+                    LocalDateTime regdtAs, String modifierAs, LocalDateTime moddtAs) {
         this.seqAs = seqAs;
         this.titleAs = titleAs;
         this.contentsAs = contentsAs;
         this.noTelAs = noTelAs;
         this.latitudeAs = latitudeAs;
         this.longitudeAs = longitudeAs;
+        this.locationAs = locationAs;
+        this.dtlLocationAs = dtlLocationAs;
         this.passwordAs = passwordAs;
         this.idAttach = idAttach;
         this.writerAs = writerAs;

@@ -11,23 +11,34 @@
 </th:block>
 
 <div layout:fragment="content" >
-    <form id="crudForm" action="/crud/post" method="post">
+    <form id="asForm" action="/as/post.do" method="post">
         <div class="input-field col s12">
-            <input type="text" id="title" name="title">
-            <label for="title">제목</label>
+            <i class="material-icons prefix">title</i>
+            <input type="text" class="validate" id="titleAs" name="titleAs" required="" maxlength="100">
+            <label for="titleAs">제목</label>
         </div>
         <div class="input-field col s12">
-            <input type="text" id="writerId" name="writerId">
-            <label for="writerId">작성자</label>
+            <i class="material-icons prefix">account_circle</i>
+            <input type="text" class="validate" id="writerAs" name="writerAs" required="" maxlength="20">
+            <label for="writerAs">작성자</label>
         </div>
         <div class="input-field col s12">
-            <input type="password" id="pw" name="pw">
-            <label for="pw">비밀번호</label>
+            <i class="material-icons prefix">phone</i>
+            <input type="number" inputMode="numeric" class="validate" id="noTelAs" name="noTelAs" pattern="[0-9]*" required="">
+            <label for="noTelAs">전화번호</label>
         </div>
         <div class="input-field col s12">
-            <textarea id="contents" class="materialize-textarea"></textarea>
-            <label for="contents">AS 요청내용</label>
+            <i class="material-icons prefix">vpn_key</i>
+            <input type="password" class="validate" id="passwordAs" name="passwordAs" required="" maxlength="10">
+            <label for="passwordAs">비밀번호</label>
         </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">content_paste</i>
+            <textarea id="contentsAs" name="contentsAs" class="materialize-textarea" required=""></textarea>
+            <label for="contentsAs">AS 요청내용</label>
+        </div>
+        <input type="hidden" id="latitudeAs" name="latitudeAs" />
+        <input type="hidden" id="longitudeAs" name="longitudeAs" />
         <div id="kakaoMap" style="width:100%;height:300px;border: 1px solid;">
             <input id="keyword" type="text" placeholder="검색할 주소" value="" style="width: 150px;
     height: 20px;
@@ -40,34 +51,42 @@
     z-index: 999;
     position: relative;
     "/>
-            <input id="search" type="button" value="주소 검색" style="height: 30px;
-    line-height: 30px;
-    padding: 0 10px;
-    font-size: 12px;
-    border: solid 1px #555;
-    border-radius: 3px;
-    cursor: pointer;
-    box-sizing: content-box;
-    z-index: 999;
-    position: relative;"/>
-            <input id="here" type="button" value="현위치" style="height: 30px;
-    line-height: 30px;
-    padding: 0 10px;
-    font-size: 12px;
-    border: solid 1px #555;
-    border-radius: 3px;
-    cursor: pointer;
-    box-sizing: content-box;
-    z-index: 999;
-    position: relative;"/>
+            <button class="btn waves-effect waves-light" type="button" id="search" style="height: 30px;
+                                                                                        width: 5%;
+                                                                                        line-height: 30px;
+                                                                                        padding: 0 10px;
+                                                                                        font-size: 12px;
+                                                                                        border: solid 1px #555;
+                                                                                        border-radius: 3px;
+                                                                                        cursor: pointer;
+                                                                                        box-sizing: content-box;
+                                                                                        z-index: 999;
+                                                                                        position: relative;">
+                <i class="material-icons right">search</i>
+            </button>
+            <button class="btn waves-effect waves-light" type="button" id="here" style="height: 30px;
+                                                                                        width: 5%;
+                                                                                        line-height: 30px;
+                                                                                        padding: 0 10px;
+                                                                                        font-size: 12px;
+                                                                                        border: solid 1px #555;
+                                                                                        border-radius: 3px;
+                                                                                        cursor: pointer;
+                                                                                        box-sizing: content-box;
+                                                                                        z-index: 999;
+                                                                                        position: relative;">
+                <i class="material-icons right">gps_fixed</i>
+            </button>
         </div>
         <div class="input-field col s12">
-            <input type="text" id="asLocation" name="asLocation"><br>
-            <label for="asLocation">AS 위치</label>
+            <i class="material-icons prefix">location_on</i>
+            <input type="text" id="locationAs" name="locationAs" required="" maxlength="100" readonly><br>
+            <label for="locationAs">AS 위치</label>
         </div>
         <div class="input-field col s12">
-            <input type="text" id="locationDetail" name="locationDetail"><br>
-            <label for="locationDetail">AS 상세위치</label>
+            <i class="material-icons prefix">location_on</i>
+            <input type="text" class="validate" id="dtlLocationAs" name="dtlLocationAs"><br>
+            <label for="dtlLocationAs">AS 상세위치</label>
         </div>
         <div class="img-container">
             <div class="img-row">
@@ -86,7 +105,7 @@
             </div>
         </div>
         <input type="file" id="img-input" class="img-input" multiple accept="image/*" style="display: none;"/>
-        <a class="waves-effect waves-light btn-small" id="submitBtn">등록</a>
+        <button class="btn waves-effect waves-light" type="submit" name="action">등록</button>
     </form>
 </div>
 </html>

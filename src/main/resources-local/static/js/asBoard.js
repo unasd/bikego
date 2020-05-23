@@ -64,8 +64,10 @@ function drawThumnail(input) {
     }
 }
 
-function crudSubmit(){
-    $('#crudForm').submit();
+function asSubmit(){
+    $('#asForm').attr('method', 'post');
+    $('#asForm').attr('action', '/as/post.do');
+    $('#asForm').submit();
 }
 
 // 키워드 검색을 요청하는 함수입니다
@@ -170,7 +172,7 @@ $(document).ready(function(){
     });
 
     $('#submitBtn').click(function() {
-        crudSubmit();
+        asSubmit();
     });
 
   var container = document.getElementById('kakaoMap'); //지도를 담을 영역의 DOM 레퍼런스
@@ -185,6 +187,8 @@ $(document).ready(function(){
       var keyCode = e.which;
 
       if (keyCode === 13) { // Enter Key
+        e.preventDefault();
+        e.stopPropagation();
         searchPlaces();
       }
     });
@@ -220,11 +224,14 @@ $(document).ready(function(){
         marker.setPosition(latlng);
         let latitudeAs = latlng.getLat();
         let longitudeAs = latlng.getLng();
+        $('#latitudeAs').val(latitudeAs);
+        $('#longitudeAs').val(longitudeAs);
 
         searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
             if (status === kakao.maps.services.Status.OK) {
                 var detailAddr = result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
-                $('#asLocation').val(detailAddr);
+                $('#locationAs').val(detailAddr);
+                $("#locationAs").parent().find("label").addClass("active");
             }
         });
     });
