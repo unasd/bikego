@@ -15,12 +15,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PopupinfoDto {
 
-    private int popupSeq;
+    private Long popupSeq;
     private String popupTitle;
     private String popupUrl;
     private String popupWriter;
-    private Timestamp popupRegdt;
-    private Timestamp popupModdt;
+    private LocalDateTime popupRegdt;
+    private LocalDateTime popupModdt;
+    private String contents;
     private String popYn;
     private String delYn;
     private String popupStartDt;
@@ -34,33 +35,33 @@ public class PopupinfoDto {
         .popupTitle(popupTitle)
         .popupUrl(popupUrl)
         .popupWriter(popupWriter)
-        .popupRegdt(popupRegdt)
-        .popupModdt(popupModdt)
         .popYn(popYn)
         .delYn(delYn)
         .popupStartDt(popupStartDt)
         .popupEndDt(popupEndDt)
         .ipReg(ipReg)
         .attachId(attachId)
+        .contents(contents)
         .build();
         return popupinfoEntity;
 
     }
 
     @Builder
-    public PopupinfoDto(int popupSeq,String popupTitle,String popupUrl,String popupWriter,Timestamp popupRegdt,Timestamp popupModdt,String popYn,String delYn,String popupStartDt,String popupEndDt,String ipReg,String attachId) {
+    public PopupinfoDto(Long popupSeq,String popupTitle,String popupUrl,String contents,String popupWriter,LocalDateTime popupRegdt,LocalDateTime popupModdt,String popYn,String delYn,String popupStartDt,String popupEndDt,String ipReg,String attachId) {
         this.popupSeq = popupSeq;
         this.popupTitle = popupTitle;
         this.popupUrl = popupUrl;
         this.popupWriter=popupWriter;
-        this.popupRegdt=popupRegdt;
-        this.popupModdt=popupModdt;
+        this.popupRegdt = popupRegdt;
+        this.popupModdt = popupModdt;
         this.popYn=popYn;
         this.delYn=delYn;
         this.popupStartDt=popupStartDt;
         this.popupEndDt=popupEndDt;
         this.ipReg=ipReg;
         this.attachId=attachId;
+        this.contents=contents;
     }
 
 }

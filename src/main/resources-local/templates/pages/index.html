@@ -53,15 +53,22 @@
                 autoControls: false,
                 controls:false,
                 captions: true, //캡션사용
+                touchEnabled : (navigator.maxTouchPoints > 0),
                 pager:true,});
             });
+
+
+            function aa() {
+                var openNewWindow = window.open("about:blank");
+                openNewWindow.location.href = "http://www.naver.com";
+            }
 
         </script>
 
         <div class="container">
             <div >
                 <ul class="slider">
-                    <li><img  th:src="@{static/image/office.jpg}" title="1st image" /></li>
+                    <li><img  th:src="@{static/image/office.jpg}" title="1st image" onclick="aa();"  /></li>
                     <li><img  th:src="@{static/image/office.jpg}" title="2th image"/></li>
                     <li><img  th:src="@{static/image/office.jpg}" title="3rd image"/></li>
                 </ul>
