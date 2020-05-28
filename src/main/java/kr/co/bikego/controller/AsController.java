@@ -1,5 +1,6 @@
 package kr.co.bikego.controller;
 
+import kr.co.bikego.domain.entity.AsEntity;
 import kr.co.bikego.dto.AsDto;
 import kr.co.bikego.service.AsService;
 import kr.co.bikego.test.dto.CrudDto;
@@ -7,6 +8,7 @@ import kr.co.bikego.util.AES256Util;
 import kr.co.bikego.util.PageRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -33,14 +35,12 @@ public class AsController {
 
     @GetMapping("/list.do")
     public String list(Model model, final PageRequest pageable) throws GeneralSecurityException, UnsupportedEncodingException {
-        pageable.setDirection(Sort.Direction.ASC);
-        pageable.setSortProp("seqAs");
-        pageable.setPage(1);
+        System.out.println("pageable :: " + pageable);
+        pageable.setSortProp("seqAs"); // 페이징 필수셋팅 값
         pageable.setSize(10);
         HashMap result = asService.getAsList(pageable.of());
         model.addAttribute("asList", result.get("asDtoList"));
-        model.addAttribute("asEntityPage", result.get("asEntityPage"));
-        System.out.println("result :: " + result);
+        model.addAttribute("pageable", result.get("asEntityPage"));
         return "as/list";
     }
 

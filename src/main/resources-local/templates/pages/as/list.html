@@ -7,6 +7,54 @@
 
 <!-- page 스크립트 -->
 <th:block layout:fragment="script">
+    <script type="text/javascript">
+        function pagination(pUrl, pListSize, pSortProp, pSortDirection, pPageSize) {
+            let page = [[${pageable.number}]] ? [[${pageable.number}]]+1 : 1;
+            let totalCount = [[${pageable.totalElements}]] ? [[${pageable.totalElements}]] : 0;
+            let listSize = [[${pageable.size}]] ? [[${pageable.size}]] : 10;
+            let pageSize = 5;
+
+            if(pListSize) listSize = pListSize;
+            if(pPageSize) pageSize = pPageSize;
+
+            let totalPage = Math.floor(totalCount / listSize);
+            if(totalCount % listSize > 0) totalPage++;
+
+            let currPageBlock = Math.floor(page / pageSize);
+            if(page % pageSize > 0) currPageBlock++;
+
+            let startPage = Math.floor((currPageBlock - 1) * pageSize + 1);
+            let endPage = 0;
+            if(startPage + (pageSize - 1) > totalPage) {
+                endPage = totalPage;
+            } else {
+                endPage = startPage + (pageSize - 1);
+            }
+
+            console.info('startPage : ' + startPage);
+            console.info('endPage : ' + endPage);
+            let url = pUrl + '?size=' + listSize;
+            if(pSortProp) url = url + '&sortProp=' + pSortProp;
+            if(pSortDirection) url = url + '&sortDirection=' + pSortDirection;
+
+            let listHtml = '';
+            listHtml += '<li class="'+ ([[${pageable.hasPrevious()}]] ? 'waves-effect' : 'disabled') +'"><a href="'+ ([[${pageable.hasPrevious()}]] ? url + '&page='+(page-1) : '#!') +'"><i class="material-icons">chevron_left</i></a></li>';
+            for(let i = startPage; i <= endPage; i++) {
+                if(page == i) {
+                    listHtml += '<li class="active"><a href="#!">'+ i +'</a></li>';
+                } else {
+                    listHtml += '<li class="waves-effect"><a href="'+ url + '&page='+ i +'">'+ i +'</a></li>';
+                }
+            }
+            listHtml += '<li class="'+ ([[${pageable.hasNext()}]] ? 'waves-effect' : 'disabled') +'"><a href="'+ ([[${pageable.hasNext()}]] ? url + '&page='+(page+1) : '#!') +'"><i class="material-icons">chevron_right</i></a></li>';
+
+            return listHtml;
+        }
+
+        $(document).ready(function() {
+            $('.pagination').append($(pagination('/as/list.do')));
+        });
+    </script>
 </th:block>
 
 <div layout:fragment="content" >
@@ -42,7 +90,7 @@
         </tr>
         </tbody>
     </table>
-
-    <span th:text="${asEntityPage.pageable}"/>
+    <ul class="pagination">
+    </ul>
 </div>
 </html>
