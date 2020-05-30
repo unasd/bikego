@@ -3,6 +3,7 @@ package kr.co.bikego.service;
 import kr.co.bikego.domain.entity.AsEntity;
 import kr.co.bikego.domain.entity.AttachEntity;
 import kr.co.bikego.domain.repository.AsRepository;
+import kr.co.bikego.domain.spec.AsSpecs;
 import kr.co.bikego.dto.AsDto;
 import kr.co.bikego.util.AES256Util;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @Service
@@ -38,9 +40,16 @@ public class AsService {
         return seqAs;
     }
 
-    public HashMap getAsList(Pageable pageble) throws GeneralSecurityException, UnsupportedEncodingException {
+    public HashMap getAsList(Map<AsSpecs.SearchKey, Object> searchKeys, Pageable pageble) throws GeneralSecurityException, UnsupportedEncodingException {
         HashMap result = new HashMap();
-        Page<AsEntity> asEntityPage = asRepository.findAll(pageble);
+        Page<AsEntity> asEntityPage = null;
+
+        if(searchKeys.isEmpty()) {
+            asEntityPage = asRepository.findAll(pageble);
+        } else {
+            asEntityPage = asRepository.findAll(AsSpecs.searchWith(searchKeys), pageble);
+        }
+
         List<AsEntity> asEntities = asEntityPage.getContent();
         List<AsDto> asDtoList = new ArrayList<>();
         System.out.println("getIv :: " + aes.getIv());

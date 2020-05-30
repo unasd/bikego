@@ -142,3 +142,9 @@ table {
 .column .img-remove-btn:hover {
     background-color: black;
 }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
