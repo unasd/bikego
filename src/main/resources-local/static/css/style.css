@@ -105,6 +105,20 @@ table {
     clear: both;
 }
 
+.img-row2 {
+    height: 50px;
+    display: grid;
+    grid-template-columns: repeat(1,minmax(0,1fr));
+    grid-template-rows: repeat(1,minmax(0,1fr));
+    grid-gap: 4px;
+}
+
+.img-row2:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
 /* Six columns side by side */
 .column {
     position: relative;

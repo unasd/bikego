@@ -47,6 +47,7 @@ public class PopupService {
 
     public Long savePost(PopupinfoDto popupinfoDto, String[] image, String[] imageName, String[] imageSize) {
         // 파일업로드가 필요할 때 Transactional 어노테이션 선언된 서비스 메소드에서
+        System.out.println("111111==="+image);
         if(image != null) {
             List<AttachEntity> attachEntities = attachService.saveImage(image, imageName, imageSize, "crud");
             if (attachEntities != null) {

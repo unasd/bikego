@@ -148,6 +148,30 @@
                 crudSubmit();
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            var options = document.querySelectorAll('option');
+            var instances = M.FormSelect.init(elems, options);
+           /* var elems2 = document.querySelectorAll('.datepicker');
+            var instances2 = M.Datepicker.init(elems2, options);*/
+             elems = document.querySelectorAll('.datepicker');
+             instances = M.Datepicker.init(elems, options);
+
+        })
+
+        // Or with jQuery
+
+        $(document).ready(function(){
+            $('.datepicker').datepicker();
+        });
+
+
+    /*    $(document).ready(function() {
+            $('select').material_select();
+        });*/
+
+
     </script>
     <script th:inline="javascript" th:src="@{/static/js/crud.js}"></script>
 </th:block>
@@ -155,7 +179,7 @@
 <div layout:fragment="content" >
     <form id="popupForm" action="/popup/post" method="post">
         <input type="hidden" id="delYn" name="delYn" value="N">
-        <input type="hidden" id="popYn" name="popYn" value="Y">
+       <!-- <input type="hidden" id="popYn" name="popYn" value="Y">-->
         <div class="input-field col s12">
             <input type="text" id="popupTitle" name="popupTitle">
             <label for="popupTitle">제목</label>
@@ -164,12 +188,28 @@
             <input type="text" id="popupWriter" name="popupWriter"><br>
             <label for="popupWriter">작성자</label>
         </div>
-
-
-
-
-        <textarea name="contents"></textarea><br>
-
+        <div class="input-field col s12">
+            <input type="text" id="popupUrl" name="popupUrl"><br>
+            <label for="popupWriter">팝업Url</label>
+        </div>
+       <div class="input-field col s12">
+           <select  id="popYn" name="popYn">
+                 <option>Y</option>
+                 <option>N</option>
+             </select>
+           <label>팝업 사용 여부</label>
+       </div>
+        <div class="input-field col s12">
+            <input type="text" id="popupStartDt" name ="popupStartDt" class="datepicker">
+            <label >팝업게시기간</label>
+        </div>
+        <div class="input-field col s12">
+            <input type="text" id="popupEndDt" name ="popupEndDt" class="datepicker">
+            <label >팝업종료기간</label>
+        </div>
+        <div>
+            <textarea name="contents"></textarea><br>
+        </div>
         <div class="img-container">
             <div class="large-slide">
                 <div id="numbertext" class="numbertext"></div>

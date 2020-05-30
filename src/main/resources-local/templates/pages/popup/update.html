@@ -101,60 +101,85 @@
 
 
 
-    /*<![CDATA[*/
+        /*<![CDATA[*/
         var popupinfoDto = /*[[${popupinfoDto}]]*/ "";
-    /*]]>*/
-    $(document).ready(function(){
-        CKEDITOR.replace( 'contents',{
-            filebrowserUploadUrl: '/attach/ckImgUpload.do',
-            on: {
-                instanceReady: function() {
-                    CKEDITOR.instances.contents.setData(popupinfoDto.contents);
+        /*]]>*/
+        $(document).ready(function(){
+            CKEDITOR.replace( 'contents',{
+                filebrowserUploadUrl: '/attach/ckImgUpload.do',
+                on: {
+                    instanceReady: function() {
+                        CKEDITOR.instances.contents.setData(popupinfoDto.contents);
+                    }
+                },
+                toolbarGroups: [
+                    { name: 'editing',     groups: [ 'find', 'selection' ] },
+                    { name: 'insert' },
+                    { name: 'forms' },
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] }
+                ],
+                image_previewText: ' '
+            });
+
+            CKEDITOR.on('dialogDefinition', function (ev) {
+                var dialogName = ev.data.name;
+                var dialogDefinition = ev.data.definition;
+                var dialog = ev.data.definition.dialog;
+
+                if (dialogName == 'image') {
+                    dialog.on('show', function () {
+                        this.selectPage('Upload');
+                    });
+                    var infoTab = dialogDefinition.getContents( 'info' );
+                    infoTab.remove('txtBorder');
+                    infoTab.remove('txtHSpace');
+                    infoTab.remove('txtVSpace');
+                    infoTab.remove('txtWidth');
+                    infoTab.remove('txtHeight');
+                    infoTab.remove('txtAlt');
+                    infoTab.remove('cmbAlign');
+                    infoTab.remove('ratioLock');
                 }
-            },
-            toolbarGroups: [
-                { name: 'editing',     groups: [ 'find', 'selection' ] },
-                { name: 'insert' },
-                { name: 'forms' },
-                { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] }
-            ],
-            image_previewText: ' '
+            });
+
+            $('.img-input').change(function(){
+                drawThumnail(this);
+            });
+
+            $('.img-input').click(function(){
+                $('.img-input').val('');
+            });
+
+            $('.column').click(function(){
+
+                $('.img-input').eq(0).val('');
+                $('.img-input').click();
+            });
+
+            $('.slide-img').click(function(e){
+                alert('이미지 클릭');
+                e.stopPropagation();
+            });
+
+            $('.img-remove-btn').click(function(e){
+                // 삭제버튼 클릭
+                $(this).parent().remove();
+                let emptyColumn = document.createElement('div');
+                emptyColumn.setAttribute('class', 'column');
+                emptyColumn.onclick = function(e){
+                    $('.img-input').eq(0).val('');
+                    $('.img-input').click();
+                };
+                $('.img-row').append(emptyColumn);
+                e.stopPropagation();
+            });
+
+
+            $('#submitBtn').click(function() {
+                crudSubmit();
+            });
+
         });
-
-        CKEDITOR.on('dialogDefinition', function (ev) {
-            var dialogName = ev.data.name;
-            var dialogDefinition = ev.data.definition;
-            var dialog = ev.data.definition.dialog;
-
-            if (dialogName == 'image') {
-                dialog.on('show', function () {
-                    this.selectPage('Upload');
-                });
-                var infoTab = dialogDefinition.getContents( 'info' );
-                infoTab.remove('txtBorder');
-                infoTab.remove('txtHSpace');
-                infoTab.remove('txtVSpace');
-                infoTab.remove('txtWidth');
-                infoTab.remove('txtHeight');
-                infoTab.remove('txtAlt');
-                infoTab.remove('cmbAlign');
-                infoTab.remove('ratioLock');
-            }
-        });
-
-        $('.img-input').change(function(){
-            drawThumnail(this);
-        });
-
-        $('.column').click(function(){
-            $('.img-input').click();
-        });
-
-        $('#submitBtn').click(function() {
-            crudSubmit();
-        });
-
-    });
     </script>
 </th:block>
 
@@ -167,7 +192,7 @@
 
         제목 : <input type="text" name="popupTitle" th:value="${popupinfoDto.popupTitle}"> <br>
         작성자 : <input type="text" name="popupWriter" readonly="readonly" th:value="${popupinfoDto.popupWriter}"> <br>
-        <textarea name="contents"></textarea><br>
+        <textarea name="contents"><th:block th:utext="${popupinfoDto.contents}"></th:block></textarea><br>
 
         <div class="img-container">
             <div class="large-slide">
@@ -177,14 +202,15 @@
             <a class="prev" onclick="plusSlides(-1)"> < </a>
             <a class="next" onclick="plusSlides(1)"> > </a>
             <div  style="text-align: center; margin: 0 auto;" >
-              <div class="img-row">
-                    <div th:each="attachDto : ${attachDtoList}" class="column">
-                        <img class="slide-img cursor" th:style="'background-image: url(/attach/resizeImgView.do/' + ${attachDto.idAttach} + '/' + ${attachDto.snFileAttach} + ');'"/>
-                    </div>
-                </div>
-               <!-- <div class="img-row" >
+                 <div class="img-row" th:if="${attachDtoList.size()>0}">
+                       <div th:each="attachDto : ${attachDtoList}" class="column">
+                           <img class="slide-img cursor" th:style="'background-image: url(/attach/resizeImgView.do/' + ${attachDto.idAttach} + '/' + ${attachDto.snFileAttach} + ');'"/>
+                           <i class="tiny material-icons img-remove-btn">remove_circle</i>
+                       </div>
+                   </div>
+                <div class="img-row" th:if="${attachDtoList.size()<1}" >
                     <div class="column"> </div>
-                </div>-->
+                </div>
             </div>
         </div>
         <input type="file" id="img-input" class="img-input" multiple accept="image/*" style="display: none;"/>

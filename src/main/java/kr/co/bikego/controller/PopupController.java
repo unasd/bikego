@@ -61,8 +61,9 @@ public class PopupController {
     }
 
     @PutMapping("/post/edit/{no}")
-    public String update(PopupinfoDto popupinfoDto) {
-        popupService.savePost(popupinfoDto, null, null, null);
+    public String update(PopupinfoDto popupinfoDto , String[] image, String[] imageName, String[] imageSize) {
+        //popupService.savePost(popupinfoDto, null, null, null);
+        popupService.savePost(popupinfoDto, image, imageName, imageSize);
 
         return "redirect:/popup/list";
     }
