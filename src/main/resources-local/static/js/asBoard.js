@@ -116,7 +116,8 @@ function onSuccessGeolocation(position) {
     var currentPosition = new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
     // 지도 중심을 이동 시킵니다
     kakaoMap.setCenter(currentPosition);
-    marker.setPosition(currentPosition);
+//    marker.setPosition(currentPosition);
+//todo: 마커 옮기기, 좌표 input 반영하기, 주소 input 반영하기
     kakaoMap.setLevel(3);
 }
 
