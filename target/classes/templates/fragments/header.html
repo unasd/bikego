@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
+
 <header th:fragment="headerFragment">
     <nav class="light-blue lighten-1" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">Bikego</a>
             <ul class="right hide-on-med-and-down">
-                <li><a href="/as/list">AS</a></li>
+                <li><a href="/as/list.do">AS</a></li>
+                <li><a href="/popup/list">PopupInfo</a></li>
                 <li><a href="#">Board</a></li>
                 <li><a href="#">FAQ</a></li>
                 <li><a href="#">Info</a></li>
@@ -13,7 +15,16 @@
             </ul>
 
             <ul id="nav-mobile" class="sidenav">
-                <li><a href="/as/list">AS</a></li>
+                <li><div class="user-view">
+                    <div class="background">
+                        <img src="/static/image/sideImg.jpg" style="max-width: 100%; height: auto;" >
+                    </div>
+                    <a href="#user"><img class="circle" src="/static/image/yuna.jpg"></a>
+                  <!--  <a href="#name"><span class="white-text name">John Doe</span></a>-->
+                    <a href="#email"><span class="deep-orange-text email">jdandturk@gmail.com</span></a>
+                </div></li>
+                <li><a href="/as/list.do">AS</a></li>
+                <li><a href="/popup/list">PopupInfo</a></li>
                 <li><a href="#">Board</a></li>
                 <li><a href="#">FAQ</a></li>
                 <li><a href="#">Info</a></li>

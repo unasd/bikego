@@ -31,6 +31,7 @@ public class AsService {
     private AttachService attachService;
 
     @Transactional
+
     public Long saveAs(AsDto asDto, String[] image, String[] imageName, String[] imageSize) {
         if(image != null) {
             List<AttachEntity> attachEntities = attachService.saveImage(image, imageName, imageSize, "as");

@@ -181,18 +181,22 @@
         <input type="hidden" id="delYn" name="delYn" value="N">
        <!-- <input type="hidden" id="popYn" name="popYn" value="Y">-->
         <div class="input-field col s12">
-            <input type="text" id="popupTitle" name="popupTitle">
+            <i class="material-icons prefix">title</i>
+            <input type="text" class="validate" id="popupTitle" name="popupTitle" required="" maxlength="100">
             <label for="popupTitle">제목</label>
         </div>
         <div class="input-field col s12">
+            <i class="material-icons prefix">account_circle</i>
             <input type="text" id="popupWriter" name="popupWriter"><br>
             <label for="popupWriter">작성자</label>
         </div>
         <div class="input-field col s12">
+            <i class="material-icons prefix">http</i>
             <input type="text" id="popupUrl" name="popupUrl"><br>
             <label for="popupWriter">팝업Url</label>
         </div>
        <div class="input-field col s12">
+           <i class="material-icons prefix">check</i>
            <select  id="popYn" name="popYn">
                  <option>Y</option>
                  <option>N</option>
@@ -200,10 +204,12 @@
            <label>팝업 사용 여부</label>
        </div>
         <div class="input-field col s12">
+            <i class="material-icons prefix">event_available</i>
             <input type="text" id="popupStartDt" name ="popupStartDt" class="datepicker">
             <label >팝업게시기간</label>
         </div>
         <div class="input-field col s12">
+            <i class="material-icons prefix">event_busy</i>
             <input type="text" id="popupEndDt" name ="popupEndDt" class="datepicker">
             <label >팝업종료기간</label>
         </div>
