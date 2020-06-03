@@ -18,9 +18,25 @@
             $('[name="listForm"]').submit();
         }
 
+        function passwordChk(){
+            alert('12321');
+            $('#passwordForm').submit();
+        }
+
         $(document).ready(function() {
             $('select').formSelect(); // select box 초기화
-            $('.modal').modal(); // modal 초기화
+            $('#passwordModal').modal({
+                dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                opacity: .5, // Opacity of modal background
+                inDuration: 300, // Transition in duration
+                outDuration: 200, // Transition out duration
+                startingTop: '4%', // Starting top style attribute
+                endingTop: '10%', // Ending top style attribute
+                onCloseStart: function(e) {
+                    console.info(e);
+                    return false;
+                }
+            }); // modal 초기화
 
             $('.modal-trigger').on('click', function(e){
                 $('#passwordAs').val('');
@@ -117,13 +133,15 @@
         <div class="modal-content">
             <h5>비밀번호 입력</h5>
             <p>작성시 입력한 비밀번호</p>
-            <div class="input-field">
-                <input id="passwordAs" name="passwordAs" type="password" class="validate" onkeypress="if( event.keyCode==13 ){goSearch();}">
-                <label for="passwordAs">Password</label>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">확인</a>
+            <form id="passwordForm">
+                <div class="input-field">
+                    <input id="passwordAs" name="passwordAs" type="password" class="validate" onkeypress="if( event.keyCode==13 ){passwordChk();}" required="">
+                    <label for="passwordAs">Password</label>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn waves-effect waves-green btn-flat" type="submit" name="action">확인</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
