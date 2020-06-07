@@ -176,3 +176,15 @@ ul.bxslider {
   font-size: 1.5em;
   padding: 20px;
 }
+
+.bx-wrapper {
+  border: 0;
+}
+
+.bx-wrapper .slider {
+  margin: 0;
+}
+
+.bx-wrapper .slider > li {
+  width: 100%;
+}
