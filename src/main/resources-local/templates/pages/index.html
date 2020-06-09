@@ -12,9 +12,6 @@
 <th:block layout:fragment="script">
 </th:block>
 
-
-
-
 <div layout:fragment="content" >
 
     <div class="section no-pad-bot" id="index-banner">
@@ -44,7 +41,7 @@
             $(document).ready(function(){$('.slider').bxSlider({
                 auto: true,speed: 500,
                 pause: 4000,
-                slideWidth: 1000,
+                responsive: true,
                 mode:'fade',
                 autoControls: false,
                 controls:false,
@@ -61,7 +58,7 @@
 
         </script>
 
-        <div class="container" align="center">
+        <div class="container full" align="center">
             <div >
                 <ul class="slider">
                     <li><img th:src="@{static/image/office.jpg}" title="1st image" onclick="aa();"   /></li>
@@ -74,21 +71,34 @@
         </div>
 
 
-
-
-        <div class="container">
-            <br><br>
-            <h1 class="header center orange-text">AS Service</h1>
-            <div class="row center">
-                <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
-                <img width="150" th:src="@{static/image/office.jpg}"/>
-            </div>
-            <div class="row center">
-                <a href="http://materializecss.com/getting-started.html" id="download-button" class="btn-large waves-effect waves-light orange">Get Started</a>
-            </div>
-            <br><br>
-
+        <div class="container full">
+            <ul>
+                <li>
+                    <div>
+                        <h1 class="header center orange-text">AS Service</h1>
+                        <a href="#" class="full-wrapper" style="background: url(/static/image/bike-sunset.jpg); background-size: cover; background-position: center center;">
+                            <h5 class="header col s12 light description">A modern responsive front-end framework based on Material Design2</h5>
+                        </a>
+                    </div>
+                </li>
+            </ul>
         </div>
+
+
+
+          <!--  <div class="container">
+                <br><br>
+                <h1 class="header center orange-text">AS Service</h1>
+                <div class="row center">
+                    <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
+                    <img width="150" th:src="@{static/image/office.jpg}"/>
+                </div>
+                <div class="row center">
+                    <a href="http://materializecss.com/getting-started.html" id="download-button" class="btn-large waves-effect waves-light orange">Get Started</a>
+                </div>
+                <br><br>
+
+            </div>-->
     </div>
 
 
@@ -100,7 +110,7 @@
                 <div class="col s12 m4">
                     <div class="icon-block">
                         <h2 class="center light-blue-text"><i class="material-icons">electric_bike</i></h2>
-                        <h5 class="center">What's Bike go !!!</h5>
+                        <h5 class="center">What's Bike go </h5>
 
                         <p class="light">Bike go 저희가 하는 일을 알려드립니다. </p>
                     </div>

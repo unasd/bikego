@@ -162,3 +162,83 @@ table {
   align-items: center;
   justify-content: center;
 }
+
+/* Customized CSS */
+
+body {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.no-border {
+    border: 0 !important;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.sidenav .avatar {
+    width: 10rem;
+}
+
+.sidenav li > a {
+    color: #e6e6e6;
+}
+
+.container.full {
+    width: 100%;
+}
+
+.full-wrapper {
+    display: block;
+    width: 100%;
+    background-size: cover;
+    min-height: 320px;
+    position: relative;
+}
+.full-wrapper .description {
+    position: absolute;
+    bottom: 0;
+    right: 5%;
+}
+
+.popup-list .desc h4 {
+    margin: 24px 0 15px 0;
+}
+
+.popup-list .row {
+    margin-bottom: 10%;
+}
+
+.popup-list .row:not(:first-child) {
+    margin-top: 10%;
+}
+
+/* Customized Materialize */
+
+.collection {
+    border: 0;
+}
+
+.select-dropdown {
+    color: white;
+}
+
+.img-row {
+    height: 50px;
+    display: grid;
+    grid-template-columns: repeat(1,minmax(0,1fr));
+    grid-template-rows: repeat(1,minmax(0,1fr));
+    grid-gap: 4px;
+}
+
+@media (max-width: 767px) {
+    .popup-list .row {
+        margin-bottom: 0;
+    }
+    
+    .popup-list .row:not(:first-child) {
+        margin-top: 50px;
+    }
+}
