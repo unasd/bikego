@@ -242,17 +242,15 @@ public class AttachService {
     }
 
     @Transactional
-    public void updateDelYn(String idAttach, int[] snFileAttach) {
-        for(int sn : snFileAttach) {
-            AttachEntity attachEntity = AttachEntity.builder()
-                    .idAttach(idAttach)
-                    .snFileAttach(sn)
-                    .modifierAttach("test")
-                    .moddtAttach(LocalDateTime.now())
-                    .build();
-            attachRepository.save(attachEntity);
-
-        }
+    public void updateDelYn(String idAttach, int snFileAttach, String modifier) {
+        AttachEntity attachEntity = AttachEntity.builder()
+                .idAttach(idAttach)
+                .snFileAttach(snFileAttach)
+                .ynDel("Y")
+                .modifierAttach(modifier)
+                .moddtAttach(LocalDateTime.now())
+                .build();
+        attachRepository.save(attachEntity);
     }
 
 }

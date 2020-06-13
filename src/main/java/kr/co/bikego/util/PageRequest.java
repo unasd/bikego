@@ -1,12 +1,15 @@
 package kr.co.bikego.util;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
+@Getter
+@Setter
 public final class PageRequest {
 
     private int page = 1;
@@ -14,26 +17,6 @@ public final class PageRequest {
     private int pageSize = 5;
     private Sort.Direction direction = Sort.Direction.DESC;
     private String sortProp;
-
-    public void setPage(int page) {
-        this.page = page <= 0 ? 1 : page;
-    }
-
-    public void setListSize(int listSize) {
-        this.listSize = listSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public void setDirection(Sort.Direction direction) {
-        this.direction = direction;
-    }
-
-    public void setSortProp(String sortProp) {
-        this.sortProp = sortProp;
-    }
 
     public org.springframework.data.domain.PageRequest of() {
         return org.springframework.data.domain.PageRequest.of(page - 1, listSize, direction, sortProp);

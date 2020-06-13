@@ -5,6 +5,8 @@ import kr.co.bikego.domain.entity.AttachEntity;
 import kr.co.bikego.domain.repository.AsRepository;
 import kr.co.bikego.dto.AsDto;
 import kr.co.bikego.dto.SearchDto;
+import kr.co.bikego.test.domain.entity.CrudEntity;
+import kr.co.bikego.test.dto.CrudDto;
 import kr.co.bikego.util.AES256Util;
 import kr.co.bikego.util.SearchSpec;
 import lombok.AllArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +30,8 @@ import java.util.Optional;
 public class AsService {
     @Autowired
     AES256Util aes;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     private AsRepository asRepository;
     private AttachService attachService;
 
@@ -43,7 +48,7 @@ public class AsService {
         return seqAs;
     }
 
-    public HashMap getAsList(Pageable pageble, SearchDto searchDto) throws GeneralSecurityException, UnsupportedEncodingException {
+    public HashMap getAsList(Pageable pageble, SearchDto searchDto) throws Exception {
         HashMap result = new HashMap();
         Page<AsEntity> asEntityPage = null;
         if(Optional.ofNullable(searchDto.getSearchKeyword()).orElse("").isEmpty()) {
@@ -78,5 +83,34 @@ public class AsService {
         result.put("asDtoList", asDtoList);
 
         return result;
+    }
+
+    public boolean passwordChk(AsDto asDto) throws Exception {
+        return passwordEncoder.matches(asDto.getPasswordAs(),
+                Optional.ofNullable(this.getAsDetail(asDto.getSeqAs())).map(AsDto::getPasswordAs).orElse(""));
+    }
+
+    public AsDto getAsDetail(Long seqAs) throws Exception {
+        Optional<AsEntity> asEntityWrapper = asRepository.findById(seqAs);
+        AsEntity asEntity = asEntityWrapper.get();
+
+        AsDto asDto = AsDto.builder()
+                .seqAs(asEntity.getSeqAs())
+                .titleAs(asEntity.getTitleAs())
+                .contentsAs(asEntity.getContentsAs())
+                .noTelAs(aes.decrypt(asEntity.getNoTelAs()))
+                .latitudeAs(asEntity.getLatitudeAs())
+                .longitudeAs(asEntity.getLongitudeAs())
+                .locationAs(asEntity.getLocationAs())
+                .dtlLocationAs(asEntity.getDtlLocationAs())
+                .passwordAs(asEntity.getPasswordAs())
+                .idAttach(asEntity.getIdAttach())
+                .writerAs(asEntity.getWriterAs())
+                .regdtAs(asEntity.getRegdtAs())
+                .modifierAs(asEntity.getModifierAs())
+                .moddtAs(asEntity.getModdtAs())
+                .build();
+
+        return asDto;
     }
 }

@@ -7,10 +7,10 @@ function drawThumnail(input) {
     if (input.files && input.files[0]) {
         // 현재 썸네일 이미지가 몇개인지 가져옴
         let count = $('.slide-img').length;
-        let imgLimit = 6 - count;
+        let imgLimit = $('.column').length - count;
         let loopLimit = input.files.length > imgLimit ? imgLimit : input.files.length;
 
-        // 6 - (썸네일 이미지 개수) 만큼 반복 돌면서 썸네일 이미지 추가
+        // 썸네일 이미지 개수 만큼 반복 돌면서 썸네일 이미지 추가
         for(let i = 0; i < loopLimit; i++) {
             let reader = new FileReader();
             reader.onload = function (e) {
@@ -18,7 +18,7 @@ function drawThumnail(input) {
                 slideImg.setAttribute('class', 'slide-img cursor');
                 slideImg.setAttribute('style', 'background-image: url('+ e.target.result +');');
                 slideImg.onclick = function(e){
-                    alert('이미지 클릭');
+                    $('#imageModal').modal('open');
                     e.stopPropagation();
                 };
                 $('.column').eq(count).html(slideImg);
@@ -74,7 +74,9 @@ function asSubmit(){
 function searchPlaces() {
     var keyword = document.getElementById('keyword').value;
     if (!keyword.replace(/^\s+|\s+$/g, '')) {
-        alert('키워드를 입력해주세요!');
+        $('#alertModal').find('h4').text('');
+        $('#alertModal').find('p').text('키워드를 입력하세요!');
+        $('#alertModal').modal('open');
         return false;
     }
     // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
@@ -167,19 +169,25 @@ $(document).ready(function(){
         drawThumnail(this);
     });
 
-    $('.column').click(function(){
-        $('.img-input').eq(0).val('');
-        $('.img-input').click();
+    $('.column, .imgUpBtn').click(function(){
+        if($('.slide-img').length < $('.column').length) {
+            $('.img-input').eq(0).val('');
+            $('.img-input').click();
+        } else {
+            $('#alertModal').find('h4').text('');
+            $('#alertModal').find('p').text('더 이상 추가할 수 없습니다.');
+            $('#alertModal').modal('open');
+        }
     });
 
     $('#submitBtn').click(function() {
         asSubmit();
     });
 
-  var container = document.getElementById('kakaoMap'); //지도를 담을 영역의 DOM 레퍼런스
+  var container = document.getElementById('kakaoMap');
   var options = { //지도를 생성할 때 필요한 기본 옵션
-  	center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-  	level: 3 //지도의 레벨(확대, 축소 정도)
+      center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+  	  level: 3 //지도의 레벨(확대, 축소 정도)
   };
   kakaoMap = new kakao.maps.Map(container, options);
 
@@ -202,20 +210,20 @@ $(document).ready(function(){
 
     // 현위치
     $('#here').on('click', function(e) {
-      e.preventDefault();
+        e.preventDefault();
         setCurrentLocation(e);
     });
 
-    // 지도를 클릭한 위치에 표출할 마커입니다
+    // 지도를 클릭한 위치에 표출할 마커
     marker = new kakao.maps.Marker({
-        // 지도 중심좌표에 마커를 생성합니다
+        // 지도 중심좌표에 마커 생성
         position: kakaoMap.getCenter()
     });
-    // 지도에 마커를 표시합니다
+    // 지도에 마커 표시
     marker.setMap(kakaoMap);
     setCurrentLocation();
 
-    // 지도에 클릭 이벤트를 등록합니다
+    // 지도 클릭 이벤트
     // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
     kakao.maps.event.addListener(kakaoMap, 'click', function(mouseEvent) {
 

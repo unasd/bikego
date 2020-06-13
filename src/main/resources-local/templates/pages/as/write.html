@@ -3,6 +3,30 @@
 
 <!-- page CSS -->
 <th:block layout:fragment="css">
+    <style>
+        .input-field > textarea {
+          color :#ffffff;
+        }
+
+        .img-row {
+            display: grid;
+            grid-template-columns: repeat(4,minmax(0,1fr));
+            grid-template-rows: repeat(1,minmax(0,1fr));
+            grid-gap: 2%;
+            height: 100%;
+        }
+        .column {
+            background-color: #9e9e9e;
+            position: relative;
+            width: 100%;
+            height: 0;
+            overflow: hidden;
+            padding-bottom: 100%;
+        }
+        .slide-img {
+            position: absolute;
+        }
+    </style>
 </th:block>
 
 <!-- page 스크립트 -->
@@ -10,8 +34,8 @@
     <script th:inline="javascript" th:src="@{/static/js/asBoard.js}"></script>
 </th:block>
 
-<div layout:fragment="content" >
-    <form id="asForm" action="/as/post.do" method="post">
+<div layout:fragment="content" class="container">
+    <form id="asForm" action="/as/write.do" method="post">
         <div class="input-field col s12">
             <i class="material-icons prefix">title</i>
             <input type="text" class="validate" id="titleAs" name="titleAs" required="" maxlength="100">
@@ -39,42 +63,12 @@
         </div>
         <input type="hidden" id="latitudeAs" name="latitudeAs" />
         <input type="hidden" id="longitudeAs" name="longitudeAs" />
-        <div id="kakaoMap" style="width:100%;height:300px;border: 1px solid;">
-            <input id="keyword" type="text" placeholder="검색할 주소" value="" style="width: 150px;
-    height: 20px;
-    line-height: 20px;
-    border: solid 1px #555;
-    padding: 5px;
-    font-size: 12px;
-    box-sizing: content-box;
-    background-color: white;
-    z-index: 99;
-    position: relative;
-    "/>
-            <button class="btn waves-effect waves-light" type="button" id="search" style="height: 30px;
-                                                                                        width: 5%;
-                                                                                        line-height: 30px;
-                                                                                        padding: 0 10px;
-                                                                                        font-size: 12px;
-                                                                                        border: solid 1px #555;
-                                                                                        border-radius: 3px;
-                                                                                        cursor: pointer;
-                                                                                        box-sizing: content-box;
-                                                                                        z-index: 99;
-                                                                                        position: relative;">
+        <div id="kakaoMap" class="asMap">
+            <input id="keyword" type="text" class="asMapInput browser-default" placeholder="검색할 주소" value=""/>
+            <button class="btn waves-effect waves-light asMapBtn" type="button" id="search">
                 <i class="material-icons right">search</i>
             </button>
-            <button class="btn waves-effect waves-light" type="button" id="here" style="height: 30px;
-                                                                                        width: 5%;
-                                                                                        line-height: 30px;
-                                                                                        padding: 0 10px;
-                                                                                        font-size: 12px;
-                                                                                        border: solid 1px #555;
-                                                                                        border-radius: 3px;
-                                                                                        cursor: pointer;
-                                                                                        box-sizing: content-box;
-                                                                                        z-index: 99;
-                                                                                        position: relative;">
+            <button class="btn waves-effect waves-light asMapBtn" type="button" id="here">
                 <i class="material-icons right">gps_fixed</i>
             </button>
         </div>
@@ -98,14 +92,18 @@
                 </div>
                 <div class="column">
                 </div>
-                <div class="column">
-                </div>
-                <div class="column">
-                </div>
             </div>
+            <a class="material-icons imgUpBtn" style="float: right;">add_photo_alternate</a>
         </div>
         <input type="file" id="img-input" class="img-input" multiple accept="image/*" style="display: none;"/>
-        <button class="btn waves-effect waves-light" type="submit" name="action">등록</button>
+        <div class="row">
+            <div class="col s12 center-align">
+                <!-- <a class="waves-effect waves-light btn-small" id="submitBtn">등록</a> -->
+                <button type="submit" name="action" style="background-color: black;">
+                    <i class="large material-icons" style="color: rgba(255, 255, 255, 1);">edit</i>
+                </button>
+            </div>
+        </div>
     </form>
 </div>
 </html>

@@ -6521,7 +6521,10 @@ textarea.materialize-textarea + label:after, .select-wrapper + label:after {
 
 .input-field > input {
   color :#ffffff;
+}
 
+.modal-content {
+  color : black;
 }
 
 .input-field > label {

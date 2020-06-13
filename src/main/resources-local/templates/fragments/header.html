@@ -33,6 +33,40 @@
             <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         </div>
     </nav>
-</header>
 
+    <!-- alert 모달 -->
+    <div id="alertModal" class="modal">
+        <div class="modal-content">
+            <h4></h4>
+            <p></p>
+        </div>
+        <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">확인</a>
+        </div>
+    </div>
+
+    <!-- 이미지뷰 모달 -->
+    <div id="imageModal" class="modal" style="width: 90%;">
+        <div class="img-container">
+            <div class="modal-slide" style="margin-bottom: 0px; background-image: url('/static/image/bike-sunset.jpg'); background-size: contain;">
+                <div id="numbertext" class="numbertext"></div>
+                <i class="material-icons modal-close" style="float: right;">close</i>
+            </div>
+            <a class="prev">❮</a>
+            <a class="next">❯</a>
+        </div>
+    </div>
+
+    <!-- confirm 모달-->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h4></h4>
+            <p></p>
+        </div>
+        <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat cancel">취소</a>
+            <a class="modal-close waves-effect waves-green btn-flat confirm">확인</a>
+        </div>
+    </div>
+</header>
 </html>

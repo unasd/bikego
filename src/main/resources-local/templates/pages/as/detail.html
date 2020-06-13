@@ -1,10 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="../layout/default">
 
-</body>
+<!-- page CSS -->
+<th:block layout:fragment="css">
+    <style>
+        .img-row {
+            display: grid;
+            grid-template-columns: repeat(4,minmax(0,1fr));
+            grid-template-rows: repeat(1,minmax(0,1fr));
+            grid-gap: 2%;
+            height: 100%;
+        }
+        .column {
+            background-color: #9e9e9e;
+            position: relative;
+            width: 100%;
+            height: 0;
+            overflow: hidden;
+            padding-bottom: 100%;
+        }
+        .slide-img {
+            position: absolute;
+        }
+    </style>
+</th:block>
+
+<!-- page 스크립트 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var resultDto = /*[[${resultDto}]]*/ "";
+        /*]]>*/
+        function goList(){
+            $('[name="listForm"]').attr('method', 'get');
+            $('[name="listForm"]').attr('action', '/as/list.do');
+            $('[name="listForm"]').submit();
+        }
+        function goUpdate(){
+            $('[name="listForm"]').attr('method', 'get');
+            $('[name="listForm"]').attr('action', '/as/update.do');
+            $('[name="listForm"]').submit();
+        }
+        function goDelete(){
+            $('[name="listForm"]').attr('method', 'post');
+            $('[name="listForm"]').attr('action', '/as/delete.do');
+            //$('[name="listForm"]').submit();
+        }
+
+        $(document).ready(function(){
+            $('.slide-img').on('click', function(){
+                $('#imageModal').modal('open');
+            });
+
+            let container = document.getElementById('kakaoMap'); //지도를 담을 영역의 DOM 레퍼런스
+            if(resultDto.latitudeAs) {
+                let options = { //지도를 생성할 때 필요한 기본 옵션
+                  center: new kakao.maps.LatLng(resultDto.latitudeAs, resultDto.longitudeAs), //지도의 중심좌표.
+                  level: 3 //지도의 레벨(확대, 축소 정도)
+                };
+                let kakaoMap = new kakao.maps.Map(container, options);
+
+                let marker = new kakao.maps.Marker({
+                    // 지도 중심좌표에 마커를 생성합니다
+                    position: kakaoMap.getCenter()
+                });
+                marker.setMap(kakaoMap);
+            } else {
+                //todo: 좌표없을 때 예외처리
+            }
+        });
+    </script>
+</th:block>
+
+<div layout:fragment="content" >
+    <h2 th:text="${resultDto.titleAs}"></h2>
+    <p th:inline="text">작성일 : [[${#temporals.format(resultDto.regdtAs, 'yyyy-MM-dd HH:mm')}]]</p>
+    <p th:inline="text">작성자 : [[${resultDto.writerAs}]]</p>
+    <p th:inline="text">전화번호 : [[${resultDto.noTelAs}]]</p>
+    <div style="border: solid 1px;"><th:block th:utext="${resultDto.contentsAs}"></th:block></div>
+    <div id="kakaoMap" style="width:100%;height:300px;border: 1px solid;"></div>
+    <p th:inline="text">AS위치 : [[${resultDto.locationAs}]]</p>
+    <p th:inline="text">AS 상세위치 : [[${resultDto.dtlLocationAs}]]</p>
+    <div class="img-container">
+        <div class="img-row">
+            <div th:each="attachDto : ${attachDtoList}" class="column">
+                <img class="slide-img cursor" th:style="'background-image: url(/attach/resizeImgView.do/' + ${attachDto.idAttach} + '/' + ${attachDto.snFileAttach} + ');'"/>
+            </div>
+        </div>
+    </div>
+
+    <!-- 수정/삭제 -->
+    <div>
+        <a onclick="javascript: goUpdate();">
+            <button>수정</button>
+        </a>
+        <a onclick="javascript: goDelete();">
+            <button>삭제</button>
+        </a>
+        <a onclick="javascript: goList();">
+            <button>목록</button>
+        </a>
+        <form name="listForm" method="get" action="/as/list.do">
+            <input type="hidden" name="page" th:value="${pagingResult.page}"/>
+            <input type="hidden" name="listSize" th:value="${pagingResult.listSize}"/>
+            <input type="hidden" name="pageSize" th:value="${pagingResult.pageSize}"/>
+            <input type="hidden" name="direction" th:value="${pagingResult.direction}"/>
+            <input type="hidden" name="sortProp" th:value="${pagingResult.sortProp}"/>
+            <input type="hidden" name="searchType" th:value="${searchDto.searchType}"/>
+            <input type="hidden" name="searchKeyword" th:value="${searchDto.searchKeyword}"/>
+            <input type="hidden" name="seqAs" th:value="${param.seqAs}"/>
+            <input type="hidden" name="passwordAs" th:value="${param.passwordAs}"/>
+        </form>
+    </div>
+</div>
 </html>

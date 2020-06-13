@@ -2,7 +2,9 @@ package kr.co.bikego.controller;
 
 import com.google.gson.JsonObject;
 import kr.co.bikego.domain.entity.AttachEntity;
+import kr.co.bikego.dto.AsDto;
 import kr.co.bikego.dto.AttachDto;
+import kr.co.bikego.service.AsService;
 import kr.co.bikego.service.AttachService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -25,6 +28,7 @@ import java.util.List;
 @RequestMapping("/attach")
 public class AttachController {
     private AttachService attachService;
+    private AsService asService;
 
     @GetMapping(
             value = "/imgView.do"
@@ -94,9 +98,7 @@ public class AttachController {
         JsonObject json = new JsonObject();
         PrintWriter printWriter = null;
         OutputStream out = null;
-        System.out.println("upload ::: " + req.getParameter("upload"));
         MultipartFile file = multiFile.getFile("upload");
-        System.out.println("file ::: " + file);
 
         if(file != null){
             if(file.getSize() > 0 && !StringUtils.isEmpty(file.getName())){
@@ -110,18 +112,11 @@ public class AttachController {
                         String[] imageName = {file.getOriginalFilename()};
                         String[] imageSize = {String.valueOf(file.getSize())};
                         List<AttachEntity> attachEntities = attachService.saveImage(image, imageName, imageSize, "ckEditor");
-                        for(AttachEntity test : attachEntities) {
-                            System.out.println(test.getIdAttach());
-                        }
 
-                        // json 데이터로 등록
-                        // {"uploaded" : 1, "fileName" : "test.jpg", "url" : "/img/test.jpg"}
-                        // 이런 형태로 리턴이 나가야함.
                         json.addProperty("uploaded", 1);
                         json.addProperty("fileName", file.getOriginalFilename());
                         json.addProperty("url", "/attach/resizeImgView.do/" + attachEntities.get(0).getIdAttach() + "/" + 1); //todo: 도메인 변수처리
 
-                        System.out.println("json :: " + json);
                         printWriter = resp.getWriter();
                         printWriter.println(json);
                         printWriter.flush();
@@ -140,5 +135,17 @@ public class AttachController {
         }
     }
 
-
+    @PostMapping(value = "/asImgDelete.do")
+    @ResponseBody
+    public Object asImgDelete(@RequestParam HashMap<String, Object> requestMap, AsDto asDto) throws Exception {
+        if (asService.passwordChk(asDto)) {
+            // 삭제여부 업데이트
+            attachService.updateDelYn(asDto.getIdAttach()
+                                        , (int) requestMap.getOrDefault("snFileAttach", 0)
+                                        , asDto.getWriterAs());
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
