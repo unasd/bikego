@@ -105,6 +105,7 @@
 
         $(document).ready(function(){
             CKEDITOR.replace( 'contents',{
+            height:300,
             filebrowserUploadUrl: '/attach/ckImgUpload.do',
             toolbarGroups: [
                 { name: 'editing',     groups: [ 'find', 'selection' ] },
@@ -193,7 +194,7 @@
         <div class="input-field col s12">
             <i class="material-icons prefix">http</i>
             <input type="text" id="popupUrl" name="popupUrl"><br>
-            <label for="popupWriter">팝업Url</label>
+            <label for="popupUrl">팝업Url</label>
         </div>
        <div class="input-field col s12">
            <i class="material-icons prefix">check</i>
@@ -233,10 +234,10 @@
 
         <div class="row">
             <div class="col s12 center-align">
-                <!-- <a class="waves-effect waves-light btn-small" id="submitBtn">등록</a> -->
-                <a id="submitBtn" th:href="@{/popup/post}">
-                    <i class="large material-icons" style="color: rgba(255, 255, 255, 1);">edit</i>
-                </a>
+                 <a id="submitBtn"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i></a>
+                <!--<a id="submitBtn" th:href="@{/popup/post}">
+                    <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i>
+                </a>-->
             </div>
         </div>
     </form>

@@ -43,8 +43,8 @@
 </th:block>
 
 <div layout:fragment="content" class="container full">
-    <div class="right-align" style="margin: 2%;">
-        <a th:href="@{/popup/post}" class="material-icons" style="color: rgba(255, 255, 255, 1);">edit</a>
+    <div class="col s12 right-align" style="margin: 2%;">
+        <a th:href="@{/popup/post}" class="large material-icons" style="font-size: 30px; color: rgba(255, 255, 255, 1);">edit</a>
     </div>
     <ul class="collection popup-list">
         <li class="collection-item black no-border no-padding" th:each="popupList : ${popupList}" style="border-bottom: none;">
@@ -57,7 +57,7 @@
                     <h4 th:text="${popupList.popupTitle}" />
                     <div class="blue-grey-text lighten-5" th:text="${popupList.popupWriter}" />
                     <p>In a few years, the World will look back at 2020 and the Covid-19 as arguably a defining moment…</p>
-                    <a class="waves-effect waves-light btn-small" th:href="@{'/popup/post/' + ${popupList.popupSeq}}">더보기</a>
+                    <a class="waves-effect waves-light btn-small" th:href="@{'/popup/post/' + ${popupList.popupSeq}}">more</a>
                 </div>
             </div>
         </li>

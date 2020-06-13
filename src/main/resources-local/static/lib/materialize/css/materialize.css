@@ -7574,10 +7574,10 @@ input[type=range]::-ms-thumb {
 .sidenav li > a {
   color: rgba(0, 0, 0, 0.87);
   display: block;
-  font-size: 14px;
+  font-size: 30px;
   font-weight: 500;
-  height: 48px;
-  line-height: 48px;
+  height: 45px;
+  line-height: 45px;
   padding: 0 32px;
 }
 
@@ -8746,6 +8746,7 @@ input[type=range]::-ms-thumb {
   -webkit-flex: 2.5 auto;
       -ms-flex: 2.5 auto;
           flex: 2.5 auto;
+  color: black;
 }
 
 .datepicker-table {
