@@ -86,7 +86,7 @@ public class PopupController {
         return "redirect:/popup/list";
     }
 
-    @DeleteMapping("/post/{no}")
+    @DeleteMapping("/post/delete/{no}")
     public String delete(@PathVariable("no") Long no) {
         popupService.deletePost(no);
 

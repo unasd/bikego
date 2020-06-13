@@ -57,7 +57,7 @@
                     <h4 th:text="${popupList.popupTitle}" />
                     <div class="blue-grey-text lighten-5" th:text="${popupList.popupWriter}" />
                     <p>In a few years, the World will look back at 2020 and the Covid-19 as arguably a defining moment…</p>
-                    <a class="waves-effect waves-light btn-small" th:href="@{'/popup/post/' + ${popupList.popupSeq}}">more</a>
+                    <div align="right" style="padding-right: 5px;"><a class="waves-effect waves-light btn-small" th:href="@{'/popup/post/' + ${popupList.popupSeq}}">more</a></div>
                 </div>
             </div>
         </li>

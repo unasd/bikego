@@ -24,28 +24,30 @@
 </th:block>
 
 <div layout:fragment="content" >
-    <h2 th:text="${popupinfoDto.popupTitle}"></h2>
-    <p th:inline="text">작성일 : [[${#temporals.format(popupinfoDto.popupRegdt, 'yyyy-MM-dd HH:mm')}]]</p>
-    <div style="border: solid 1px;"><th:block th:utext="${popupinfoDto.contents}"></th:block></div>
+        <h4 th:text="${popupinfoDto.popupTitle}" />
+        <h6 class="teal-text" th:text="${#temporals.format(popupinfoDto.popupRegdt, 'yyyy-MM-dd')}" />
+        <p><th:block th:utext="${popupinfoDto.contents}"></th:block></p>
 
-    <div class="img-container">
-        <div class="img-row">
-            <div th:each="attachDto : ${attachDtoList}" class="column">
-                <img class="slide-img cursor" th:style="'background-image: url(/attach/resizeImgView.do/' + ${attachDto.idAttach} + '/' + ${attachDto.snFileAttach} + ');'"/>
-            </div>
+
+        <div th:each="attachDto : ${attachDtoList}" >
+            <img style="max-height: 800px; width: 100%; overflow: hidden;" th:src="@{/attach/resizeImgView.do/} + ${attachDto.idAttach} + '/' + ${attachDto.snFileAttach}" />
         </div>
-    </div>
 
     <!-- 수정/삭제 -->
-    <div>
-        <a th:href="@{'/popup/post/edit/' + ${popupinfoDto.popupSeq}}">
-            <button>수정</button>
-        </a>
 
-        <form id="delete-form" th:action="@{'/popup/post/' + ${popupinfoDto.popupSeq}}" method="post">
-            <input type="hidden" name="_method" value="delete"/>
-            <button id="delete-btn">삭제</button>
-        </form>
-    </div>
+
+
+        <div class="col s12 center-align">
+
+            <form name="delete-form" id="delete-form" th:action="@{'/popup/post/delete/' + ${popupinfoDto.popupSeq}}" method="post">
+                <input type="hidden" name="_method" value="delete"/>
+                <a th:href="@{'/popup/post/edit/' + ${popupinfoDto.popupSeq}}" id="submitBtn"><i class="small material-icons" style="color: rgba(255, 255, 255, 1);">settings</i></a>
+                <a onclick="return confirm('삭제 하시겠습니까?');" href="javascript:document.getElementById('delete-form').submit();" id="delete-btn"><i class="small material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i></a>
+            </form>
+        </div>
+
+
+
 </div>
+
 </html>
