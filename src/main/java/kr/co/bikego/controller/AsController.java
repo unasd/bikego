@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -134,6 +136,16 @@ public class AsController {
         }
     }
 
+    /**
+     * AS 수정화면 이동
+     * @param model
+     * @param asDto
+     * @param searchDto
+     * @param pageable
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @GetMapping("/update.do")
     public String update(Model model, AsDto asDto, SearchDto searchDto, final PageRequest pageable, HttpServletResponse response) throws Exception {
         if(asService.passwordChk(asDto)) {
@@ -155,13 +167,57 @@ public class AsController {
         }
     }
 
+    /**
+     * AS 수정처리
+     * @param asDto
+     * @param image
+     * @param imageName
+     * @param imageSize
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/update.do")
-    public String update(AsDto asDto, String[] image, String[] imageName, String[] imageSize) throws Exception {
-        asDto.setRegdtAs(LocalDateTime.now());
-        asDto.setPasswordAs(passwordEncoder.encode(asDto.getPasswordAs()));
-        asDto.setNoTelAs(aes.encrypt(asDto.getNoTelAs()));
-        asService.saveAs(asDto, image, imageName, imageSize);
+    public String update(AsDto asDto, String[] image, String[] imageName, String[] imageSize
+            , HttpServletResponse response, HttpServletRequest request) throws Exception {
+        if (asService.passwordChk(asDto)) {
+            asDto.setModdtAs(LocalDateTime.now());
+            asDto.setPasswordAs(passwordEncoder.encode(asDto.getPasswordAs()));
+            asDto.setNoTelAs(aes.encrypt(asDto.getNoTelAs()));
+            asService.updateAs(asDto, image, imageName, imageSize);
+            FlashMap fm = RequestContextUtils.getOutputFlashMap(request);
+            fm.put("test", "test");
+
+
+
+        } else {
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('잘못된 접근입니다.'); history.back();</script>");
+            out.flush();
+            return null;
+        }
 
         return "redirect:/as/detail.do";
+    }
+
+    /**
+     * AS이미지 삭제
+     * @param asDto
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(value = "/asImgDelete.do")
+    @ResponseBody
+    public Object asImgDelete(@RequestBody AsDto asDto) throws Exception {
+        HashMap<String,Object> resultMap = new HashMap<>();
+        if (asService.passwordChk(asDto)) {
+            // 삭제여부 업데이트
+            attachService.updateDelYn(asDto);
+            resultMap.put("result", "success");
+        } else {
+            resultMap.put("result", "passwordFail");
+        }
+
+        return resultMap;
     }
 }

@@ -2,7 +2,6 @@ package kr.co.bikego.controller;
 
 import com.google.gson.JsonObject;
 import kr.co.bikego.domain.entity.AttachEntity;
-import kr.co.bikego.dto.AsDto;
 import kr.co.bikego.dto.AttachDto;
 import kr.co.bikego.service.AsService;
 import kr.co.bikego.service.AttachService;
@@ -20,7 +19,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -132,20 +130,6 @@ public class AttachController {
                     }
                 }
             }
-        }
-    }
-
-    @PostMapping(value = "/asImgDelete.do")
-    @ResponseBody
-    public Object asImgDelete(@RequestParam HashMap<String, Object> requestMap, AsDto asDto) throws Exception {
-        if (asService.passwordChk(asDto)) {
-            // 삭제여부 업데이트
-            attachService.updateDelYn(asDto.getIdAttach()
-                                        , (int) requestMap.getOrDefault("snFileAttach", 0)
-                                        , asDto.getWriterAs());
-            return true;
-        } else {
-            return false;
         }
     }
 }

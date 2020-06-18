@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MainController {
 
-    @RequestMapping(value="/" )
+    @RequestMapping(value="/" ) 
     public String index() {
         return "index.html";
     }

@@ -191,21 +191,23 @@
             $('.img-remove-btn').click(function(e){
                 $('#confirmModal').find('h4').text('');
                 $('#confirmModal').find('p').text('업로드한 이미지가 삭제됩니다.');
+                let removeBtn = $(this);
                 $('#confirmModal').find('.confirm').on('click', function(){
                     $.ajax({
-                        url: '/attach/asImgDelete.do',
+                        url: '/as/asImgDelete.do',
                         type: 'post',
                         data: JSON.stringify({
                             seqAs: resultDto.seqAs,
                             passwordAs: resultDto.passwordAs,
                             writerAs: resultDto.writerAs,
-                            snFileAttach: $(this).attr('data-snFileAttach')
+                            idAttach: removeBtn.attr('data-idAttach'),
+                            snFileAttach: removeBtn.attr('data-snFileAttach')
                         }),
                         contentType: 'application/json; charset=utf-8;',
                         dataType: 'json',
                         success: function(data) {
-                            if(data) {
-                                $(this).parent().remove();
+                            if(data.result == 'success') {
+                                removeBtn.parent().remove();
                                 let emptyColumn = document.createElement('div');
                                 emptyColumn.setAttribute('class', 'column');
                                 emptyColumn.onclick = function(e){
@@ -305,6 +307,8 @@
 
 <div layout:fragment="content" >
     <form id="asForm" action="/as/update.do" method="post">
+        <input type="hidden" name="seqAs" th:value="${resultDto.seqAs}"/>
+        <input type="hidden" name="regdtAs" th:value="${resultDto.regdtAs}"/>
         <div class="input-field col s12">
             <i class="material-icons prefix">title</i>
             <input type="text" class="validate" id="titleAs" name="titleAs" required="" maxlength="100" th:value="${resultDto.titleAs}">
@@ -354,8 +358,8 @@
         <div class="img-container">
             <div class="img-row" th:if="${attachDtoList.size()>0}">
                 <div th:each="attachDto : ${attachDtoList}" class="column">
-                    <img class="slide-img cursor" th:style="'background-image: url(/attach/resizeImgView.do/' + ${attachDto.idAttach} + '/' + ${attachDto.snFileAttach} + ');'" th:data-snFileAttach="${attachDto.snFileAttach}"/>
-                    <i class="tiny material-icons img-remove-btn">remove_circle</i>
+                    <img class="slide-img cursor" th:style="'background-image: url(/attach/resizeImgView.do/' + ${attachDto.idAttach} + '/' + ${attachDto.snFileAttach} + ');'"/>
+                    <i class="tiny material-icons img-remove-btn" th:data-idAttach="${attachDto.idAttach}" th:data-snFileAttach="${attachDto.snFileAttach}">remove_circle</i>
                 </div>
                 <div th:each="num: ${#numbers.sequence(1, 4-attachDtoList.size())}" class="column">
                 </div>

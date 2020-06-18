@@ -12,6 +12,8 @@ import java.util.List;
 public interface AttachRepository extends JpaRepository<AttachEntity, AttachId> {
     List<AttachEntity> findByIdAttach(String idAttach);
 
+    List<AttachEntity> findByIdAttachAndYnDel(String idAttach, String ynDel);
+
     AttachEntity findByIdAttachAndSnFileAttach(String idAttach, int snFileAttach);
 
     AttachEntity findTopByIdAttachOrderBySnFileAttachDesc(String idAttach);

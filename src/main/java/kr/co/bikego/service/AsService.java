@@ -4,6 +4,7 @@ import kr.co.bikego.domain.entity.AsEntity;
 import kr.co.bikego.domain.entity.AttachEntity;
 import kr.co.bikego.domain.repository.AsRepository;
 import kr.co.bikego.dto.AsDto;
+import kr.co.bikego.dto.AttachDto;
 import kr.co.bikego.dto.SearchDto;
 import kr.co.bikego.test.domain.entity.CrudEntity;
 import kr.co.bikego.test.dto.CrudDto;
@@ -18,8 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +35,6 @@ public class AsService {
     private AttachService attachService;
 
     @Transactional
-
     public Long saveAs(AsDto asDto, String[] image, String[] imageName, String[] imageSize) {
         if(image != null) {
             List<AttachEntity> attachEntities = attachService.saveImage(image, imageName, imageSize, "as");
@@ -112,5 +110,14 @@ public class AsService {
                 .build();
 
         return asDto;
+    }
+
+    @Transactional
+    public Long updateAs(AsDto asDto, String[] image, String[] imageName, String[] imageSize) {
+        if(image != null) {
+            List<AttachEntity> attachEntities = attachService.saveImage(image, imageName, imageSize, "as", asDto.getIdAttach());
+        }
+        Long seqAs = asRepository.save(asDto.toEntity()).getSeqAs();
+        return seqAs;
     }
 }

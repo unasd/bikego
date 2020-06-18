@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -50,7 +51,7 @@ public class AsEntity {
     @Column(length = 20, nullable = false, name = "as_writer")
     private String writerAs;
 
-    @Column(nullable = false, name = "as_regdt")
+    @Column(nullable = true, name = "as_regdt")
     private LocalDateTime regdtAs;
 
     @Column(length = 20, nullable = true, name = "as_modifier")

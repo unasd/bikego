@@ -2,6 +2,7 @@ package kr.co.bikego.service;
 
 import kr.co.bikego.domain.entity.AttachEntity;
 import kr.co.bikego.domain.repository.AttachRepository;
+import kr.co.bikego.dto.AsDto;
 import kr.co.bikego.dto.AttachDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -59,7 +60,7 @@ public class AttachService {
     }
 
     public List<AttachDto> getAttachInfoList(String idAttach) {
-        List<AttachEntity> attachEntities = attachRepository.findByIdAttach(idAttach);
+        List<AttachEntity> attachEntities = attachRepository.findByIdAttachAndYnDel(idAttach, "N");
 
         List<AttachDto> attachDtoList = new ArrayList<>();
 
@@ -242,15 +243,12 @@ public class AttachService {
     }
 
     @Transactional
-    public void updateDelYn(String idAttach, int snFileAttach, String modifier) {
-        AttachEntity attachEntity = AttachEntity.builder()
-                .idAttach(idAttach)
-                .snFileAttach(snFileAttach)
-                .ynDel("Y")
-                .modifierAttach(modifier)
-                .moddtAttach(LocalDateTime.now())
-                .build();
-        attachRepository.save(attachEntity);
+    public void updateDelYn(AsDto asDto) {
+        AttachDto attachDto = this.getAttachInfo(asDto.getIdAttach(), asDto.getSnFileAttach());
+        attachDto.setYnDel("Y");
+        attachDto.setModifierAttach(asDto.getWriterAs());
+        attachDto.setModdtAttach(LocalDateTime.now());
+        this.saveAttachInfo(attachDto);
     }
 
 }
