@@ -70,14 +70,8 @@
                     <div class="blue-grey-text lighten-5"  />
                     <!--#strings.length(str)   th:text="${popupList.contents}"-->
                     <p> 팝업게시기간 : <span th:text="${popupList.popupStartDt}"/> ~ <span  th:text="${popupList.popupEndDt}"/> </p>
-<!--
-                    <p th:text="${#temporals.format(popupList.popupEndDt, 'yyyy-MM-dd')}"/>
--->
-<!--
-                    <p><th:block th:utext="${popupList.contents}"></th:block></p>
--->
 
-                    <div align="right" style="padding-right: 5px;"><a class="waves-effect waves-light btn-small" th:onclick="|javascript:goDetail('${popupList.popupSeq}');|">more</a></div>
+                    <div align="right" style="padding-right: 5px; padding-bottom: 5px;"><a class="waves-effect waves-light btn-small" th:onclick="|javascript:goDetail('${popupList.popupSeq}');|">more</a></div>
 
 
 
