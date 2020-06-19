@@ -1,10 +1,12 @@
 package kr.co.bikego.service;
 
+import kr.co.bikego.PropertyConfig;
 import kr.co.bikego.domain.entity.AttachEntity;
 import kr.co.bikego.domain.repository.AttachRepository;
 import kr.co.bikego.dto.AsDto;
 import kr.co.bikego.dto.AttachDto;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,9 @@ import java.util.List;
 @Service
 public class AttachService {
     private AttachRepository attachRepository;
+
+    @Autowired
+    private PropertyConfig propertyConfig;
 
     @Transactional
     public String saveAttachInfo(AttachDto attachDto) {
@@ -174,7 +179,7 @@ public class AttachService {
         String data = "";
         byte[] imageBytes = null;
         StringBuffer uploadPathBuf = new StringBuffer();
-        uploadPathBuf.append("C:\\Users\\sinna\\IdeaProjects\\upload"); // todo: root 경로 properties 파일에서 받아와야 함
+        uploadPathBuf.append(propertyConfig.getUploadPath()); // todo: root 경로 properties 파일에서 받아와야 함
         uploadPathBuf.append("\\" + type);
         uploadPathBuf.append("\\" + localDateTime.getYear());
         uploadPathBuf.append("\\" + localDateTime.getMonthValue());
@@ -248,7 +253,7 @@ public class AttachService {
         attachDto.setYnDel("Y");
         attachDto.setModifierAttach(asDto.getWriterAs());
         attachDto.setModdtAttach(LocalDateTime.now());
-        this.saveAttachInfo(attachDto);
+//        this.saveAttachInfo(attachDto);
     }
 
 }
