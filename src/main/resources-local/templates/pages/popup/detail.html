@@ -41,9 +41,9 @@
 
         <div class="col s12 center-align">
 
-            <form name="delete-form" id="delete-form" th:action="@{'/popup/post/delete/' + ${popupinfoDto.popupSeq}}" method="post">
+            <form name="delete-form" id="delete-form" th:action="@{'/popup/post/delete.do/' + ${popupinfoDto.popupSeq}}" method="post">
                 <input type="hidden" name="_method" value="delete"/>
-                <a th:href="@{'/popup/post/edit/' + ${popupinfoDto.popupSeq}}" id="submitBtn"><i class="small material-icons" style="color: rgba(255, 255, 255, 1);">settings</i></a>
+                <a th:href="@{'/popup/post/edit.do/' + ${popupinfoDto.popupSeq}}" id="submitBtn"><i class="small material-icons" style="color: rgba(255, 255, 255, 1);">settings</i></a>
                 <a onclick="return confirm('삭제 하시겠습니까?');" href="javascript:document.getElementById('delete-form').submit();" id="delete-btn"><i class="small material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i></a>
             </form>
         </div>

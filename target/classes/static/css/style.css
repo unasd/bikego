@@ -26,7 +26,7 @@ table {
 }
 
 /* Hide the images by default */
-.large-slide {
+.large-slide, .modal-slide {
     display: block;
     width: 100%;
     height: 100%;
@@ -82,6 +82,14 @@ table {
     position: absolute;
     top: 0;
 }
+
+/*.input-field{
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+}*/
 
 /* Container for image text */
 .caption-container {
@@ -162,3 +170,124 @@ table {
   align-items: center;
   justify-content: center;
 }
+
+/* Customized CSS */
+
+body {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.no-border {
+    border: 0 !important;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.sidenav .avatar {
+    width: 10rem;
+}
+
+.sidenav li > a {
+    color: #26baac;
+}
+
+.container.full {
+    width: 100%;
+}
+
+.full-wrapper {
+    display: block;
+    width: 100%;
+    background-size: cover;
+    min-height: 250px;
+    position: relative;
+}
+.full-wrapper .description {
+    position: absolute;
+    bottom: 0;
+    right: 5%;
+}
+
+.popup-list .desc h4 {
+    margin: 24px 0 15px 0;
+}
+
+.popup-list .row {
+    margin-bottom: 10%;
+}
+
+.popup-list .row:not(:first-child) {
+    margin-top: 10%;
+}
+
+/* Customized Materialize */
+
+.collection {
+    border: 0;
+}
+
+.select-dropdown {
+    color: white;
+}
+
+.img-row {
+    height: 50px;
+    display: grid;
+    grid-template-columns: repeat(1,minmax(0,1fr));
+    grid-template-rows: repeat(1,minmax(0,1fr));
+    grid-gap: 4px;
+}
+
+@media (max-width: 767px) {
+    .popup-list .row {
+        margin-bottom: 0;
+    }
+    
+    .popup-list .row:not(:first-child) {
+        margin-top: 50px;
+    }
+}
+
+.imgUpBtn {
+    color: rgba(255, 255, 255, 1);
+}
+
+.asMap {
+    width:100%;
+    height:300px;
+    border: 1px solid;
+}
+
+.asMapInput {
+    width: 150px;
+    height: 20px;
+    line-height: 20px;
+    border: solid 1px #555;
+    padding: 5px;
+    font-size: 12px;
+    box-sizing: content-box;
+    background-color: white;
+    z-index: 99;
+    position: relative;
+}
+
+.asMapBtn {
+    height: 30px;
+    width: 5%;
+    line-height: 30px;
+    padding: 0 10px;
+    font-size: 12px;
+    border: solid 1px #555;
+    border-radius: 3px;
+    cursor: pointer;
+    box-sizing: content-box;
+    z-index: 99;
+    position: relative;
+}
+
+
+
+/* 이미지 모달 */

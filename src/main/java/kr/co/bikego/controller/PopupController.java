@@ -30,7 +30,7 @@ public class PopupController {
     private AttachService attachService;
 
 
-    @GetMapping("/list")
+    @GetMapping("/list.do")
     public String list(Model model, final PageRequest pageable, SearchDto searchDto) throws GeneralSecurityException, UnsupportedEncodingException {
 
         pageable.setSortProp("popupSeq"); // 페이징 필수셋팅 값, 정렬기준
@@ -47,20 +47,20 @@ public class PopupController {
         return "popup/list";
     }
 
-    @GetMapping("/post")
+    @GetMapping("/post.do")
     public String write() {
         return "popup/write";
     }
 
-    @PostMapping("/post")
+    @PostMapping("/save.do")
     public String write(PopupinfoDto popupinfoDto, String[] image, String[] imageName, String[] imageSize) {
         popupinfoDto.setPopupRegdt(LocalDateTime.now());
         popupService.savePost(popupinfoDto, image, imageName, imageSize);
-        return "redirect:/popup/list";
+        return "redirect:/popup/list.do";
     }
 
-    @GetMapping("/post/{no}")
-    public String detail(@PathVariable("no") Long no, Model model) {
+    @GetMapping("/detail.do")
+    public String detail(@RequestParam("popupSeq") long no, Model model) {
         PopupinfoDto popupinfoDto  = popupService.getPost(no);
         List<AttachDto> attachDtoList = attachService.getAttachInfoList(popupinfoDto.getAttachId());
 
@@ -69,7 +69,7 @@ public class PopupController {
         return "popup/detail";
     }
 
-    @GetMapping("/post/edit/{no}")
+    @GetMapping("/post/edit.do/{no}")
     public String edit(@PathVariable("no") Long no, Model model) {
         PopupinfoDto popupinfoDto = popupService.getPost(no);
         List<AttachDto> attachDtoList = attachService.getAttachInfoList(popupinfoDto.getAttachId());
@@ -78,18 +78,18 @@ public class PopupController {
         return "popup/update";
     }
 
-    @PutMapping("/post/edit/{no}")
+    @PutMapping("/post/edit.do/{no}")
     public String update(PopupinfoDto popupinfoDto , String[] image, String[] imageName, String[] imageSize) {
         //popupService.savePost(popupinfoDto, null, null, null);
         popupService.savePost(popupinfoDto, image, imageName, imageSize);
 
-        return "redirect:/popup/list";
+        return "redirect:/popup/list.do";
     }
 
-    @DeleteMapping("/post/delete/{no}")
+    @DeleteMapping("/post/delete.do/{no}")
     public String delete(@PathVariable("no") Long no) {
         popupService.deletePost(no);
 
-        return "redirect:/popup/list";
+        return "redirect:/popup/list.do";
     }
 }

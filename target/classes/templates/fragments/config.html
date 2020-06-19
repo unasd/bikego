@@ -10,7 +10,6 @@
     <!-- common CSS -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="/static/lib/materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-
     <link href="/static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     <!-- page CSS -->
     <th:block layout:fragment="css"></th:block>
@@ -27,6 +26,71 @@
     <!--<script  src="/static/lib/slide/jquery-ui.min.js" type="text/javascript"></script>-->
     <script src="/static/lib/slide/jquery.bxslider.js" type="text/javascript" ></script>
     <link rel="stylesheet" type="text/css" href="/static/css/jquery.bxslider.css"/>
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#alertModal').modal({
+                 onCloseEnd: function() {
+                    $('#alertModal').find('h4').text('');
+                    $('#alertModal').find('p').text('');
+                 }
+            });
+
+            $('#imageModal').modal({
+                onOpenStart: function(e) {
+                    let imgTags = $('.slide-img');
+                    let selectedImg = $('.slide-img:hover');
+                    let imgIndex = imgTags.index(selectedImg);
+                    let imgSrc = selectedImg.css('background-image');
+
+                    // 클릭한 이미지
+                    if(typeof(imgSrc) != "undefined") {
+                        imgSrc = imgSrc.replace('url(','').replace(')','').replace(/\"/gi, "");
+                        $('.modal-slide').eq(0).css({'background-image' : 'url('+ imgSrc +')'});
+                    }
+                    $('#imageModal').find('#numbertext').text((imgIndex+1) + '/' + imgTags.length);
+
+                    // 이미지 슬라이드효과
+                    $('#imageModal').find('.prev').on('click', function(){
+                        if(imgIndex <= 0) { // 맨처음 이미지일 때
+                            imgIndex = imgTags.length-1;
+                        } else {
+                            imgIndex--;
+                        }
+                        imgSrc = imgTags.eq(imgIndex).css('background-image');
+                        imgSrc = imgSrc.replace('url(','').replace(')','').replace(/\"/gi, "");
+                        $('.modal-slide').eq(0).css({'background-image' : 'url('+ imgSrc +')'});
+                        $('#imageModal').find('#numbertext').text((imgIndex+1) + '/' + imgTags.length);
+                    });
+                    $('#imageModal').find('.next').on('click', function(){
+                        if(imgIndex >= imgTags.length-1) { // 마지막 이미지일 때
+                            imgIndex = 0;
+                        } else {
+                            imgIndex++;
+                        }
+                        imgSrc = imgTags.eq(imgIndex).css('background-image');
+                        imgSrc = imgSrc.replace('url(','').replace(')','').replace(/\"/gi, "");
+                        $('.modal-slide').eq(0).css({'background-image' : 'url('+ imgSrc +')'});
+                        $('#imageModal').find('#numbertext').text((imgIndex+1) + '/' + imgTags.length);
+                    });
+                },
+                onCloseEnd: function() {
+                    $('#imageModal').find('#numbertext').text('');
+                    $('#imageModal').find('.prev').off('click');
+                    $('#imageModal').find('.next').off('click');
+                 }
+            });
+
+            $('#confirmModal').modal({
+                 onCloseEnd: function() {
+                    $('#confirmModal').find('h4').text('');
+                    $('#confirmModal').find('p').text('');
+                    $('#confirmModal').find('.modal-close').off('click');
+                 }
+            });
+        });
+    </script>
 
 
     <!-- Main Slide JS -->

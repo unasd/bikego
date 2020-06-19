@@ -18,9 +18,19 @@
             $('[name="listForm"]').submit();
         }
 
-        function passwordChk(){
-            alert('12321');
-            $('#passwordForm').submit();
+        function goDetail(seqAs, passwordAs) {
+            $('[name="listForm"]').children('[name="seqAs"]').val(seqAs);
+            $('[name="listForm"]').children('[name="passwordAs"]').val(passwordAs);
+            $('[name="listForm"]').attr('method', 'get');
+            $('[name="listForm"]').attr('action', '/as/detail.do');
+            $('[name="listForm"]').submit();
+        }
+
+        function passwordInputClear() {
+            $('#passwordAs').val('');
+            $('#passwordAs').removeClass('valid').removeClass('invalid');
+            $('#passwordAs').next().removeClass('active');
+            $('#passwordAs').next().next().removeAttr('data-error');
         }
 
         $(document).ready(function() {
@@ -32,55 +42,85 @@
                 outDuration: 200, // Transition out duration
                 startingTop: '4%', // Starting top style attribute
                 endingTop: '10%', // Ending top style attribute
-                onCloseStart: function(e) {
-                    console.info(e);
-                    return false;
-                }
+                onCloseStart: function(e) {}
             }); // modal 초기화
 
-            $('.modal-trigger').on('click', function(e){
-                $('#passwordAs').val('');
-                $('#passwordModal').children('p').text($(this).children('span').text());
+            $('.modal-trigger').on('click', function(e) {
+                $('#passwordForm').find('[name="seqAs"]').val($(this).attr('data'));
+                passwordInputClear();
+            });
+
+            $('#passwordAs').on('focus', function(e) {
+                console.info(e);
+                if($('#passwordAs').next().next().is('[data-error]')) {
+                    console.info('data-error exists');
+                    $('#passwordAs').removeClass('valid').removeClass('invalid');
+                    $('#passwordAs').next().next().removeAttr('data-error');
+                } else {
+                    console.info('data-error not exists');
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $('#passwordForm').on('submit', function(e) {
+                $('#passwordAs').blur();
+                e.preventDefault();
+                let seqAs = $(this).find('[name="seqAs"]').val();
+                let passwordAs = $(this).find('[name="passwordAs"]').val();
+                $.ajax({
+                    url: '/as/passwordChk.do',
+                    type: 'post',
+                    data: JSON.stringify({
+                        seqAs: seqAs,
+                        passwordAs: passwordAs
+                    }),
+                    contentType: 'application/json; charset=utf-8;',
+                    dataType: 'json',
+                    success: function(data) {
+                        if(data) {
+                            goDetail(seqAs, passwordAs);
+                        } else {
+                            $('#passwordAs').next().next().attr('data-error', '비밀번호가 일치하지 않습니다.');
+                            $('#passwordAs').removeClass('valid');
+                            $('#passwordAs').addClass('invalid');
+                        }
+                    },
+                    error: function(errorThrown) {
+                        alert(errorThrown.statusText);
+                    }
+                });
             });
         });
     </script>
 </th:block>
 
-<div layout:fragment="content" class="container">
-    <div>
-        <table class="highlight">
-            <thead>
-            <tr style="background-color: rgba(242, 242, 242, 0.5);">
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성일</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <!-- CONTENTS !-->
-            <tr th:each="as : ${asList}" class="row">
-                <td class="modal-trigger" href="#passwordModal">
-                    <a>
-                        <span th:text="${as.titleAs}"></span>
-                    </a>
-                </td>
-                <td>
-                    <span th:text="${as.writerAs}"></span>
-                </td>
-                <td>
-                    <span th:text="${#temporals.format(as.regdtAs, 'yyyy-MM-dd')}"></span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="row" style="background-color: rgba(242, 242, 242, 0.5);">
-            <div class="col s9"></div>
-            <div class="col s3">
-                <a th:href="@{/as/post.do}" class="btn waves-effect waves-light">작성</a>
-            </div>
-        </div>
+<div layout:fragment="content" class="container full">
+    <div class="right-align" style="margin: 2%;">
+        <a th:href="@{/as/write.do}" class="material-icons" style="color: rgba(255, 255, 255, 1);">edit</a>
     </div>
+    <ul class="collection popup-list">
+        <li class="collection-item black no-border no-padding" th:each="asList : ${asList}" style="border-bottom: none;">
+            <div class="row">
+                <!--<div class="col s12 m6 thumbnail" style="max-height: 300px; overflow: hidden;">
+                    <th:block th:if="${#lists.isEmpty(asList.idAttach)}">
+                        <img src="https://www.bianchi.com/wp-content/uploads/2020/05/BIANCHI-PARTICOLARI-02-09-19175182-634x452.jpg" alt="" style="width: 100%; height: auto;" />
+                    </th:block>
+                    <th:block th:unless="${#lists.isEmpty(asList.idAttach)}">
+                        <img th:src="'/attach/resizeImgView.do/' + ${asList.idAttach} + '/1'" alt="" style="width: 100%; height: auto;" />
+                    </th:block>
+                </div>-->
+                <div class="col s12 m6 desc">
+                    <h6 class="teal-text" th:text="${#temporals.format(asList.regdtAs, 'yyyy-MM-dd')}" />
+                    <h4 th:text="${asList.titleAs}"/>
+                    <div class="blue-grey-text lighten-5" th:text="${asList.writerAs}" />
+                    <p th:text="${asList.contentsAs}"></p>
+                    <p th:text="${asList.locationAs}"></p>
+                    <a class="waves-effect waves-light btn-small modal-trigger" href="#passwordModal" th:data="${asList.seqAs}">더보기</a>
+                </div>
+            </div>
+        </li>
+    </ul>
     <div class="row">
         <form name="listForm" method="get" action="/as/list.do">
             <input type="hidden" name="page" th:value="${pagingResult.page}"/>
@@ -88,21 +128,30 @@
             <input type="hidden" name="pageSize" th:value="${pagingResult.pageSize}"/>
             <input type="hidden" name="direction" th:value="${pagingResult.direction}"/>
             <input type="hidden" name="sortProp" th:value="${pagingResult.sortProp}"/>
-            <div class="input-field col s3">
-                <select name="searchType">
-                    <option value="titleAs" th:selected="(${searchDto.searchType} == 'titleAs')">제목</option>
-                    <option value="contentsAs" th:selected="(${searchDto.searchType} == 'contentsAs')">내용</option>
-                    <option value="locationAs" th:selected="(${searchDto.searchType} == 'locationAs')">위치</option>
-                    <option value="writerAs" th:selected="(${searchDto.searchType} == 'writerAs')">작성자</option>
-                </select>
-            </div>
-            <div class="input-field col s6">
-                <input id="searchKeyword" name="searchKeyword" type="text" class="validate" th:value="${searchDto.searchKeyword}"
-                       onkeypress="if( event.keyCode==13 ){goSearch();}">
-                <label for="searchKeyword">검색어</label>
-            </div>
-            <div class="input-field col s3">
-                <button class="btn waves-effect waves-light" type="button" id="searchBtn" onclick="javascript:goSearch();">검색</button>
+            <input type="hidden" name="seqAs">
+            <input type="hidden" name="passwordAs">
+
+            <div class="row">
+                <div class="col s12 m8 offset-m2">
+                    <div class="row">
+                        <div class="input-field col s3">
+                            <select name="searchType" class="white-text">
+                                <option value="titleAs" th:selected="(${searchDto.searchType} == 'titleAs')">제목</option>
+                                <option value="contentsAs" th:selected="(${searchDto.searchType} == 'contentsAs')">내용</option>
+                                <option value="locationAs" th:selected="(${searchDto.searchType} == 'locationAs')">위치</option>
+                                <option value="writerAs" th:selected="(${searchDto.searchType} == 'writerAs')">작성자</option>
+                            </select>
+                        </div>
+                        <div class="input-field col s6" >
+                            <input style="color: #fff3e0" id="searchKeyword" name="searchKeyword" type="text" class="validate" th:value="${searchDto.searchKeyword}"
+                                   onkeypress="if( event.keyCode==13 ){goSearch();}">
+                            <label for="searchKeyword">검색어</label>
+                        </div>
+                        <div class="input-field col s3 left-align">
+                            <button class="btn waves-effect waves-light" type="button" id="searchBtn" onclick="javascript:goSearch();">검색</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -133,10 +182,12 @@
         <div class="modal-content">
             <h5>비밀번호 입력</h5>
             <p>작성시 입력한 비밀번호</p>
-            <form id="passwordForm">
+            <form id="passwordForm" action="/as/passwordChk.do" method="post">
                 <div class="input-field">
-                    <input id="passwordAs" name="passwordAs" type="password" class="validate" onkeypress="if( event.keyCode==13 ){passwordChk();}" required="">
+                    <input type="hidden" name="seqAs">
+                    <input id="passwordAs" name="passwordAs" type="password" class="validate" required="" style="color: black;">
                     <label for="passwordAs">Password</label>
+                    <span class="helper-text"></span>
                 </div>
                 <div class="modal-footer">
                     <button class="btn waves-effect waves-green btn-flat" type="submit" name="action">확인</button>

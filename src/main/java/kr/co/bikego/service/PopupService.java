@@ -74,9 +74,12 @@ public class PopupService {
                     .popupUrl(popupEntity.getPopupUrl())
                     .popupWriter(popupEntity.getPopupWriter())
                     .popupRegdt(popupEntity.getPopupRegdt())
+                    .contents(popupEntity.getContents())
                     .popYn(popupEntity.getPopYn())
                     .delYn(popupEntity.getDelYn())
-                    .popupRegdt(popupEntity.getPopupRegdt())
+                    .popupStartDt(popupEntity.getPopupStartDt())
+                    .popupEndDt(popupEntity.getPopupEndDt())
+                    .attachId(popupEntity.getAttachId())
                     .build();
 
             popupinfoDtoList.add(popupinfoDto);

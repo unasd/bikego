@@ -796,7 +796,7 @@
 }
 
 .light-blue.lighten-1 {
-  background-color: #47545a !important;
+  background-color: #000000 !important;
 }
 
 .light-blue-text.text-lighten-1 {
@@ -1652,7 +1652,7 @@
 }
 
 .orange {
-  background-color: #38b6aa  !important;
+  background-color: #47545a  !important;
 }
 
 .orange-text {
@@ -6170,8 +6170,8 @@ input[type=search]:not(.browser-default):disabled,
 input[type=search]:not(.browser-default)[readonly="readonly"],
 textarea.materialize-textarea:disabled,
 textarea.materialize-textarea[readonly="readonly"] {
-  color: rgba(0, 0, 0, 0.42);
-  border-bottom: 1px dotted rgba(0, 0, 0, 0.42);
+  color: #9e9e9e;
+  border-bottom: 1px dotted #9e9e9e;;
 }
 
 input:not([type]):disabled + label,
@@ -6200,7 +6200,7 @@ input[type=search]:not(.browser-default):disabled + label,
 input[type=search]:not(.browser-default)[readonly="readonly"] + label,
 textarea.materialize-textarea:disabled + label,
 textarea.materialize-textarea[readonly="readonly"] + label {
-  color: rgba(0, 0, 0, 0.42);
+  color: #9e9e9e;
 }
 
 input:not([type]):focus:not([readonly]),
@@ -6495,6 +6495,7 @@ textarea.materialize-textarea + label:after, .select-wrapper + label:after {
   position: relative;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  color : #FFFFFF;
 }
 
 .input-field.inline {
@@ -6515,6 +6516,15 @@ textarea.materialize-textarea + label:after, .select-wrapper + label:after {
 .input-field.col .prefix ~ label,
 .input-field.col .prefix ~ .validate ~ label {
   width: calc(100% - 3rem - 1.5rem);
+
+}
+
+.input-field > input {
+  color :#ffffff;
+}
+
+.modal-content {
+  color : black;
 }
 
 .input-field > label {
@@ -6556,7 +6566,7 @@ textarea.materialize-textarea + label:after, .select-wrapper + label:after {
   min-height: 18px;
   display: block;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.54);
+  color: #9e9e9e;
 }
 
 .input-field .helper-text::after {
@@ -7567,10 +7577,10 @@ input[type=range]::-ms-thumb {
 .sidenav li > a {
   color: rgba(0, 0, 0, 0.87);
   display: block;
-  font-size: 14px;
+  font-size: 30px;
   font-weight: 500;
-  height: 48px;
-  line-height: 48px;
+  height: 45px;
+  line-height: 45px;
   padding: 0 32px;
 }
 
@@ -8739,6 +8749,7 @@ input[type=range]::-ms-thumb {
   -webkit-flex: 2.5 auto;
       -ms-flex: 2.5 auto;
           flex: 2.5 auto;
+  color: black;
 }
 
 .datepicker-table {
