@@ -84,7 +84,7 @@
     <div class="img-container">
         <div class="img-row">
             <div th:each="attachDto : ${attachDtoList}" class="column">
-                <img class="slide-img cursor" th:style="'background-image: url(/attach/resizeImgView.do/' + ${attachDto.idAttach} + '/' + ${attachDto.snFileAttach} + ');'"/>
+                <img class="slide-img cursor" th:style="'background-image: url(/attach/resizeImgView.do?idAttach=' + ${attachDto.idAttach} + '&snFileAttach=' + ${attachDto.snFileAttach} + ');'"/>
             </div>
         </div>
     </div>

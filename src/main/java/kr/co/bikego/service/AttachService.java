@@ -179,11 +179,11 @@ public class AttachService {
         String data = "";
         byte[] imageBytes = null;
         StringBuffer uploadPathBuf = new StringBuffer();
-        uploadPathBuf.append(propertyConfig.getUploadPath()); // todo: root 경로 properties 파일에서 받아와야 함
-        uploadPathBuf.append("\\" + type);
-        uploadPathBuf.append("\\" + localDateTime.getYear());
-        uploadPathBuf.append("\\" + localDateTime.getMonthValue());
-        uploadPathBuf.append("\\" + localDateTime.getDayOfMonth());
+        uploadPathBuf.append(propertyConfig.getUploadPath());
+        uploadPathBuf.append(propertyConfig.getFilePathSeperator() + type);
+        uploadPathBuf.append(propertyConfig.getFilePathSeperator() + localDateTime.getYear());
+        uploadPathBuf.append(propertyConfig.getFilePathSeperator() + localDateTime.getMonthValue());
+        uploadPathBuf.append(propertyConfig.getFilePathSeperator() + localDateTime.getDayOfMonth());
         Path uploadPath = Paths.get(uploadPathBuf.toString());
         Iterator<ImageWriter> iter = ImageIO.getImageWritersByMIMEType("image/jpeg");
         ImageWriter imgWriter = iter.next();
@@ -194,6 +194,7 @@ public class AttachService {
                 Files.createDirectories(uploadPath);
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.println(e);
             }
         }
 
@@ -215,10 +216,14 @@ public class AttachService {
                 // 파일생성
                 extension = imageName[i].substring(imageName[i].lastIndexOf("."), imageName[i].length()); // 확장자
                 serverFileNm = UUID.randomUUID().toString() + System.currentTimeMillis() + extension; // 서버저장 파일명
-                serverFilePath = uploadPathBuf.toString() + "\\" + serverFileNm; // 서버저장 경로
+                serverFilePath = uploadPathBuf.toString() + propertyConfig.getFilePathSeperator() + serverFileNm; // 서버저장 경로
+                System.out.println("serverFilePath ;; " + serverFilePath);
                 imageOutputStream = ImageIO.createImageOutputStream(new FileOutputStream(serverFilePath));
                 imgWriter.setOutput(imageOutputStream);
                 imgWriter.write(null, new IIOImage(newImage, null, null), param);
+
+                imgWriter.dispose();
+                imageOutputStream.close();
 
                 // 첨부파일 저장 값
                 attachDto = new AttachDto();
@@ -240,10 +245,11 @@ public class AttachService {
             return attachEntities;
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println(e);
             return null;
         } finally {
-            try{imgWriter.dispose();}catch(Exception e) {}
-            try{imageOutputStream.close();}catch(Exception e) {}
+            try{imgWriter.dispose();}catch(Exception e) {e.printStackTrace();}
+            try{imageOutputStream.close();}catch(Exception e) {e.printStackTrace();}
         }
     }
 

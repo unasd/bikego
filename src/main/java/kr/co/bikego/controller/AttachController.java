@@ -53,9 +53,9 @@ public class AttachController {
         }
     }
 
-    @GetMapping(value = "/resizeImgView.do/{idAttach}/{snFileAttach}") //todo: 이미지사이즈 메소드 분리
+    @GetMapping(value = "/resizeImgView.do") //todo: 이미지사이즈 메소드 분리
     public @ResponseBody
-    byte[] resizeImgView(@PathVariable("idAttach") String idAttach, @PathVariable("snFileAttach") int snFileAttach) throws Exception {
+    byte[] resizeImgView(@RequestParam("idAttach") String idAttach, @RequestParam("snFileAttach") int snFileAttach) throws Exception {
         try {
             AttachDto attachDto = attachService.getAttachInfo(idAttach, snFileAttach);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -67,8 +67,8 @@ public class AttachController {
         }
     }
 
-    @GetMapping(value = "/ckImgView.do/{idAttach}/{snFileAttach}")
-    public void ckImgView(@PathVariable("idAttach") String idAttach, @PathVariable("snFileAttach") int snFileAttach,
+    @GetMapping(value = "/ckImgView.do")
+    public void ckImgView(@RequestParam("idAttach") String idAttach, @RequestParam("snFileAttach") int snFileAttach,
                      HttpServletResponse res) throws Exception {
         ServletOutputStream servletOutputStream = null;
         ByteArrayOutputStream byteArrayOutputStream = null;
@@ -113,7 +113,7 @@ public class AttachController {
 
                         json.addProperty("uploaded", 1);
                         json.addProperty("fileName", file.getOriginalFilename());
-                        json.addProperty("url", "/attach/resizeImgView.do/" + attachEntities.get(0).getIdAttach() + "/" + 1); //todo: 도메인 변수처리
+                        json.addProperty("url", "/attach/resizeImgView.do?idAttach=" + attachEntities.get(0).getIdAttach() + "&snFileAttach=" + 1); //todo: 도메인 변수처리
 
                         printWriter = resp.getWriter();
                         printWriter.println(json);
