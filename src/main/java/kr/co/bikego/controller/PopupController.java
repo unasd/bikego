@@ -69,8 +69,8 @@ public class PopupController {
         return "popup/detail";
     }
 
-    @GetMapping("/post/edit.do/{no}")
-    public String edit(@PathVariable("no") Long no, Model model) {
+    @GetMapping("/edit.do")
+    public String edit(@RequestParam("popupSeq") long no, Model model) {
         PopupinfoDto popupinfoDto = popupService.getPost(no);
         List<AttachDto> attachDtoList = attachService.getAttachInfoList(popupinfoDto.getAttachId());
         model.addAttribute("popupinfoDto", popupinfoDto);
@@ -78,7 +78,7 @@ public class PopupController {
         return "popup/update";
     }
 
-    @PutMapping("/post/edit.do/{no}")
+    @PutMapping("/update.do")
     public String update(PopupinfoDto popupinfoDto , String[] image, String[] imageName, String[] imageSize) {
         //popupService.savePost(popupinfoDto, null, null, null);
         popupService.savePost(popupinfoDto, image, imageName, imageSize);
@@ -86,8 +86,8 @@ public class PopupController {
         return "redirect:/popup/list.do";
     }
 
-    @DeleteMapping("/post/delete.do/{no}")
-    public String delete(@PathVariable("no") Long no) {
+    @DeleteMapping("/delete.do")
+    public String delete(@RequestParam("popupSeq") long no) {
         popupService.deletePost(no);
 
         return "redirect:/popup/list.do";

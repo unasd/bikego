@@ -7,7 +7,7 @@
 
 <!-- page 스크립트 -->
 <th:block layout:fragment="script">
-    <script >
+    <script>
         let slideIndex = 0;
         function plusSlides(n) {
             slideIndex += n
@@ -99,11 +99,10 @@
             }
         }
 
+        function crudSubmit(){
+            $('#popupForm').submit();
+        }
 
-
-        /*<![CDATA[*/
-        var popupinfoDto = /*[[${popupinfoDto}]]*/ "";
-        /*]]>*/
         $(document).ready(function(){
             CKEDITOR.replace( 'contents',{
                 filebrowserUploadUrl: '/attach/ckImgUpload.do',
@@ -120,7 +119,6 @@
                 ],
                 image_previewText: ' '
             });
-
             CKEDITOR.on('dialogDefinition', function (ev) {
                 var dialogName = ev.data.name;
                 var dialogDefinition = ev.data.definition;
@@ -156,22 +154,9 @@
                 $('.img-input').click();
             });
 
-            $('.slide-img').click(function(e){
-                alert('이미지 클릭');
-                e.stopPropagation();
-            });
 
-            document.addEventListener('DOMContentLoaded', function() {
-                var elems = document.querySelectorAll('select');
-                var options = document.querySelectorAll('option');
-                var instances = M.FormSelect.init(elems, options);
-                elems = document.querySelectorAll('.datepicker');
-                instances = M.Datepicker.init(elems, options);
-
-            })
-
-            $(document).ready(function(){
-                $('.datepicker').datepicker();
+            $('#submitBtn').click(function() {
+                crudSubmit();
             });
 
             $('.img-remove-btn').click(function(e){
@@ -188,22 +173,47 @@
             });
 
 
-            $('#submitBtn').click(function() {
-                crudSubmit();
-            });
-
         });
+
+
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            var options = document.querySelectorAll('option');
+            var instances = M.FormSelect.init(elems, options);
+            /* var elems2 = document.querySelectorAll('.datepicker');
+             var instances2 = M.Datepicker.init(elems2, options);*/
+            elems = document.querySelectorAll('.datepicker');
+            instances = M.Datepicker.init(elems, options);
+
+        })
+
+        // Or with jQuery
+
+        $(document).ready(function(){
+            $('.datepicker').datepicker();
+        });
+
+
+        function goDetail(popupSeq) {
+            location.href="/popup/detail.do?popupSeq="+popupSeq;
+        }
+
+
     </script>
+    <script th:inline="javascript" th:src="@{/static/js/crud.js}"></script>
 </th:block>
 
 <div layout:fragment="content" class="container"  >
-    <form th:action="@{'/popup/post/edit/' + ${popupinfoDto.popupSeq}}" method="post">
+    <form id="popupForm" th:action="@{'/popup/update.do'}" method="post">
         <input type="hidden" name="_method" value="put"/>
         <input type="hidden" name="popupSeq" th:value="${popupinfoDto.popupSeq}"/>
         <input type="hidden" id="delYn" name="delYn" value="N">
-<!--
-        <input type="hidden" id="popYn" name="popYn" value="Y">
--->
+        <!--
+                <input type="hidden" id="popYn" name="popYn" value="Y">
+        -->
 
         <div class="input-field col s12">
             <i class="material-icons prefix">title</i>
@@ -212,17 +222,17 @@
         </div>
         <div class="input-field col s12">
             <i class="material-icons prefix">account_circle</i>
-            <input type="text" id="popupWriter" name="popupWriter"><br>
+            <input type="text" id="popupWriter" name="popupWriter" th:value="${popupinfoDto.popupWriter}"><br>
             <label for="popupWriter">작성자</label>
         </div>
         <div class="input-field col s12">
             <i class="material-icons prefix">http</i>
-            <input type="text" id="popupUrl" name="popupUrl"><br>
+            <input type="text" id="popupUrl" name="popupUrl" th:value="${popupinfoDto.popupUrl}"><br>
             <label for="popupUrl">팝업Url</label>
         </div>
         <div class="input-field col s12">
             <i class="material-icons prefix">check</i>
-            <select  id="popYn" name="popYn">
+            <select  id="popYn" name="popYn" >
                 <option>Y</option>
                 <option>N</option>
             </select>
@@ -230,7 +240,7 @@
         </div>
         <div class="input-field col s12">
             <i class="material-icons prefix">event_available</i>
-            <input type="text" id="popupStartDt" name ="popupStartDt" class="datepicker">
+            <input type="text" id="popupStartDt" name ="popupStartDt"  th:value="${popupinfoDto.popupStartDt}" class="datepicker">
             <label >팝업게시기간</label>
         </div>
         <div class="input-field col s12">
@@ -239,8 +249,8 @@
             <label >팝업종료기간</label>
         </div>
 
-        제목 : <input type="text" name="popupTitle" th:value="${popupinfoDto.popupTitle}"> <br>
-        작성자 : <input type="text" name="popupWriter" readonly="readonly" th:value="${popupinfoDto.popupWriter}"> <br>
+        <!--제목 : <input type="text" name="popupTitle" th:value="${popupinfoDto.popupTitle}"> <br>
+        작성자 : <input type="text" name="popupWriter" readonly="readonly" th:value="${popupinfoDto.popupWriter}"> <br>-->
         <textarea name="contents"><th:block th:utext="${popupinfoDto.contents}"></th:block></textarea><br>
 
         <div class="img-container">
@@ -251,12 +261,12 @@
             <a class="prev" onclick="plusSlides(-1)"> < </a>
             <a class="next" onclick="plusSlides(1)"> > </a>
             <div  style="text-align: center; margin: 0 auto;" >
-                 <div class="img-row" th:if="${attachDtoList.size()>0}">
-                       <div th:each="attachDto : ${attachDtoList}" class="column">
-                           <img class="slide-img cursor" th:style="'background-image: url(/attach/resizeImgView.do/' + ${attachDto.idAttach} + '/' + ${attachDto.snFileAttach} + ');'"/>
-                           <i class="tiny material-icons img-remove-btn">remove_circle</i>
-                       </div>
-                   </div>
+                <div class="img-row" th:if="${attachDtoList.size()>0}">
+                    <div th:each="attachDto : ${attachDtoList}" class="column">
+                        <img class="slide-img cursor" th:style="'background-image: url(/attach/resizeImgView.do?idAttach=' + ${attachDto.idAttach} + '&snFileAttach=' + ${attachDto.snFileAttach} + ');'"/>
+                        <i class="tiny material-icons img-remove-btn">remove_circle</i>
+                    </div>
+                </div>
                 <div class="img-row" th:if="${attachDtoList.size()<1}" >
                     <div class="column">파일 업로드</div>
 
@@ -264,8 +274,12 @@
             </div>
         </div>
         <input type="file" id="img-input" class="img-input" multiple accept="image/*" style="display: none;"/>
+        <div class="row">
+            <div class="col s12 center-align">
+                <a onclick="return confirm('수정 하시겠습니까?');" href="javascript:document.getElementById('popupForm').submit();" id="update-btn"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i></a>
+            </div>
+        </div>
 
-        <input type="submit" value="수정">
     </form>
 </div>
 </html>
