@@ -80,7 +80,7 @@
         </li>
     </ul>
     <div class="row" align="center">
-        <form name="listForm" method="get" action="/popup/list">
+        <form name="listForm" method="get" action="/popup/list.do">
             <input type="hidden" name="page" th:value="${pagingResult.page}"/>
             <input type="hidden" name="listSize" th:value="${pagingResult.listSize}"/>
             <input type="hidden" name="pageSize" th:value="${pagingResult.pageSize}"/>
