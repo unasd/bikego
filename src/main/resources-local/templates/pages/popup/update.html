@@ -129,7 +129,7 @@
         <textarea name="contents"><th:block th:utext="${popupinfoDto.contents}"></th:block></textarea><br>
 
         <div class="img-container">
-            <div class="large-slide">
+            <div class="large-slide" th:style="'background-image: url(/attach/resizeImgView.do?idAttach=' + ${popupinfoDto.attachId} + '&snFileAttach=' + '1' + ');'">
                 <div id="numbertext" class="numbertext"></div>
             </div>
 
