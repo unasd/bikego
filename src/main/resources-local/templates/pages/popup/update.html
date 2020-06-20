@@ -104,41 +104,7 @@
         }
 
         $(document).ready(function(){
-            CKEDITOR.replace( 'contents',{
-                filebrowserUploadUrl: '/attach/ckImgUpload.do',
-                on: {
-                    instanceReady: function() {
-                        CKEDITOR.instances.contents.setData(popupinfoDto.contents);
-                    }
-                },
-                toolbarGroups: [
-                    { name: 'editing',     groups: [ 'find', 'selection' ] },
-                    { name: 'insert' },
-                    { name: 'forms' },
-                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] }
-                ],
-                image_previewText: ' '
-            });
-            CKEDITOR.on('dialogDefinition', function (ev) {
-                var dialogName = ev.data.name;
-                var dialogDefinition = ev.data.definition;
-                var dialog = ev.data.definition.dialog;
-
-                if (dialogName == 'image') {
-                    dialog.on('show', function () {
-                        this.selectPage('Upload');
-                    });
-                    var infoTab = dialogDefinition.getContents( 'info' );
-                    infoTab.remove('txtBorder');
-                    infoTab.remove('txtHSpace');
-                    infoTab.remove('txtVSpace');
-                    infoTab.remove('txtWidth');
-                    infoTab.remove('txtHeight');
-                    infoTab.remove('txtAlt');
-                    infoTab.remove('cmbAlign');
-                    infoTab.remove('ratioLock');
-                }
-            });
+            CKEDITOR.replace( 'contents');
 
             $('.img-input').change(function(){
                 drawThumnail(this);

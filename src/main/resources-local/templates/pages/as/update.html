@@ -34,7 +34,7 @@
     <script th:inline="javascript">
         let kakaoMap; // 지도객체
         let marker; // 마커
-        let ps = new kakao.maps.services.Places();; // 검색 서비스
+        let ps = new kakao.maps.services.Places(); // 검색 서비스
         let geocoder = new kakao.maps.services.Geocoder();// 주소-좌표 변환 객체를 생성합니다
         /*<![CDATA[*/
         var resultDto = /*[[${resultDto}]]*/ "";
@@ -120,6 +120,7 @@
         // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
         function placesSearchCB(data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
+                console.info(data);
                 // 정상적으로 검색이 완료됐으면
                 // 검색 목록과 마커를 표출합니다
                 var placePosition = new kakao.maps.LatLng(data[0].y, data[0].x);
@@ -169,7 +170,7 @@
         $(document).ready(function(){
 
             $('.img-input').change(function(){
-                drawThumnail(this);
+                imgComn.drawThumnail(this);
             });
 
             $('.column, .imgUpBtn').click(function(){
@@ -239,22 +240,25 @@
                 crudSubmit();
             });
 
-            var container = document.getElementById('kakaoMap');
+            let container = document.getElementById('kakaoMap');
+            let options;
             if(resultDto.latitudeAs) {
-                let options = { //지도를 생성할 때 필요한 기본 옵션
+                options = {
                   center: new kakao.maps.LatLng(resultDto.latitudeAs, resultDto.longitudeAs), //지도의 중심좌표.
                   level: 3 //지도의 레벨(확대, 축소 정도)
                 };
-                kakaoMap = new kakao.maps.Map(container, options);
-
-                marker = new kakao.maps.Marker({
-                    // 지도 중심좌표에 마커를 생성합니다
-                    position: kakaoMap.getCenter()
-                });
-                marker.setMap(kakaoMap);
             } else {
-                //todo: 좌표없을 때 예외처리
+                options = {
+                  center: new kakao.maps.LatLng(37.52983920869157, 126.99756873623262),
+                  level: 3
+                };
             }
+            kakaoMap = new kakao.maps.Map(container, options);
+            marker = new kakao.maps.Marker({
+                // 지도 중심좌표에 마커를 생성합니다
+                position: kakaoMap.getCenter()
+            });
+            marker.setMap(kakaoMap);
 
             // 주소입력 input 엔터
             $('#keyword').on('keydown', function(e) {
@@ -324,26 +328,28 @@
             <input type="number" inputMode="numeric" class="validate" id="noTelAs" name="noTelAs" pattern="[0-9]*" required="" th:value="${resultDto.noTelAs}">
             <label for="noTelAs">전화번호</label>
         </div>
-        <div class="input-field col s12">
+        <!--<div class="input-field col s12">
             <i class="material-icons prefix">vpn_key</i>
             <input type="password" class="validate" id="passwordAs" name="passwordAs" required="" maxlength="10">
             <label for="passwordAs">비밀번호</label>
-        </div>
+        </div>-->
+        <input type="hidden" id="passwordAs" name="passwordAs" th:value="${resultDto.passwordAs}">
         <div class="input-field col s12">
             <i class="material-icons prefix">content_paste</i>
             <textarea id="contentsAs" name="contentsAs" class="materialize-textarea" required="" th:text="${resultDto.contentsAs}"></textarea>
             <label for="contentsAs">AS 요청내용</label>
         </div>
-        <input type="hidden" id="latitudeAs" name="latitudeAs" />
-        <input type="hidden" id="longitudeAs" name="longitudeAs" />
+        <input type="hidden" id="latitudeAs" name="latitudeAs" th:value="${resultDto.latitudeAs}"/>
+        <input type="hidden" id="longitudeAs" name="longitudeAs" th:value="${resultDto.longitudeAs}"/>
+        <input type="hidden" id="idAttach" name="idAttach" th:value="${resultDto.idAttach}"/>
         <div id="kakaoMap" class="asMap">
             <input id="keyword" type="text" class="asMapInput browser-default" placeholder="검색할 주소" value=""/>
             <button class="btn waves-effect waves-light asMapBtn" type="button" id="search">
                 <i class="material-icons right">search</i>
             </button>
-            <button class="btn waves-effect waves-light asMapBtn" type="button" id="here">
+            <!--<button class="btn waves-effect waves-light asMapBtn" type="button" id="here">
                 <i class="material-icons right">gps_fixed</i>
-            </button>
+            </button>-->
         </div>
         <div class="input-field col s12">
             <i class="material-icons prefix">location_on</i>
@@ -356,13 +362,14 @@
             <label for="dtlLocationAs">AS 상세위치</label>
         </div>
         <div class="img-container">
-            <div class="img-row" th:if="${attachDtoList.size()>0}">
+            <div class="img-row" th:if="${attachDtoList.size() > 0}">
                 <div th:each="attachDto : ${attachDtoList}" class="column">
-                    <img class="slide-img cursor" th:style="'background-image: url(/attach/resizeImgView.do/' + ${attachDto.idAttach} + '/' + ${attachDto.snFileAttach} + ');'"/>
+                    <img class="slide-img cursor" th:style="'background-image: url(/attach/resizeImgView.do?idAttach=' + ${attachDto.idAttach} + '&snFileAttach=' + ${attachDto.snFileAttach} + ');'"/>
                     <i class="tiny material-icons img-remove-btn" th:data-idAttach="${attachDto.idAttach}" th:data-snFileAttach="${attachDto.snFileAttach}">remove_circle</i>
                 </div>
-                <div th:each="num: ${#numbers.sequence(1, 4-attachDtoList.size())}" class="column">
-                </div>
+                <th:block th:if="${attachDtoList.size() < 4}">
+                    <div th:each="num: ${#numbers.sequence(1, 4-attachDtoList.size())}" class="column"></div>
+                </th:block>
             </div>
             <div class="img-row" th:if="${attachDtoList.size()<1}" >
                 <div class="column">
@@ -374,21 +381,22 @@
                 <div class="column">
                 </div>
             </div>
-            <a class="material-icons imgUpBtn" style="float: right;">add_photo_alternate</a>
         </div>
         <input type="file" id="img-input" class="img-input" multiple accept="image/*" style="display: none;"/>
         <div class="row">
             <div class="col s12 center-align">
-                <!-- <a class="waves-effect waves-light btn-small" id="submitBtn">등록</a> -->
-                <button type="submit" name="action" style="background-color: black;">
-                    <i class="large material-icons" style="color: rgba(255, 255, 255, 1);">edit</i>
+                <a class="medium material-icons imgUpBtn">
+                    <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">add_photo_alternate</i>
+                </a>
+                <button type="submit" name="action" style="all: unset;">
+                    <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i>
                 </button>
+                <!--<a onclick="javascript: goList();">
+                    <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">view_list</i>
+                </a>-->
             </div>
         </div>
     </form>
-    <a onclick="javascript: goList();">
-        <button>목록</button>
-    </a>
     <form name="listForm" method="get" action="/as/list.do">
         <input type="hidden" name="page" th:value="${pagingResult.page}"/>
         <input type="hidden" name="listSize" th:value="${pagingResult.listSize}"/>

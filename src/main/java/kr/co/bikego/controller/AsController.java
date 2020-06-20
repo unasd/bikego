@@ -5,13 +5,11 @@ import kr.co.bikego.dto.AttachDto;
 import kr.co.bikego.dto.SearchDto;
 import kr.co.bikego.service.AsService;
 import kr.co.bikego.service.AttachService;
-import kr.co.bikego.test.dto.CrudDto;
 import kr.co.bikego.util.AES256Util;
 import kr.co.bikego.util.PageRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,13 +19,13 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @AllArgsConstructor
@@ -87,6 +85,7 @@ public class AsController {
      */
     @PostMapping("/write.do")
     public String write(AsDto asDto, String[] image, String[] imageName, String[] imageSize) throws Exception {
+        System.out.println("write.do asDto ;; " + asDto);
         asDto.setRegdtAs(LocalDateTime.now());
         asDto.setPasswordAs(passwordEncoder.encode(asDto.getPasswordAs()));
         asDto.setNoTelAs(aes.encrypt(asDto.getNoTelAs()));
@@ -117,11 +116,32 @@ public class AsController {
      * @throws Exception
      */
     @GetMapping("/detail.do")
-    public String detail(Model model, AsDto asDto, SearchDto searchDto, final PageRequest pageable, HttpServletResponse response) throws Exception {
-        if(asService.passwordChk(asDto)) {
-            AsDto resultDto = asService.getAsDetail(asDto.getSeqAs());
-            List<AttachDto> attachDtoList = attachService.getAttachInfoList(resultDto.getIdAttach());
+    public String detail(Model model, AsDto asDto, SearchDto searchDto, final PageRequest pageable
+            , HttpServletResponse response, HttpServletRequest request) throws Exception {
 
+        AsDto resultDto = null;
+        List<AttachDto> attachDtoList = null;
+        Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+
+        // 일반적인 상세조회
+        if(flashMap == null && asService.passwordChk(asDto)) {
+            resultDto = asService.getAsDetail(asDto.getSeqAs());
+            resultDto.setPasswordAs(request.getParameter("passwordAs"));
+        }
+        System.out.println("resultDto1 ;; " + resultDto);
+
+        // update.do 처리후 redirect 될 때
+        if(resultDto == null && flashMap != null) {
+            System.out.println("resultDto2 ;; " + resultDto);
+            asDto.setSeqAs((Long) flashMap.get("seqAs"));
+            resultDto = asService.getAsDetail(asDto.getSeqAs());
+            resultDto.setPasswordAs((String) flashMap.get("passwordAs"));
+        }
+
+        System.out.println("resultDto3 ;; " + resultDto);
+
+        if(resultDto != null) {
+            attachDtoList = attachService.getAttachInfoList(resultDto.getIdAttach());
             model.addAttribute("resultDto", resultDto);
             model.addAttribute("attachDtoList", attachDtoList);
             model.addAttribute("searchDto", searchDto);
@@ -147,7 +167,8 @@ public class AsController {
      * @throws Exception
      */
     @GetMapping("/update.do")
-    public String update(Model model, AsDto asDto, SearchDto searchDto, final PageRequest pageable, HttpServletResponse response) throws Exception {
+    public String update(Model model, AsDto asDto, SearchDto searchDto
+            , final PageRequest pageable, HttpServletResponse response) throws Exception {
         if(asService.passwordChk(asDto)) {
             AsDto resultDto = asService.getAsDetail(asDto.getSeqAs());
             List<AttachDto> attachDtoList = attachService.getAttachInfoList(resultDto.getIdAttach());
@@ -177,18 +198,18 @@ public class AsController {
      * @throws Exception
      */
     @PostMapping("/update.do")
-    public String update(AsDto asDto, String[] image, String[] imageName, String[] imageSize
+    public String update(Model model, AsDto asDto, SearchDto searchDto
+            , String[] image, String[] imageName, String[] imageSize
             , HttpServletResponse response, HttpServletRequest request) throws Exception {
         if (asService.passwordChk(asDto)) {
+            FlashMap fm = RequestContextUtils.getOutputFlashMap(request);
+            fm.put("seqAs", asDto.getSeqAs());
+            fm.put("passwordAs", asDto.getPasswordAs());
+
             asDto.setModdtAs(LocalDateTime.now());
             asDto.setPasswordAs(passwordEncoder.encode(asDto.getPasswordAs()));
             asDto.setNoTelAs(aes.encrypt(asDto.getNoTelAs()));
             asService.updateAs(asDto, image, imageName, imageSize);
-            FlashMap fm = RequestContextUtils.getOutputFlashMap(request);
-            fm.put("test", "test");
-
-
-
         } else {
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();

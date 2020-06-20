@@ -26,32 +26,6 @@ import java.util.List;
 @RequestMapping("/attach")
 public class AttachController {
     private AttachService attachService;
-    private AsService asService;
-
-    @GetMapping(
-            value = "/imgView.do"
-    )
-    public void imgView(HttpServletResponse response) throws IOException {
-        String orgFileNm = "C:\\Users\\user\\Pictures\\IMG_4199.jpg";
-        response.setContentType("image/jpeg");
-        response.setHeader("Content-Disposition","filename=\"" + orgFileNm + "\"");
-
-        BufferedInputStream in = null;
-        BufferedOutputStream out = null;
-
-        try {
-            in = new BufferedInputStream(new FileInputStream(new File(orgFileNm)));
-            out = new BufferedOutputStream(response.getOutputStream());
-
-            FileCopyUtils.copy(in, out);
-            out.flush();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            if(in!=null){try{in.close();}catch(Exception e){}}
-            if(out!=null){try{out.close();}catch(Exception e){}}
-        }
-    }
 
     @GetMapping(value = "/resizeImgView.do") //todo: 이미지사이즈 메소드 분리
     public @ResponseBody
@@ -131,5 +105,16 @@ public class AttachController {
                 }
             }
         }
+    }
+
+    @PostMapping(value = "/fileUpload.do")
+    public void fileUpload(HttpServletRequest req, HttpServletResponse resp,
+                            MultipartHttpServletRequest multiFile) throws Exception {
+
+        List<MultipartFile> files = multiFile.getFiles("upload");
+        for(MultipartFile file : files) {
+            System.out.println(file.getOriginalFilename());
+        }
+
     }
 }

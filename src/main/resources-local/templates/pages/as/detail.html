@@ -90,16 +90,16 @@
     </div>
 
     <!-- 수정/삭제 -->
-    <div>
+    <div class="col s12 center-align">
         <a onclick="javascript: goUpdate();">
-            <button>수정</button>
+            <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
         </a>
         <a onclick="javascript: goDelete();">
-            <button>삭제</button>
+            <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i>
         </a>
-        <a onclick="javascript: goList();">
-            <button>목록</button>
-        </a>
+        <!--<a onclick="javascript: goList();">
+            <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">view_list</i>
+        </a>-->
         <form name="listForm" method="get" action="/as/list.do">
             <input type="hidden" name="page" th:value="${pagingResult.page}"/>
             <input type="hidden" name="listSize" th:value="${pagingResult.listSize}"/>
@@ -108,8 +108,8 @@
             <input type="hidden" name="sortProp" th:value="${pagingResult.sortProp}"/>
             <input type="hidden" name="searchType" th:value="${searchDto.searchType}"/>
             <input type="hidden" name="searchKeyword" th:value="${searchDto.searchKeyword}"/>
-            <input type="hidden" name="seqAs" th:value="${param.seqAs}"/>
-            <input type="hidden" name="passwordAs" th:value="${param.passwordAs}"/>
+            <input type="hidden" name="seqAs" th:value="${resultDto.seqAs}"/>
+            <input type="hidden" name="passwordAs" th:value="${resultDto.passwordAs}"/>
         </form>
     </div>
 </div>

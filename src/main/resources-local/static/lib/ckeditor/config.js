@@ -10,20 +10,24 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.toolbarGroups = [
-		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
-		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
-		{ name: 'links' },
-		{ name: 'insert' },
-		{ name: 'forms' },
-		{ name: 'tools' },
-		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
-		{ name: 'others' },
-		'/',
-		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-		{ name: 'styles' },
-		{ name: 'colors' },
-		{ name: 'about' }
+//		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
+//		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
+//		{ name: 'links' },
+//		{ name: 'insert' },
+//		{ name: 'forms' },
+//		{ name: 'tools' },
+//		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
+//		{ name: 'others' },
+//		'/',
+//		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+//		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+//		{ name: 'styles' },
+//		{ name: 'colors' },
+//		{ name: 'about' }
+        { name: 'editing',     groups: [ 'find', 'selection' ] },
+        { name: 'insert' },
+        { name: 'forms' },
+        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] }
 	];
 
 	// Remove some buttons provided by the standard plugins, which are
@@ -35,4 +39,33 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+
+    config.height = 300;
+	config.filebrowserUploadUrl = '/attach/ckImgUpload.do';
+	config.image_previewText = ' ';
+	config.image2_maxSize = {
+        height: 300,
+        width: 250
+    };
 };
+
+CKEDITOR.on('dialogDefinition', function (ev) {
+    var dialogName = ev.data.name;
+    var dialogDefinition = ev.data.definition;
+    var dialog = ev.data.definition.dialog;
+
+    if (dialogName == 'image') {
+        dialog.on('show', function () {
+            this.selectPage('Upload');
+        });
+        var infoTab = dialogDefinition.getContents( 'info' );
+        infoTab.remove('txtBorder');
+        infoTab.remove('txtHSpace');
+        infoTab.remove('txtVSpace');
+        infoTab.remove('txtWidth');
+        infoTab.remove('txtHeight');
+        infoTab.remove('txtAlt');
+        infoTab.remove('cmbAlign');
+        infoTab.remove('ratioLock');
+    }
+});

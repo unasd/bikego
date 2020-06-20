@@ -166,7 +166,7 @@ $(document).ready(function(){
     });
 
     $('.img-input').change(function(){
-        drawThumnail(this);
+        imgComn.drawThumnail(this);
     });
 
     $('.column, .imgUpBtn').click(function(){
@@ -186,7 +186,7 @@ $(document).ready(function(){
 
   var container = document.getElementById('kakaoMap');
   var options = { //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+      center: new kakao.maps.LatLng(37.52983920869157, 126.99756873623262),
   	  level: 3 //지도의 레벨(확대, 축소 정도)
   };
   kakaoMap = new kakao.maps.Map(container, options);
@@ -221,7 +221,7 @@ $(document).ready(function(){
     });
     // 지도에 마커 표시
     marker.setMap(kakaoMap);
-    setCurrentLocation();
+    //setCurrentLocation();
 
     // 지도 클릭 이벤트
     // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다

@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -118,6 +119,7 @@ public class AsService {
             List<AttachEntity> attachEntities = attachService.saveImage(image, imageName, imageSize, "as", asDto.getIdAttach());
         }
         Long seqAs = asRepository.save(asDto.toEntity()).getSeqAs();
+
         return seqAs;
     }
 }

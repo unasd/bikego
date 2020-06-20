@@ -107,16 +107,18 @@
                         <img src="https://www.bianchi.com/wp-content/uploads/2020/05/BIANCHI-PARTICOLARI-02-09-19175182-634x452.jpg" alt="" style="width: 100%; height: auto;" />
                     </th:block>
                     <th:block th:unless="${#lists.isEmpty(asList.idAttach)}">
-                        <img th:src="'/attach/resizeImgView.do/' + ${asList.idAttach} + '/1'" alt="" style="width: 100%; height: auto;" />
+                        <img th:src="'/attach/resizeImgView.do?idAttach=' + ${asList.idAttach} + '&snFileAttach=1'" alt="" style="width: 100%; height: auto;" />
                     </th:block>
                 </div>-->
                 <div class="col s12 m6 desc">
                     <h6 class="teal-text" th:text="${#temporals.format(asList.regdtAs, 'yyyy-MM-dd')}" />
                     <h4 th:text="${asList.titleAs}"/>
                     <div class="blue-grey-text lighten-5" th:text="${asList.writerAs}" />
-                    <p th:text="${asList.contentsAs}"></p>
-                    <p th:text="${asList.locationAs}"></p>
-                    <a class="waves-effect waves-light btn-small modal-trigger" href="#passwordModal" th:data="${asList.seqAs}">더보기</a>
+                    <p class="blue-grey-text lighten-5" th:text="${asList.contentsAs}"></p>
+                    <p class="blue-grey-text lighten-5" th:text="${asList.locationAs}"></p>
+                    <div align="right" style="padding-right: 5px;">
+                        <a class="waves-effect waves-light btn-small modal-trigger" href="#passwordModal" th:data="${asList.seqAs}">more</a>
+                    </div>
                 </div>
             </div>
         </li>
