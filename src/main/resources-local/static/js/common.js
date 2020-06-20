@@ -3,6 +3,7 @@ $(document).ready(function(){
 });
 
 function imageCommon() {
+    // 이미지 리사이즈(축소)
     this.resizeImage = function(imageObj) {
         let canvas = document.createElement("canvas"),
             max_size = 1280,
@@ -27,10 +28,10 @@ function imageCommon() {
         canvas.height = height;
         canvas.getContext("2d").drawImage(imageObj, 0, 0, width, height);
         let dataUrl = canvas.toDataURL("image/jpeg");
-        console.info('dataURL ;; ' + dataUrl);
         return dataUrl;
     };
 
+    // Blob파일 생성
     this.dataURLToBlob = function(dataURL){
         const BASE64_MARKER = ";base64,";
 
@@ -61,6 +62,7 @@ function imageCommon() {
         });
     };
 
+    // 썸네일, 파일업로드 정보 생성
     this.drawThumnail = function (input) {
         if (input.files && input.files[0]) {
             // 현재 썸네일 이미지가 몇개인지 가져옴
@@ -76,7 +78,7 @@ function imageCommon() {
                     let imageObj = new Image();
                     imageObj.src = e.target.result;
                     imageObj.onload = imageEvent => {
-console.info('0 ;; ' + count);
+
                         let dataURL = imgComn.resizeImage(imageObj); // 이미지 리사이즈
 
                         let slideImg = document.createElement('img'); // 썸네일 이미지
@@ -87,7 +89,7 @@ console.info('0 ;; ' + count);
                             e.stopPropagation();
                         };
                         $('.column').eq(count).html(slideImg);
-console.info('1 ;; ' + count);
+
                         let removeIcon = document.createElement('i'); // 삭제버튼
                         removeIcon.setAttribute('class', 'tiny material-icons img-remove-btn');
                         removeIcon.append(document.createTextNode('remove_circle'));
@@ -109,21 +111,23 @@ console.info('1 ;; ' + count);
                         image.setAttribute('name', 'image');
                         image.setAttribute('value', dataURL.split(',')[1]); // 리사이즈
                         $('.column').eq(count).append(image);
-console.info('2 ;; ' + count);
+
                         let imageName = document.createElement('input'); // 전송할 이미지명
                         imageName.setAttribute('type', 'hidden');
                         imageName.setAttribute('name', 'imageName');
                         imageName.setAttribute('value', input.files[i].name);
                         $('.column').eq(count).append(imageName);
-console.info('3 ;; ' + count);
+
                         let imageSize = document.createElement('input'); // 전송할 이미지 크기
                         imageSize.setAttribute('type', 'hidden');
                         imageSize.setAttribute('name', 'imageSize');
                         imageSize.setAttribute('value', imgComn.stringToBytesFaster(dataURL.split(',')[1]).length);
                         $('.column').eq(count).append(imageSize);
-console.info('4 ;; ' + count);
 
-console.info('5 ;; ' + count);
+                        if(i == loopLimit-1) { // 마지막 이미지를 크게 표시
+                            imgComn.showSlides(count);
+//                            slideIndex = count;
+                        }
                         count++;
                     }
                 }
@@ -132,6 +136,7 @@ console.info('5 ;; ' + count);
         }
     };
 
+    // base64 이미지 용량산정
     this.stringToBytesFaster = function ( str ) {
         var ch, st, re = [], j=0;
         for (var i = 0; i < str.length; i++ ) {
@@ -157,7 +162,35 @@ console.info('5 ;; ' + count);
         }
         // return an array of bytes
         return re;
+    };
+
+    // 슬라이드 이미지 표시
+    this.showSlides = function(n) {
+        let dots = $('.slide-img');
+        if(dots.length > 0) {
+            dots.removeClass('active');
+            let imgSrc = dots.eq(n).css('background-image');
+            if(typeof(imgSrc) != "undefined") {
+                imgSrc = imgSrc.replace('url(','').replace(')','').replace(/\"/gi, "");
+                $('.large-slide').eq(0).css({'background-image' : 'url('+ imgSrc +')'});
+            }
+            dots.eq(n).addClass('active');
+            $('#numbertext').text((Number(n)+1) + '/ 6');
+        }
     }
+
+
+//    const slideIndex = 0;
+//    plusSlides = function(n) {
+//        slideIndex += n
+//        // 이미지가 존재하는 범위내에 있는지 체크
+//        if(slideIndex > 5) {
+//            slideIndex = 0;
+//        } else if(slideIndex < 0) {
+//            slideIndex = 5;
+//        }
+//        showSlides(slideIndex);
+//    }
 }
 
 function chkword(obj, maxByte) {
