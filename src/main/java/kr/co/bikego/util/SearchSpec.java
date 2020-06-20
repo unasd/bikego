@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 public class SearchSpec {
     public static Specification<?> searchLike(SearchDto searchDto) {
         return (Specification<?>) ((root, query, builder) ->
-                builder.like(root.get(searchDto.getSearchType()), "%" + searchDto.getSearchKeyword() + "%").not()
+                builder.like(root.get(searchDto.getSearchType()), "%" + searchDto.getSearchKeyword() + "%")
         );
     }
 }
