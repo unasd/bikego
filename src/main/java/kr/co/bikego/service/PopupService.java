@@ -32,8 +32,10 @@ public class PopupService {
     private AttachService attachService;
 
 
-    public List<PopupinfoDto> getPopupList() {
-        List<PopupinfoEntity> popupinfoEntities = popupRepository.findAll();
+    public List<PopupinfoDto> getPopupMainList() {
+
+        List<PopupinfoEntity> popupinfoEntities =  popupRepository.findBydelYnAndPopYn("N","Y");
+
         List<PopupinfoDto> popupinfoDtoList = new ArrayList<>();
 
         for(PopupinfoEntity popupEntity : popupinfoEntities) {
@@ -43,9 +45,12 @@ public class PopupService {
                     .popupUrl(popupEntity.getPopupUrl())
                     .popupWriter(popupEntity.getPopupWriter())
                     .popupRegdt(popupEntity.getPopupRegdt())
+                    .contents(popupEntity.getContents())
                     .popYn(popupEntity.getPopYn())
                     .delYn(popupEntity.getDelYn())
-                    .popupRegdt(popupEntity.getPopupRegdt())
+                    .popupStartDt(popupEntity.getPopupStartDt())
+                    .popupEndDt(popupEntity.getPopupEndDt())
+                    .attachId(popupEntity.getAttachId())
                     .build();
 
 
@@ -56,14 +61,20 @@ public class PopupService {
     }
 
 
+
+
     public HashMap getPopupList(Pageable pageble, SearchDto searchDto) throws GeneralSecurityException, UnsupportedEncodingException {
         HashMap result = new HashMap();
         Page<PopupinfoEntity> popupinfoEntityPage = null;
         if(Optional.ofNullable(searchDto.getSearchKeyword()).orElse("").isEmpty()) {
-            popupinfoEntityPage = popupRepository.findAll(pageble);
+            /*popupinfoEntityPage = popupRepository.findAll(pageble);*/
+            popupinfoEntityPage = popupRepository.findBydelYn("N",pageble);
+
+
         } else {
-            popupinfoEntityPage = popupRepository.findAll((Specification<PopupinfoEntity>) SearchSpec.searchLike(searchDto), pageble);
-        }
+
+            popupinfoEntityPage = popupRepository.findAll(((Specification<PopupinfoEntity>)  SearchSpec.searchLike(searchDto)).and((Specification<PopupinfoEntity>)SearchSpec.searchLike2(searchDto,"N")) , pageble);
+     }
 
         List<PopupinfoEntity> popupinfoEntities = popupinfoEntityPage.getContent();
         List<PopupinfoDto> popupinfoDtoList = new ArrayList<>();
@@ -80,6 +91,7 @@ public class PopupService {
                     .popupStartDt(popupEntity.getPopupStartDt())
                     .popupEndDt(popupEntity.getPopupEndDt())
                     .attachId(popupEntity.getAttachId())
+
                     .build();
 
             popupinfoDtoList.add(popupinfoDto);
@@ -92,7 +104,7 @@ public class PopupService {
 
     public Long savePost(PopupinfoDto popupinfoDto, String[] image, String[] imageName, String[] imageSize) {
         // 파일업로드가 필요할 때 Transactional 어노테이션 선언된 서비스 메소드에서
-        System.out.println("111111==="+image);
+
         if(image != null) {
             List<AttachEntity> attachEntities = attachService.saveImage(image, imageName, imageSize, "crud");
             if (attachEntities != null) {
@@ -119,6 +131,8 @@ public class PopupService {
                 .popupUrl(popupinfoEntity.getPopupUrl())
                 .popYn(popupinfoEntity.getPopYn())
                 .popupRegdt(popupinfoEntity.getPopupRegdt())
+                .popupStartDt(popupinfoEntity.getPopupStartDt())
+                .popupEndDt(popupinfoEntity.getPopupEndDt())
                 .build();
 
         return popupinfoDto;

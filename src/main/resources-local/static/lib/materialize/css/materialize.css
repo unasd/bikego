@@ -8703,10 +8703,12 @@ input[type=range]::-ms-thumb {
 }
 
 .datepicker-controls .select-year input {
+  color: #26a69a;
   width: 50px;
 }
 
 .datepicker-controls .select-month input {
+  color: #26a69a;
   width: 70px;
 }
 

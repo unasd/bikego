@@ -36,19 +36,10 @@
             var instances2 = M.Datepicker.init(elems2, options);*/
              elems = document.querySelectorAll('.datepicker');
              instances = M.Datepicker.init(elems, options);
+            $('.datepicker').datepicker( {"format":'yyyy-mm-dd'} ).datepicker("setDate", new Date());
 
         })
 
-        // Or with jQuery
-
-        $(document).ready(function(){
-            $('.datepicker').datepicker();
-        });
-
-
-    /*    $(document).ready(function() {
-            $('select').material_select();
-        });*/
 
 
     </script>
@@ -58,7 +49,6 @@
 <div layout:fragment="content" class="container" >
     <form id="popupForm" action="/popup/save.do" method="post">
         <input type="hidden" id="delYn" name="delYn" value="N">
-       <!-- <input type="hidden" id="popYn" name="popYn" value="Y">-->
         <div class="input-field col s12">
             <i class="material-icons prefix">title</i>
             <input type="text" class="validate" id="popupTitle" name="popupTitle" required="" maxlength="100">
@@ -76,15 +66,15 @@
         </div>
        <div class="input-field col s12">
            <i class="material-icons prefix">check</i>
-           <select  id="popYn" name="popYn">
-                 <option>Y</option>
-                 <option>N</option>
+           <select id="popYn" name="popYn">
+                 <option value="Y">Y</option>
+                 <option value="N">N</option>
              </select>
            <label>팝업 사용 여부</label>
        </div>
         <div class="input-field col s12">
             <i class="material-icons prefix">event_available</i>
-            <input type="text" id="popupStartDt" name ="popupStartDt" class="datepicker">
+            <input type="text" id="popupStartDt" name ="popupStartDt" class="datepicker" >
             <label >팝업게시기간</label>
         </div>
         <div class="input-field col s12">
