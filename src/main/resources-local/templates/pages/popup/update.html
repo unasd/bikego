@@ -8,6 +8,97 @@
 <!-- page 스크립트 -->
 <th:block layout:fragment="script">
     <script>
+        let slideIndex = 0;
+        function plusSlides(n) {
+            slideIndex += n
+            // 이미지가 존재하는 범위내에 있는지 체크
+            if(slideIndex > 5) {
+                slideIndex = 0;
+            } else if(slideIndex < 0) {
+                slideIndex = 5;
+            }
+            showSlides(slideIndex);
+        }
+
+        function showSlides(n) {
+            let dots = $('.slide-img');
+            if(dots.length > 0) {
+                dots.removeClass('active');
+                let imgSrc = dots.eq(n).css('background-image');
+                if(typeof(imgSrc) != "undefined") {
+                    imgSrc = imgSrc.replace('url(','').replace(')','').replace(/\"/gi, "");
+                    $('.large-slide').eq(0).css({'background-image' : 'url('+ imgSrc +')'});
+                }
+                dots.eq(n).addClass('active');
+                $('#numbertext').text((Number(n)+1) + '/ 6');
+            }
+        }
+
+        function drawThumnail(input) {
+            if (input.files && input.files[0]) {
+                // 현재 썸네일 이미지가 몇개인지 가져옴
+                let count = $('.slide-img').length;
+                let imgLimit = 6 - count;
+                let loopLimit = input.files.length > imgLimit ? imgLimit : input.files.length;
+
+                // 6 - (썸네일 이미지 개수) 만큼 반복 돌면서 썸네일 이미지 추가
+                for(let i = 0; i < loopLimit; i++) {
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        let slideImg = document.createElement('img'); // 썸네일 이미지
+                        slideImg.setAttribute('class', 'slide-img cursor');
+                        slideImg.setAttribute('style', 'background-image: url('+ e.target.result +');');
+                        slideImg.onclick = function(e){
+                            alert('이미지 클릭');
+                            e.stopPropagation();
+                        };
+                        $('.column').eq(count).html(slideImg);
+
+                        let removeIcon = document.createElement('i'); // 삭제버튼
+                        removeIcon.setAttribute('class', 'tiny material-icons img-remove-btn');
+                        removeIcon.append(document.createTextNode('remove_circle'));
+                        removeIcon.onclick = function(e){
+                            // 삭제버튼 클릭
+                            $(this).parent().remove();
+                            let emptyColumn = document.createElement('div');
+                            emptyColumn.setAttribute('class', 'column');
+                            emptyColumn.onclick = function(e){
+                                $('.img-input').click();
+                            };
+                            $('.img-row').append(emptyColumn);
+                            e.stopPropagation();
+                        };
+                        $('.column').eq(count).append(removeIcon);
+
+                        let image = document.createElement('input'); // 서버로 전송할 이미지 데이터
+                        image.setAttribute('type', 'hidden');
+                        image.setAttribute('name', 'image');
+                        image.setAttribute('value', e.target.result.split(',')[1]);
+                        $('.column').eq(count).append(image);
+
+                        let imageName = document.createElement('input'); // 전송할 이미지명
+                        imageName.setAttribute('type', 'hidden');
+                        imageName.setAttribute('name', 'imageName');
+                        imageName.setAttribute('value', input.files[i].name);
+                        $('.column').eq(count).append(imageName);
+
+                        let imageSize = document.createElement('input'); // 전송할 이미지 크기
+                        imageSize.setAttribute('type', 'hidden');
+                        imageSize.setAttribute('name', 'imageSize');
+                        imageSize.setAttribute('value', input.files[i].size);
+                        $('.column').eq(count).append(imageSize);
+
+                        if(i == loopLimit-1) { // 마지막 이미지를 크게 표시
+                            showSlides(count);
+                            slideIndex = count;
+                        }
+                        count++;
+                    }
+                    reader.readAsDataURL(input.files[i]);
+                }
+            }
+        }
+
         function crudSubmit(){
             $('#popupForm').submit();
         }
@@ -62,14 +153,8 @@
              var instances2 = M.Datepicker.init(elems2, options);*/
             elems = document.querySelectorAll('.datepicker');
             instances = M.Datepicker.init(elems, options);
-
+            $('.datepicker').datepicker( {"format":'yyyy-mm-dd'} ).datepicker("setDate", new Date());
         })
-
-        // Or with jQuery
-
-        $(document).ready(function(){
-            $('.datepicker').datepicker();
-        });
 
 
         function goDetail(popupSeq) {
@@ -86,6 +171,9 @@
         <input type="hidden" name="_method" value="put"/>
         <input type="hidden" name="popupSeq" th:value="${popupinfoDto.popupSeq}"/>
         <input type="hidden" id="delYn" name="delYn" value="N">
+
+        <input type="hidden" id="idAttach" name="attachId" th:value="${popupinfoDto.attachId}"/>
+
         <!--
                 <input type="hidden" id="popYn" name="popYn" value="Y">
         -->
@@ -107,9 +195,9 @@
         </div>
         <div class="input-field col s12">
             <i class="material-icons prefix">check</i>
-            <select  id="popYn" name="popYn" >
-                <option>Y</option>
-                <option>N</option>
+            <select  id="popYn" name="popYn" th:value="${popupinfoDto.popYn}">
+                <option value="Y" th:selected="${popupinfoDto.popYn} == Y">Y</option>
+                <option value="N" th:selected="${popupinfoDto.popYn} == N">N</option>
             </select>
             <label>팝업 사용 여부</label>
         </div>
@@ -120,7 +208,7 @@
         </div>
         <div class="input-field col s12">
             <i class="material-icons prefix">event_busy</i>
-            <input type="text" id="popupEndDt" name ="popupEndDt" class="datepicker">
+            <input type="text" id="popupEndDt" name ="popupEndDt" th:value="${popupinfoDto.popupEndDt}"  class="datepicker">
             <label >팝업종료기간</label>
         </div>
 

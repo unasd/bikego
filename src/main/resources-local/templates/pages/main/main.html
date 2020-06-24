@@ -60,14 +60,14 @@
 
         <div class="container full-wrapper" align="center">
             <div >
-                <ul class="slider">
 <!--
-                    <li><img th:src="@{static/image/sale.png}" title="1st image" onclick="aa();"   /></li>
+                <ul class="slider"  >
 -->
-                    <li><img th:src="@{/static/image/sale.png}"  onclick="aa();" /></li>
-                    <li><img th:src="@{/static/image/sale4.png}" /></li>
-                    <li><img th:src="@{/static/image/sale5.png}" /></li>
-                    <li><img src="https://www.bianchi.com/wp-content/uploads/2020/05/BIANCHI-PARTICOLARI-02-09-19175182-634x452.jpg" /></li>
+
+                <ul class="slider"  >
+                    <li th:each="popupList : ${popupList}"  >
+                        <img th:src="@{/attach/resizeImgView.do?idAttach=} + ${popupList.attachId} + '&snFileAttach=1'" onclick="aa();"/>
+                    </li>
                 </ul>
 
             </div>
@@ -80,7 +80,7 @@
                 <li>
                     <div>
                         <h2 class="header center lime-text">AS Service</h2>
-                        <a href="#" class="full-wrapper" style="background: url(/static/image/bikego-logo1.jpg); background-size: cover; background-position: center center;">
+                        <a href="/as/list.do" class="full-wrapper" style="background: url(/static/image/bikego-logo1.jpg); background-size: cover; background-position: center center;">
                             <h5 class="header col s12 light description">AS Service </h5>
                         </a>
                     </div>
