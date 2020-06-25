@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="../layout/default">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorator="../layout/default">
 
 <!-- page CSS -->
 <th:block layout:fragment="css">
@@ -113,11 +114,22 @@
                 <div class="col s12 m6 desc">
                     <h6 class="teal-text" th:text="${#temporals.format(asList.regdtAs, 'yyyy-MM-dd')}" />
                     <h4 th:text="${asList.titleAs}"/>
-                    <div class="blue-grey-text lighten-5" th:text="${asList.writerAs}" />
-                    <p class="blue-grey-text lighten-5" th:text="${asList.contentsAs}"></p>
-                    <p class="blue-grey-text lighten-5" th:text="${asList.locationAs}"></p>
+<!--                    <div class="blue-grey-text lighten-5" th:text="${asList.writerAs}" />-->
+                    <div class="blue-grey-text lighten-5">
+                        <i class="material-icons" style="float: left; margin-right: 3px;">account_circle</i>
+                        <p style="padding-top: 2px;">[[${asList.writerAs}]]</p>
+                    </div>
+                    <div class="blue-grey-text lighten-5">
+                        <i class="material-icons" style="float: left; margin-right: 3px;">content_paste</i>
+                        <p style="padding-top: 2px;">[[${asList.contentsAs}]]</p>
+                    </div>
+                    <div class="blue-grey-text lighten-5">
+                        <i class="material-icons" style="float: left; margin-right: 3px;">location_on</i>
+                        <p style="padding-top: 2px;">[[${asList.locationAs}]]</p>
+                    </div>
                     <div align="right" style="padding-right: 5px;">
-                        <a class="waves-effect waves-light btn-small modal-trigger" href="#passwordModal" th:data="${asList.seqAs}">more</a>
+                        <a sec:authorize="hasAuthority('ADMIN')" class="waves-effect waves-light btn-small" th:href="@{/admin/as/detail.do(seqAs=${asList.seqAs})}">more</a>
+                        <a sec:authorize="!hasAuthority('ADMIN')" class="waves-effect waves-light btn-small modal-trigger" href="#passwordModal" th:data="${asList.seqAs}">more</a>
                     </div>
                 </div>
             </div>
