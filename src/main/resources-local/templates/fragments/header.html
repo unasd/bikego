@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 
-<header th:fragment="headerFragment"  >
+<header th:fragment="headerFragment">
     <nav class="light-blue lighten-1" role="navigation" >
         <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">
             <img src="/static/image/bikego-logo3.jpg" height="65px;" ></a>
@@ -21,6 +21,7 @@
                     <a href="#user" class="avatar"><img src="/static/image/bikego-logo3.jpg" height="100px;"></a>
                   <!--  <a href="#name"><span class="white-text name">John Doe</span></a>-->
                     <a href="#email"><span class="deep-orange-text email">master@bikego.co.kr</span></a>
+                    <a sec:authorize="isAuthenticated()" href="/admin/logout.do"><span th:text="${#authentication.getPrincipal().getNameAccount()}"></span>님 로그아웃</a>
                 </div></li>
                 <li><a href="/as/list.do">AS SERVICE</a></li>
                 <li><a href="/popup/list.do">POPUP INFO</a></li>

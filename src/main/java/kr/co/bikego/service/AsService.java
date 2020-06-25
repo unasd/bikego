@@ -19,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,11 +68,14 @@ public class AsService {
                     .locationAs(asEntity.getLocationAs())
                     .dtlLocationAs(asEntity.getDtlLocationAs())
                     .passwordAs(asEntity.getPasswordAs())
+                    .statAs(asEntity.getStatAs())
+                    .commentAs(asEntity.getCommentAs())
                     .idAttach(asEntity.getIdAttach())
                     .writerAs(asEntity.getWriterAs())
                     .regdtAs(asEntity.getRegdtAs())
                     .modifierAs(asEntity.getModifierAs())
                     .moddtAs(asEntity.getModdtAs())
+                    .ynDel(asEntity.getYnDel())
                     .build();
 
             asDtoList.add(asDto);
@@ -103,11 +105,14 @@ public class AsService {
                 .locationAs(asEntity.getLocationAs())
                 .dtlLocationAs(asEntity.getDtlLocationAs())
                 .passwordAs(asEntity.getPasswordAs())
+                .statAs(asEntity.getStatAs())
+                .commentAs(asEntity.getCommentAs())
                 .idAttach(asEntity.getIdAttach())
                 .writerAs(asEntity.getWriterAs())
                 .regdtAs(asEntity.getRegdtAs())
                 .modifierAs(asEntity.getModifierAs())
                 .moddtAs(asEntity.getModdtAs())
+                .ynDel(asEntity.getYnDel())
                 .build();
 
         return asDto;

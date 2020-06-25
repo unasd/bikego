@@ -1,13 +1,16 @@
 package kr.co.bikego;
 
 import kr.co.bikego.util.AES256Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 import java.io.UnsupportedEncodingException;
 
@@ -16,12 +19,35 @@ import java.io.UnsupportedEncodingException;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .cors().disable() // cors 허용
-                .csrf().disable() // csrf 허용
-                .formLogin().disable() // 로그인 페이지 disable
-                .headers().frameOptions().disable();
+        http.cors().disable() // cors 허용
+            .csrf().disable() // csrf 허용
+            .headers().frameOptions().disable();
+
+        http.authorizeRequests()
+            .antMatchers("/admin/login.do").permitAll()
+            .antMatchers("/admin/**").hasRole("ADMIN")
+            .anyRequest().permitAll();
+
+        http.formLogin()
+                .loginPage("/admin/login.do")
+                .loginProcessingUrl("/admin/loginProc.do")
+                .usernameParameter("idAccount")
+                .passwordParameter("passwordAccount")
+                .defaultSuccessUrl("/main.do");
+        http.logout()
+                .logoutUrl("/admin/logout.do")
+                .logoutSuccessUrl("/main.do")
+                .invalidateHttpSession(true);
+        http.exceptionHandling().accessDeniedPage("/accessDenied.do");
     }
+
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication()
+//                .withUser("manager")
+//                .password(passwordEncoder().encode("1111"))
+//                .roles("ADMIN");
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -31,5 +57,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AES256Util aes256Util() throws UnsupportedEncodingException {
         return new AES256Util();
+    }
+
+    @Bean
+    public SpringSecurityDialect springSecurityDialect(){
+        return new SpringSecurityDialect();
     }
 }
