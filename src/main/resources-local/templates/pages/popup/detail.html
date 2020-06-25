@@ -24,6 +24,19 @@
         function goEdit(popupSeq) {
             location.href="/popup/edit.do?popupSeq="+popupSeq;
         }
+
+        $(document).ready(function(){
+            $('#delete-btn').click(function(e){
+                $('#confirmModal').find('h4').text('알림');
+                $('#confirmModal').find('p').text('삭제 하시겠습니까?');
+                let removeBtn = $(this);
+                $('#confirmModal').find('.confirm').on('click', function(){
+                    document.getElementById('delete-form').submit();
+                })
+                $('#confirmModal').modal('open');
+                e.stopPropagation();
+            })
+        })
     </script>
 </th:block>
 
@@ -51,7 +64,7 @@
                 <a th:href="@{'/popup/post/edit.do/' + ${popupinfoDto.popupSeq}}" id="submitBtn"><i class="small material-icons" style="color: rgba(255, 255, 255, 1);">settings</i></a>
 -->
                 <a th:onclick="|javascript:goEdit('${popupinfoDto.popupSeq}');|"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i></a>
-                <a onclick="return confirm('삭제 하시겠습니까?');" href="javascript:document.getElementById('delete-form').submit();" id="delete-btn"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i></a>
+                <a  href="#" id="delete-btn"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i></a>
             </form>
         </div>
 

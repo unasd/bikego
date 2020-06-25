@@ -26,6 +26,19 @@
             $('#submitBtn').click(function() {
                 crudSubmit();
             });
+
+            $('#save_btn').click(function(e){
+                $('#confirmModal').find('h4').text('알림');
+                $('#confirmModal').find('p').text('저장 하시겠습니까?');
+                let removeBtn = $(this);
+                $('#confirmModal').find('.confirm').on('click', function(){
+                    document.getElementById('popupForm').submit();
+                })
+                $('#confirmModal').modal('open');
+                e.stopPropagation();
+            })
+
+
         });
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -73,6 +86,14 @@
            <label>팝업 사용 여부</label>
        </div>
         <div class="input-field col s12">
+            <i class="material-icons prefix">check</i>
+            <select id="popupUrlWindow" name="popupUrlWindow">
+                <option value="Y">Y</option>
+                <option value="N">N</option>
+            </select>
+            <label>팝업 새로운창 여부</label>
+        </div>
+        <div class="input-field col s12">
             <i class="material-icons prefix">event_available</i>
             <input type="text" id="popupStartDt" name ="popupStartDt" class="datepicker" >
             <label >팝업게시기간</label>
@@ -102,7 +123,7 @@
 
         <div class="row">
             <div class="col s12 center-align">
-                <a onclick="return confirm('저장 하시겠습니까?');" href="javascript:document.getElementById('popupForm').submit();" id="popupForm"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i></a>
+                <a  href="#" id="save_btn"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i></a>
             </div>
         </div>
     </form>

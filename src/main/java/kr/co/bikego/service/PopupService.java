@@ -36,6 +36,8 @@ public class PopupService {
 
         List<PopupinfoEntity> popupinfoEntities =  popupRepository.findBydelYnAndPopYn("N","Y");
 
+
+
         List<PopupinfoDto> popupinfoDtoList = new ArrayList<>();
 
         for(PopupinfoEntity popupEntity : popupinfoEntities) {
@@ -43,6 +45,7 @@ public class PopupService {
                     .popupSeq(popupEntity.getPopupSeq())
                     .popupTitle(popupEntity.getPopupTitle())
                     .popupUrl(popupEntity.getPopupUrl())
+                    .popupUrlWindow(popupEntity.getPopupUrlWindow())
                     .popupWriter(popupEntity.getPopupWriter())
                     .popupRegdt(popupEntity.getPopupRegdt())
                     .contents(popupEntity.getContents())
@@ -83,6 +86,7 @@ public class PopupService {
                     .popupSeq(popupEntity.getPopupSeq())
                     .popupTitle(popupEntity.getPopupTitle())
                     .popupUrl(popupEntity.getPopupUrl())
+                    .popupUrlWindow(popupEntity.getPopupUrlWindow())
                     .popupWriter(popupEntity.getPopupWriter())
                     .popupRegdt(popupEntity.getPopupRegdt())
                     .contents(popupEntity.getContents())
@@ -129,6 +133,7 @@ public class PopupService {
                 .attachId(popupinfoEntity.getAttachId())
                 .delYn(popupinfoEntity.getDelYn())
                 .popupUrl(popupinfoEntity.getPopupUrl())
+                .popupUrlWindow(popupinfoEntity.getPopupUrlWindow())
                 .popYn(popupinfoEntity.getPopYn())
                 .popupRegdt(popupinfoEntity.getPopupRegdt())
                 .popupStartDt(popupinfoEntity.getPopupStartDt())

@@ -15,7 +15,13 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "popupinfo")
 public class PopupinfoEntity extends TimeEntity {
+/*
+    @NamedNativeQuery(name = "popupinfo.findMainPopupList",query = "")
+*/
 
+/*
+    @NamedNativeQuery(name = "popupinfo.findMainPopupList", query = "SELECT * FROM popupinfo e WHERE (e.popup_start_dt =< CURRENT_DATE AND  CURRENT_DATE < e.popup_end_dt) AND e.del_yn ='N' and e.pop_yn = 'Y'")
+*/
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -30,6 +36,9 @@ public class PopupinfoEntity extends TimeEntity {
 
     @Column(length = 100, nullable = true, name = "popup_url")
     private String popupUrl;
+
+    @Column(length = 20, nullable = true, name = "popup_url_window")
+    private String popupUrlWindow;
 
     @Column(length = 20, nullable = true, name = "pop_yn")
     private String popYn;
@@ -58,11 +67,12 @@ public class PopupinfoEntity extends TimeEntity {
 
 
     @Builder
-    public PopupinfoEntity(Long popupSeq,String popupTitle,String popupUrl,String popupWriter,String popYn,String delYn,String popupStartDt,String popupEndDt,String ipReg,String attachId,String contents) {
+    public PopupinfoEntity(Long popupSeq,String popupTitle,String popupUrl,String getPopupUrlWindow,String popupWriter,String popYn,String delYn,String popupStartDt,String popupEndDt,String ipReg,String attachId,String contents) {
         //this.id = id;
         this.popupSeq  =popupSeq;
         this.popupTitle=popupTitle;
         this.popupUrl  =popupUrl;
+        this.popupUrlWindow  =getPopupUrlWindow;
         this.popupWriter=popupWriter;
         this.popYn=popYn;
         this.delYn=delYn;

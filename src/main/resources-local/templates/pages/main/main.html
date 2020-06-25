@@ -51,9 +51,19 @@
             });
 
 
-            function aa() {
-                var openNewWindow = window.open("about:blank");
-                openNewWindow.location.href = "http://www.naver.com";
+            function goUrl(url,windowYn) {
+
+                if(windowYn =="Y"){
+                    var openNewWindow = window.open("about:blank");
+                    openNewWindow.location.href = url;
+
+                }else{
+                    location.href = url;
+                }
+
+
+
+              /*  location.href = url;*/
             }
 
         </script>
@@ -66,7 +76,7 @@
 
                 <ul class="slider"  >
                     <li th:each="popupList : ${popupList}"  >
-                        <img th:src="@{/attach/resizeImgView.do?idAttach=} + ${popupList.attachId} + '&snFileAttach=1'" onclick="aa();"/>
+                        <img th:src="@{/attach/resizeImgView.do?idAttach=} + ${popupList.attachId} + '&snFileAttach=1'" th:onclick="|javascript:goUrl('${popupList.popupUrl}','${popupList.popupUrlWindow}');|"/>
                     </li>
                 </ul>
 

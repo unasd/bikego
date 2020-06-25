@@ -47,7 +47,7 @@
 
 <div layout:fragment="content" class="container full">
     <div class="col s12 right-align" style="margin: 2%;">
-        <a th:href="@{/popup/post.do}" class="large material-icons" style="font-size: 30px; color: rgba(255, 255, 255, 1);">edit</a>
+        <a th:href="@{/popup/post.do}" class="large material-icons" style="font-size: 30px; color: rgba(38, 166, 154);">edit</a>
     </div>
     <ul class="collection popup-list">
         <li class="collection-item black no-border no-padding" th:each="popupList : ${popupList}" style="border-bottom: none;">
@@ -55,12 +55,7 @@
                 <div class="col s12 m6 thumbnail" style="max-height: 300px; overflow: hidden;">
                    <!-- <img src="https://www.bianchi.com/wp-content/uploads/2020/05/BIANCHI-PARTICOLARI-02-09-19175182-634x452.jpg" alt="" style="width: 100%; height: auto;" />-->
                     <img style="max-height: 800px; width: 100%; overflow: hidden;" th:src="@{/attach/resizeImgView.do?idAttach=} + ${popupList.attachId} + '&snFileAttach=1'" />
-<!--
 
-                    C:\Users\sinna\IdeaProjects\upload\crud\2020\6\19\2e9ac6fd-d5c2-4d9c-915f-374cf641c07f1592531954084.PNG
-                    <img style="max-height: 800px; width: 100%; overflow: hidden;" th:src="@{/attach/resizeImgView.do/} + ${popupList.attachId} + '/' + ${attachDto.snFileAttach}" />
-
--->
 
 
                 </div>

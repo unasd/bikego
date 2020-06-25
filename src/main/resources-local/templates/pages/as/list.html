@@ -96,9 +96,10 @@
 </th:block>
 
 <div layout:fragment="content" class="container full">
-    <div class="right-align" style="margin: 2%;">
-        <a th:href="@{/as/write.do}" class="material-icons" style="color: rgba(255, 255, 255, 1);">edit</a>
+    <div class="col s12 right-align" style="margin: 2%;">
+        <a th:href="@{/as/write.do}" class="large material-icons" style="font-size: 30px; color: rgba(38, 166, 154);">edit</a>
     </div>
+
     <ul class="collection popup-list">
         <li class="collection-item black no-border no-padding" th:each="asList : ${asList}" style="border-bottom: none;">
             <div class="row">

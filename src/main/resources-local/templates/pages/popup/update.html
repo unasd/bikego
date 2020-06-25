@@ -49,7 +49,7 @@
                         slideImg.setAttribute('class', 'slide-img cursor');
                         slideImg.setAttribute('style', 'background-image: url('+ e.target.result +');');
                         slideImg.onclick = function(e){
-                            alert('이미지 클릭');
+
                             e.stopPropagation();
                         };
                         $('.column').eq(count).html(slideImg);
@@ -58,6 +58,9 @@
                         removeIcon.setAttribute('class', 'tiny material-icons img-remove-btn');
                         removeIcon.append(document.createTextNode('remove_circle'));
                         removeIcon.onclick = function(e){
+                            alert('이미지 11 클릭');
+                            $('#confirmModal').find('h4').text('');
+                            $('#confirmModal').find('p').text('업로드한 이미지가 삭제됩니다.');
                             // 삭제버튼 클릭
                             $(this).parent().remove();
                             let emptyColumn = document.createElement('div');
@@ -138,6 +141,19 @@
                 e.stopPropagation();
             });
 
+            $('.update-btn').click(function(e){
+                $('#confirmModal').find('h4').text('알림');
+                $('#confirmModal').find('p').text('수정하시겠습니까?');
+                let removeBtn = $(this);
+                $('#confirmModal').find('.confirm').on('click', function(){
+
+                    document.getElementById('popupForm').submit();
+
+                })
+                $('#confirmModal').modal('open');
+                e.stopPropagation();
+            })
+
 
         });
 
@@ -160,6 +176,9 @@
         function goDetail(popupSeq) {
             location.href="/popup/detail.do?popupSeq="+popupSeq;
         }
+
+
+
 
 
     </script>
@@ -202,6 +221,14 @@
             <label>팝업 사용 여부</label>
         </div>
         <div class="input-field col s12">
+            <i class="material-icons prefix">check</i>
+            <select  id="popupUrlWindow" name="popupUrlWindow" th:value="${popupinfoDto.popupUrlWindow}">
+                <option value="Y" th:selected="${popupinfoDto.popupUrlWindow} == Y">Y</option>
+                <option value="N" th:selected="${popupinfoDto.popupUrlWindow} == N">N</option>
+            </select>
+            <label>팝업 새로운창 여부</label>
+        </div>
+        <div class="input-field col s12">
             <i class="material-icons prefix">event_available</i>
             <input type="text" id="popupStartDt" name ="popupStartDt"  th:value="${popupinfoDto.popupStartDt}" class="datepicker">
             <label >팝업게시기간</label>
@@ -239,7 +266,12 @@
         <input type="file" id="img-input" class="img-input" multiple accept="image/*" style="display: none;"/>
         <div class="row">
             <div class="col s12 center-align">
-                <a onclick="return confirm('수정 하시겠습니까?');" href="javascript:document.getElementById('popupForm').submit();" id="update-btn"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i></a>
+
+               <!-- <a  href="javascript:document.getElementById('popupForm').submit();" id="update-btn"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i></a>-->
+
+
+                <i class="medium material-icons cursor update-btn" style="color: rgba(255, 255, 255, 1);">save_alt</i>
+
             </div>
         </div>
 

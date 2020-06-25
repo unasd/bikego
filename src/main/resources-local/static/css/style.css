@@ -186,13 +186,13 @@ body {
     padding: 0;
 }
 
-.sidenav .avatar {
+/*.sidenav .avatar {
     width: 10rem;
 }
 
 .sidenav li > a {
     color: #26baac;
-}
+}*/
 
 .container.full {
     width: 100%;
@@ -201,6 +201,7 @@ body {
 .full-wrapper {
     display: block;
     width: 100%;
+    max-height: 800px;
     background-size: cover;
     min-height: 250px;
     position: relative;
