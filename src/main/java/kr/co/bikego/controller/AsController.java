@@ -1,5 +1,6 @@
 package kr.co.bikego.controller;
 
+import kr.co.bikego.domain.entity.AsStat;
 import kr.co.bikego.dto.AsDto;
 import kr.co.bikego.dto.AttachDto;
 import kr.co.bikego.dto.SearchDto;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -86,6 +88,8 @@ public class AsController {
     @PostMapping("/write.do")
     public String write(AsDto asDto, String[] image, String[] imageName, String[] imageSize) throws Exception {
         System.out.println("write.do asDto ;; " + asDto);
+        asDto.setStatAs(AsStat.A);
+        asDto.setYnDel("N");
         asDto.setRegdtAs(LocalDateTime.now());
         asDto.setPasswordAs(passwordEncoder.encode(asDto.getPasswordAs()));
         asDto.setNoTelAs(aes.encrypt(asDto.getNoTelAs()));
@@ -121,24 +125,10 @@ public class AsController {
 
         AsDto resultDto = null;
         List<AttachDto> attachDtoList = null;
-        Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
 
-        // 일반적인 상세조회
-        if(flashMap == null && asService.passwordChk(asDto)) {
-            resultDto = asService.getAsDetail(asDto.getSeqAs());
-            resultDto.setPasswordAs(request.getParameter("passwordAs"));
-        }
+        resultDto = asService.getAsDetail(asDto.getSeqAs());
+        resultDto.setPasswordAs(request.getParameter("passwordAs"));
         System.out.println("resultDto1 ;; " + resultDto);
-
-        // update.do 처리후 redirect 될 때
-        if(resultDto == null && flashMap != null) {
-            System.out.println("resultDto2 ;; " + resultDto);
-            asDto.setSeqAs((Long) flashMap.get("seqAs"));
-            resultDto = asService.getAsDetail(asDto.getSeqAs());
-            resultDto.setPasswordAs((String) flashMap.get("passwordAs"));
-        }
-
-        System.out.println("resultDto3 ;; " + resultDto);
 
         if(resultDto != null) {
             attachDtoList = attachService.getAttachInfoList(resultDto.getIdAttach());
@@ -198,13 +188,15 @@ public class AsController {
      * @throws Exception
      */
     @PostMapping("/update.do")
-    public String update(Model model, AsDto asDto, SearchDto searchDto
-            , String[] image, String[] imageName, String[] imageSize
-            , HttpServletResponse response, HttpServletRequest request) throws Exception {
+    public String update(Model model, AsDto asDto, SearchDto searchDto , String[] image, String[] imageName, String[] imageSize
+            , HttpServletResponse response, HttpServletRequest request , RedirectAttributes redirectAttr) throws Exception {
         if (asService.passwordChk(asDto)) {
-            FlashMap fm = RequestContextUtils.getOutputFlashMap(request);
-            fm.put("seqAs", asDto.getSeqAs());
-            fm.put("passwordAs", asDto.getPasswordAs());
+//            FlashMap fm = RequestContextUtils.getOutputFlashMap(request);
+//            fm.put("seqAs", asDto.getSeqAs());
+//            fm.put("passwordAs", asDto.getPasswordAs());
+
+            redirectAttr.addAttribute("seqAs", asDto.getSeqAs());
+            redirectAttr.addAttribute("passwordAs", asDto.getPasswordAs());
 
             asDto.setModdtAs(LocalDateTime.now());
             asDto.setPasswordAs(passwordEncoder.encode(asDto.getPasswordAs()));
@@ -240,5 +232,26 @@ public class AsController {
         }
 
         return resultMap;
+    }
+
+    /**
+     * AS삭제
+     * @param asDto
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @DeleteMapping("/delete.do")
+    public String delete(AsDto asDto, HttpServletResponse response) throws Exception {
+        if (asService.passwordChk(asDto)) {
+            asService.updateYnDel(asDto.getSeqAs());
+        } else {
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('잘못된 접근입니다.'); history.back();</script>");
+            out.flush();
+            return null;
+        }
+        return "redirect:/as/list.do";
     }
 }

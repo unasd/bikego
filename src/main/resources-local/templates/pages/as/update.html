@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="../layout/default">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorator="../layout/default">
 
 <!-- page CSS -->
 <th:block layout:fragment="css">
@@ -107,7 +108,7 @@
         }
 
         $(document).ready(function(){
-
+            $('select').formSelect();
             $('.img-input').change(function(){
                 imgComn.drawThumnail(this);
             });
@@ -172,11 +173,6 @@
                 });
                 $('#confirmModal').modal('open');
                 e.stopPropagation();
-            });
-
-
-            $('#submitBtn').click(function() {
-                crudSubmit();
             });
 
             let container = document.getElementById('kakaoMap');
@@ -244,14 +240,24 @@
                 });
             });
 
+            $('#asForm').submit(function(e){
+                $('#confirmModal').find('h4').text('알림');
+                $('#confirmModal').find('p').text('수정하시겠습니까?');
+                $('#confirmModal').find('.confirm').on('click', function(e){
+                    $('#asForm').submit();
+                })
+                $('#confirmModal').modal('open');
+                e.stopPropagation();
+            });
         });
     </script>
 </th:block>
 
 <div layout:fragment="content" class="container">
-    <form id="asForm" action="/as/update.do" method="post">
+    <form id="asForm" method="post" th:action="${#authentication.getPrincipal() == 'anonymousUser' ? '/as/update.do' : '/admin/as/update.do'}">
         <input type="hidden" name="seqAs" th:value="${resultDto.seqAs}"/>
         <input type="hidden" name="regdtAs" th:value="${resultDto.regdtAs}"/>
+        <input type="hidden" name="ynDel" th:value="${resultDto.ynDel}"/>
         <div class="input-field col s12">
             <i class="material-icons prefix">title</i>
             <input type="text" class="validate" id="titleAs" name="titleAs" required="" maxlength="100" th:value="${resultDto.titleAs}">
@@ -322,6 +328,31 @@
             </div>
         </div>
         <input type="file" id="img-input" class="img-input" multiple accept="image/*" style="display: none;"/>
+
+        <div sec:authorize="isAuthenticated()" class="row">
+            <!-- 관리자만 수정할 수 있는 영역 -->
+            <div class="col s12 m8 offset-m2">
+                <div class="row">
+                    <div class="input-field col s3">
+                        <select name="statAs" class="white-text">
+                            <option th:each="statOpt : ${T(kr.co.bikego.domain.entity.AsStat).values()}"
+                                    th:value="${statOpt}" th:text="${statOpt.statName}"
+                                    th:selected="(${resultDto.statAs == statOpt})"></option>
+                        </select>
+                    </div>
+                    <div class="input-field col s9" >
+                        <input style="color: #fff3e0" id="commentAs" name="commentAs" type="text" class="validate" th:value="${resultDto.commentAs}">
+                        <label for="commentAs">처리내용</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div sec:authorize="!isAuthenticated()" class="row">
+            <input type="hidden" name="statAs" th:value="${resultDto.statAs}"/>
+            <input type="hidden" name="commentAs" th:value="${resultDto.commentAs}"/>
+        </div>
+
         <div class="row">
             <div class="col s12 center-align">
                 <a class="medium material-icons imgUpBtn">

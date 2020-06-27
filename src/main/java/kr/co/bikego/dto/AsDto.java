@@ -1,6 +1,7 @@
 package kr.co.bikego.dto;
 
 import kr.co.bikego.domain.entity.AsEntity;
+import kr.co.bikego.domain.entity.AsStat;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,7 +22,7 @@ public class AsDto {
     private String locationAs;
     private String dtlLocationAs;
     private String passwordAs;
-    private String statAs;
+    private AsStat statAs;
     private String commentAs;
     private String idAttach;
     private int snFileAttach;
@@ -51,13 +52,14 @@ public class AsDto {
                 .regdtAs(regdtAs)
                 .modifierAs(modifierAs)
                 .moddtAs(moddtAs)
+                .ynDel(ynDel)
                 .build();
         return asEntity;
     }
 
     @Builder
     public AsDto(Long seqAs, String titleAs, String contentsAs, String noTelAs, BigDecimal latitudeAs, BigDecimal longitudeAs,
-                 String locationAs, String dtlLocationAs, String passwordAs, String statAs, String commentAs,
+                 String locationAs, String dtlLocationAs, String passwordAs, AsStat statAs, String commentAs,
                  String idAttach, int snFileAttah, String writerAs, LocalDateTime regdtAs, String modifierAs, LocalDateTime moddtAs,
                  String ynDel) {
         this.seqAs = seqAs;

@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@DynamicUpdate
 @Table(name = "as_board")
 public class AsEntity {
 
@@ -46,7 +47,8 @@ public class AsEntity {
     private String passwordAs;
 
     @Column(length = 20, name = "as_stat")
-    private String statAs;
+    @Enumerated(EnumType.STRING)
+    private AsStat statAs;
 
     @Column(columnDefinition = "TEXT", name = "as_comment")
     private String commentAs;
@@ -54,10 +56,10 @@ public class AsEntity {
     @Column(length = 30, nullable = true, name = "attach_id")
     private String idAttach;
 
-    @Column(length = 20, nullable = false, name = "as_writer")
+    @Column(length = 20, nullable = false, name = "as_writer", updatable = false)
     private String writerAs;
 
-    @Column(nullable = true, name = "as_regdt")
+    @Column(nullable = true, name = "as_regdt", updatable = false)
     private LocalDateTime regdtAs;
 
     @Column(length = 20, nullable = true, name = "as_modifier")
@@ -71,7 +73,7 @@ public class AsEntity {
 
     @Builder
     public AsEntity(Long seqAs, String titleAs, String contentsAs, String noTelAs, BigDecimal latitudeAs, BigDecimal longitudeAs,
-                    String locationAs, String dtlLocationAs, String passwordAs, String  statAs, String commentAs,
+                    String locationAs, String dtlLocationAs, String passwordAs, AsStat statAs, String commentAs,
                     String idAttach, String writerAs, LocalDateTime regdtAs, String modifierAs, LocalDateTime moddtAs,
                     String ynDel) {
         this.seqAs = seqAs;

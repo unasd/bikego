@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="../layout/default">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorator="../layout/default">
 
 <!-- page CSS -->
 <th:block layout:fragment="css">
@@ -41,10 +42,10 @@
             $('[name="listForm"]').attr('action', '/as/update.do');
             $('[name="listForm"]').submit();
         }
-        function goDelete(){
-            $('[name="listForm"]').attr('method', 'post');
-            $('[name="listForm"]').attr('action', '/as/delete.do');
-            //$('[name="listForm"]').submit();
+        function goAdminUpdate(){
+            $('[name="listForm"]').attr('method', 'get');
+            $('[name="listForm"]').attr('action', '/admin/as/update.do');
+            $('[name="listForm"]').submit();
         }
 
         $(document).ready(function(){
@@ -68,11 +69,23 @@
             } else {
                 //todo: 좌표없을 때 예외처리
             }
+
+            // 삭제처리
+            $('.delete-btn').click(function(e){
+                let isAdmin = $(this).hasClass('admin');
+                $('#confirmModal').find('h4').text('알림');
+                $('#confirmModal').find('p').text('삭제 하시겠습니까?');
+                $('#confirmModal').find('.confirm').on('click', function(){
+                    $('#deleteForm').submit();
+                })
+                $('#confirmModal').modal('open');
+                e.stopPropagation();
+            });
         });
     </script>
 </th:block>
 
-<div layout:fragment="content" >
+<div layout:fragment="content" class="container">
     <h2 th:text="${resultDto.titleAs}"></h2>
     <p th:inline="text">작성일 : [[${#temporals.format(resultDto.regdtAs, 'yyyy-MM-dd HH:mm')}]]</p>
     <p th:inline="text">작성자 : [[${resultDto.writerAs}]]</p>
@@ -88,15 +101,28 @@
             </div>
         </div>
     </div>
+    <p th:inline="text">처리단계 : [[${resultDto.statAs.statName}]]</p>
+    <p th:inline="text">처리내용 : [[${resultDto.commentAs}]]</p>
 
     <!-- 수정/삭제 -->
     <div class="col s12 center-align">
-        <a onclick="javascript: goUpdate();">
-            <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
-        </a>
-        <a onclick="javascript: goDelete();">
-            <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i>
-        </a>
+        <th:block sec:authorize="!isAuthenticated()">
+            <a class="update-btn" onclick="javascript: goUpdate();">
+                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
+            </a>
+            <a class="delete-btn">
+                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i>
+            </a>
+        </th:block>
+
+        <th:block sec:authorize="isAuthenticated()">
+            <a class="update-btn" onclick="javascript: goAdminUpdate();">
+                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
+            </a>
+            <a class="delete-btn">
+                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i>
+            </a>
+        </th:block>
         <!--<a onclick="javascript: goList();">
             <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">view_list</i>
         </a>-->
@@ -108,6 +134,11 @@
             <input type="hidden" name="sortProp" th:value="${pagingResult.sortProp}"/>
             <input type="hidden" name="searchType" th:value="${searchDto.searchType}"/>
             <input type="hidden" name="searchKeyword" th:value="${searchDto.searchKeyword}"/>
+            <input type="hidden" name="seqAs" th:value="${resultDto.seqAs}"/>
+            <input type="hidden" name="passwordAs" th:value="${resultDto.passwordAs}"/>
+        </form>
+        <form id="deleteForm" name="deleteForm" method="post" th:action="${#authentication.getPrincipal() == 'anonymousUser' ? '/as/delete.do' : '/admin/as/delete.do'}">
+            <input type="hidden" name="_method" value="delete"/>
             <input type="hidden" name="seqAs" th:value="${resultDto.seqAs}"/>
             <input type="hidden" name="passwordAs" th:value="${resultDto.passwordAs}"/>
         </form>

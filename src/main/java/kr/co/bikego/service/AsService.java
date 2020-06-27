@@ -49,11 +49,7 @@ public class AsService {
     public HashMap getAsList(Pageable pageble, SearchDto searchDto) throws Exception {
         HashMap result = new HashMap();
         Page<AsEntity> asEntityPage = null;
-        if(Optional.ofNullable(searchDto.getSearchKeyword()).orElse("").isEmpty()) {
-            asEntityPage = asRepository.findAll(pageble);
-        } else {
-            asEntityPage = asRepository.findAll((Specification<AsEntity>) SearchSpec.searchLike(searchDto), pageble);
-        }
+        asEntityPage = asRepository.findAll((Specification<AsEntity>) SearchSpec.searchLike3(searchDto), pageble);
 
         List<AsEntity> asEntities = asEntityPage.getContent();
         List<AsDto> asDtoList = new ArrayList<>();
@@ -123,8 +119,14 @@ public class AsService {
         if(image != null) {
             List<AttachEntity> attachEntities = attachService.saveImage(image, imageName, imageSize, "as", asDto.getIdAttach());
         }
+        System.out.println("asDto ;; " + asDto);
         Long seqAs = asRepository.save(asDto.toEntity()).getSeqAs();
 
         return seqAs;
+    }
+
+    @Transactional
+    public void updateYnDel(Long seqAs) throws Exception {
+        asRepository.updateYnDel(seqAs);
     }
 }

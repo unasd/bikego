@@ -9,16 +9,20 @@ import kr.co.bikego.util.AES256Util;
 import kr.co.bikego.util.PageRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +40,33 @@ public class AdmnAsController {
     private AttachService attachService;
 
     /**
+     * AS리스트 조회
+     * @param model
+     * @param pageable
+     * @param searchDto
+     * @return
+     * @throws GeneralSecurityException
+     * @throws UnsupportedEncodingException
+     */
+    @GetMapping("/list.do")
+    public String list(Model model, final PageRequest pageable, SearchDto searchDto) throws Exception {
+
+        pageable.setSortProp("seqAs"); // 페이징 필수셋팅 값, 정렬기준
+//        pageable.setListSize(20);
+//        pageable.setPageSize(5);
+//        pageable.setPageSize(1);
+//        pageable.setDirection(Sort.Direction.DESC);
+        searchDto.setYnDel(""); // 삭제여부 관계없이 전부조회
+        HashMap result = asService.getAsList(pageable.of(), searchDto);
+
+        pageable.pagination((Page) result.get("asEntityPage"));
+        model.addAttribute("asList", result.get("asDtoList"));
+        model.addAttribute("pagingResult", pageable.pagination((Page) result.get("asEntityPage")));
+        model.addAttribute("searchDto", searchDto);
+        return "as/list";
+    }
+
+    /**
      * AS 상세보기
      * @param model
      * @param asDto
@@ -51,22 +82,8 @@ public class AdmnAsController {
 
         AsDto resultDto = null;
         List<AttachDto> attachDtoList = null;
-        Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
 
-        // 일반적인 상세조회
-        if(flashMap == null) {
-            resultDto = asService.getAsDetail(asDto.getSeqAs());
-        }
-        System.out.println("resultDto1 ;; " + resultDto);
-
-        // update.do 처리후 redirect 될 때
-        if(resultDto == null && flashMap != null) {
-            System.out.println("resultDto2 ;; " + resultDto);
-            asDto.setSeqAs((Long) flashMap.get("seqAs"));
-            resultDto = asService.getAsDetail(asDto.getSeqAs());
-        }
-
-        System.out.println("resultDto3 ;; " + resultDto);
+        resultDto = asService.getAsDetail(asDto.getSeqAs());
 
         attachDtoList = attachService.getAttachInfoList(resultDto.getIdAttach());
         model.addAttribute("resultDto", resultDto);
@@ -109,17 +126,16 @@ public class AdmnAsController {
      * @throws Exception
      */
     @PostMapping("/update.do")
-    public String update(Model model, AsDto asDto, SearchDto searchDto
-            , String[] image, String[] imageName, String[] imageSize
-            , HttpServletResponse response, HttpServletRequest request) throws Exception {
-        FlashMap fm = RequestContextUtils.getOutputFlashMap(request);
-        fm.put("seqAs", asDto.getSeqAs());
+    public String update(Model model, AsDto asDto, SearchDto searchDto , String[] image, String[] imageName, String[] imageSize
+            , HttpServletResponse response, HttpServletRequest request , RedirectAttributes redirectAttr) throws Exception {
+
+        redirectAttr.addAttribute("seqAs", asDto.getSeqAs());
 
         asDto.setModdtAs(LocalDateTime.now());
         asDto.setNoTelAs(aes.encrypt(asDto.getNoTelAs()));
         asService.updateAs(asDto, image, imageName, imageSize);
 
-        return "redirect:/as/detail.do";
+        return "redirect:/admin/as/detail.do";
     }
 
     /**
@@ -136,5 +152,12 @@ public class AdmnAsController {
         resultMap.put("result", "success");
 
         return resultMap;
+    }
+
+    @DeleteMapping("/delete.do")
+    public String delete(AsDto asDto, HttpServletResponse response) throws Exception {
+        asService.updateYnDel(asDto.getSeqAs());
+
+        return "redirect:/admin/as/list.do";
     }
 }

@@ -12,4 +12,5 @@ import lombok.ToString;
 public class SearchDto {
     private String searchType;
     private String searchKeyword;
+    private String ynDel = "N";
 }
