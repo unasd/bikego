@@ -115,7 +115,7 @@
                 <div class="col s12 m6 desc">
                     <h6 class="teal-text" th:text="${#temporals.format(asList.regdtAs, 'yyyy-MM-dd')}" />
                     <h4 th:text="${asList.titleAs}" style="display: inline;"></h4>
-                    <i th:if="${asList.ynDel == 'Y'}" class="material-icons blue-grey-text lighten-5">delete_outline</i>
+                    <i th:if="${asList.ynDel == 'Y'}" class="material-icons blue-grey-text lighten-5" style="color: red !important;">delete_outline</i>
 <!--                    <div class="blue-grey-text lighten-5" th:text="${asList.writerAs}" />-->
                     <div class="blue-grey-text lighten-5">
                         <i class="material-icons" style="float: left; margin-right: 3px;">account_circle</i>
