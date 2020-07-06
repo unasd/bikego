@@ -245,13 +245,22 @@ $(document).ready(function(){
         });
     });
 
+    let processed = false;
     $('#asForm').submit(function(e){
+        if(!processed) {
+            if(e.preventDefault) {
+                e.preventDefault();
+            }
+        } else {
+            e.returnValue = false;
+        }
+
         $('#confirmModal').find('h4').text('알림');
         $('#confirmModal').find('p').text('저장 하시겠습니까?');
         $('#confirmModal').find('.confirm').on('click', function(){
+            processed = true;
             $('#asForm').submit();
         })
         $('#confirmModal').modal('open');
-        e.stopPropagation();
     });
 });
