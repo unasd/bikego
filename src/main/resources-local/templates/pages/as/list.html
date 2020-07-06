@@ -21,7 +21,7 @@
 
         function goDetail(seqAs, passwordAs) {
             $('[name="listForm"]').children('[name="seqAs"]').val(seqAs);
-            $('[name="listForm"]').children('[name="passwordAs"]').val(passwordAs);
+            $('[name="listForm"]').children('[name="passwordAs"]').val(CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(passwordAs)));
             $('[name="listForm"]').attr('method', 'get');
             $('[name="listForm"]').attr('action', '/as/detail.do');
             $('[name="listForm"]').submit();
@@ -74,7 +74,7 @@
                     type: 'post',
                     data: JSON.stringify({
                         seqAs: seqAs,
-                        passwordAs: passwordAs
+                        passwordAs: CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(passwordAs))
                     }),
                     contentType: 'application/json; charset=utf-8;',
                     dataType: 'json',

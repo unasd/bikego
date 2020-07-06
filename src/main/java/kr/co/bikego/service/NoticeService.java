@@ -92,7 +92,10 @@ public class NoticeService {
     @Transactional
     public Long updateNotice(NoticeDto noticeDto, String[] image, String[] imageName, String[] imageSize) {
         if(image != null) {
-            attachService.saveImage(image, imageName, imageSize, "noti", noticeDto.getIdAttach());
+            List<AttachEntity> attachEntities = attachService.saveImage(image, imageName, imageSize, "noti", noticeDto.getIdAttach());
+            if (attachEntities != null) {
+                noticeDto.setIdAttach(attachEntities.get(0).getIdAttach());
+            }
         }
 
         Long seqNotice = noticeRepository.save(noticeDto.toEntity()).getSeqNoti();

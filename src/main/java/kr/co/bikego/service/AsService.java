@@ -115,6 +115,9 @@ public class AsService {
     public Long updateAs(AsDto asDto, String[] image, String[] imageName, String[] imageSize) {
         if(image != null) {
             List<AttachEntity> attachEntities = attachService.saveImage(image, imageName, imageSize, "as", asDto.getIdAttach());
+            if (attachEntities != null) {
+                asDto.setIdAttach(attachEntities.get(0).getIdAttach()); //첨부파일 아이디 셋팅
+            }
         }
         Long seqAs = asRepository.save(asDto.toEntity()).getSeqAs();
 

@@ -27,7 +27,7 @@
 
 <div layout:fragment="content" class="container full">
     <div class="col s12 right-align" style="margin: 2%;">
-        <a th:href="@{/admin/noti/write.do}" class="large material-icons" style="font-size: 30px; color: rgba(38, 166, 154);">edit</a>
+        <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/noti/write.do}" class="large material-icons" style="font-size: 30px; color: rgba(38, 166, 154);">edit</a>
     </div>
 
     <ul class="collection popup-list">

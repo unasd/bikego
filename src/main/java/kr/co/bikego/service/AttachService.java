@@ -150,12 +150,20 @@ public class AttachService {
      */
     @Transactional
     public List<AttachEntity> saveImage(String[] image, String[] imageName, String[] imageSize, String type) {
+        String idAttach = generateIdAttach(type);
+        return this.saveImage(image, imageName, imageSize, type, idAttach);
+    }
+
+    /**
+     * 첨부파일 아이디 생성
+     * @param type
+     * @return
+     */
+    private String generateIdAttach(String type) {
         LocalDateTime localDateTime = LocalDateTime.now();
         String time = localDateTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS"));
         String randomValue = String.valueOf(10000 + new Random().nextInt(90000));
-        String idAttach = time + "-" + type + "-"  + randomValue;
-
-        return this.saveImage(image, imageName, imageSize, type, idAttach);
+        return time + "-" + type + "-"  + randomValue;
     }
 
     /**
@@ -174,6 +182,7 @@ public class AttachService {
         AttachDto attachDto = null;
         String extension = "", serverFileNm = "", serverFilePath = "";
         int lastSn = 0;
+        if(idAttach.isEmpty()) idAttach = generateIdAttach(type);
         AttachEntity lastAttach = attachRepository.findTopByIdAttachOrderBySnFileAttachDesc(idAttach);
         if(lastAttach != null) lastSn = lastAttach.getSnFileAttach();
 

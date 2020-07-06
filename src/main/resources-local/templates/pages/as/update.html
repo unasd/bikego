@@ -130,6 +130,7 @@
             });
 
             $('.img-remove-btn').click(function(e){
+                console.info(resultDto)
                 $('#confirmModal').find('h4').text('');
                 $('#confirmModal').find('p').text('업로드한 이미지가 삭제됩니다.');
                 let removeBtn = $(this);
@@ -325,7 +326,7 @@
                     <div th:each="num: ${#numbers.sequence(1, 4-attachDtoList.size())}" class="column"></div>
                 </th:block>
             </div>
-            <div class="img-row" th:if="${attachDtoList.size()<1}" >
+            <div class="img-row" th:if="${attachDtoList.size() < 1}" >
                 <div class="column">
                 </div>
                 <div class="column">
