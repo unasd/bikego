@@ -62,15 +62,29 @@
                 <div class="col s12 m6 desc">
                     <h6 class="teal-text" th:text="${#temporals.format(popupList.popupRegdt, 'yyyy-MM-dd')}" />
                     <h4 th:text="${popupList.popupTitle}" />
-                    <div class="blue-grey-text lighten-5"  />
-                    <!--#strings.length(str)   th:text="${popupList.contents}"-->
-                    <p> 팝업게시기간 : <span th:text="${popupList.popupStartDt}"/> ~ <span  th:text="${popupList.popupEndDt}"/> </p>
+                    <div class="blue-grey-text lighten-5">
+                        <i class="material-icons" style="float: left; margin-right: 3px;">account_circle</i>
+                        <p style="padding-top: 2px;">[[${popupList.popupWriter}]]</p>
+                    </div>
+                    <div class="blue-grey-text lighten-5">
+                        <i class="material-icons" style="float: left; margin-right: 3px;">today</i>
+                        <p> <span th:text="${popupList.popupStartDt}"/> ~ <span  th:text="${popupList.popupEndDt}"/> </p>
+                    </div>
+                    <div class="blue-grey-text lighten-5">
+                        <i class="material-icons" style="float: left; margin-right: 3px;">check_box</i>
+                        <p><span th:text="${popupList.popYn}"/></p>
+                    </div>
+
+
 
                     <div align="right" style="padding-right: 5px; padding-bottom: 5px;"><a class="waves-effect waves-light btn-small" th:onclick="|javascript:goDetail('${popupList.popupSeq}');|">more</a></div>
 
 
 
                 </div>
+
+
+
             </div>
         </li>
     </ul>
