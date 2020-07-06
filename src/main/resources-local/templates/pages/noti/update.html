@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorator="../layout/default">
+
+<!-- page CSS -->
+<th:block layout:fragment="css">
+    <style>
+        .input-field > textarea {
+          color :#ffffff;
+        }
+    </style>
+</th:block>
+
+<!-- page 스크립트 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var resultDto = /*[[${resultDto}]]*/ "";
+        /*]]>*/
+        function goList(){
+            $('[name="listForm"]').submit();
+        }
+
+        $(document).ready(function(){
+            CKEDITOR.replace('contentsNoti');
+            let processed = false;
+            $('#noticeForm').submit(function(e){
+                if(!processed) {
+                    if(e.preventDefault) {
+                        e.preventDefault();
+                    }
+                } else {
+                    e.returnValue = false;
+                }
+
+                $('#confirmModal').find('h4').text('알림');
+                $('#confirmModal').find('p').text('수정하시겠습니까?');
+                $('#confirmModal').find('.confirm').on('click', function(e){
+                    processed = true;
+                    $('#noticeForm').submit();
+                })
+                $('#confirmModal').modal('open');
+            });
+        });
+    </script>
+</th:block>
+
+<div layout:fragment="content" class="container">
+    <form id="noticeForm" method="post" action="/admin/noti/update.do">
+        <input type="hidden" name="seqNoti" th:value="${resultDto.seqNoti}"/>
+        <input type="hidden" name="regdtNoti" th:value="${resultDto.regdtNoti}"/>
+        <input type="hidden" name="ynDel" th:value="${resultDto.ynDel}"/>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">title</i>
+            <input type="text" class="validate" id="titleNoti" name="titleNoti" required="" maxlength="100" th:value="${resultDto.titleNoti}">
+            <label for="titleNoti">제목</label>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">title</i>
+            <input type="text" class="validate" id="keywordNoti" name="keywordNoti" maxlength="100" th:value="${resultDto.keywordNoti}">
+            <label for="keywordNoti">키워드</label>
+        </div>
+        <div>
+            <textarea name="contentsNoti"><th:block th:utext="${resultDto.contentsNoti}"></th:block></textarea><br>
+        </div>
+
+        <div class="row">
+            <div class="col s12 center-align">
+                <a class="medium material-icons imgUpBtn">
+                    <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">add_photo_alternate</i>
+                </a>
+                <button type="submit" name="action" style="all: unset;">
+                    <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i>
+                </button>
+                <!--<a onclick="javascript: goList();">
+                    <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">view_list</i>
+                </a>-->
+            </div>
+        </div>
+    </form>
+    <form name="listForm" method="get" action="/admin/noti/list.do">
+        <input type="hidden" name="page" th:value="${pagingResult.page}"/>
+        <input type="hidden" name="listSize" th:value="${pagingResult.listSize}"/>
+        <input type="hidden" name="pageSize" th:value="${pagingResult.pageSize}"/>
+        <input type="hidden" name="direction" th:value="${pagingResult.direction}"/>
+        <input type="hidden" name="sortProp" th:value="${pagingResult.sortProp}"/>
+        <input type="hidden" name="searchType" th:value="${searchDto.searchType}"/>
+        <input type="hidden" name="searchKeyword" th:value="${searchDto.searchKeyword}"/>
+    </form>
+</div>
+</html>

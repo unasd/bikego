@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorator="../layout/default">
+
+<!-- page CSS -->
+<th:block layout:fragment="css">
+    <style>
+    </style>
+</th:block>
+
+<!-- page 스크립트 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var resultDto = /*[[${resultDto}]]*/ "";
+        /*]]>*/
+        function goList(){
+            $('[name="listForm"]').attr('method', 'get');
+            $('[name="listForm"]').attr('action', '/admin/noti/list.do');
+            $('[name="listForm"]').submit();
+        }
+        function goUpdate(){
+            $('[name="listForm"]').attr('method', 'get');
+            $('[name="listForm"]').attr('action', '/admin/noti/update.do');
+            $('[name="listForm"]').submit();
+        }
+
+        $(document).ready(function(){
+            // 삭제처리
+            $('.delete-btn').click(function(e){
+                $('#confirmModal').find('h4').text('알림');
+                $('#confirmModal').find('p').text('삭제 하시겠습니까?');
+                $('#confirmModal').find('.confirm').on('click', function(){
+                    $('#deleteForm').submit();
+                })
+                $('#confirmModal').modal('open');
+                e.stopPropagation();
+            });
+        });
+    </script>
+    <script th:inline="javascript" sec:authorize="isAuthenticated()">
+        function goAdminUpdate(){
+            $('[name="listForm"]').attr('method', 'get');
+            $('[name="listForm"]').attr('action', '/admin/noti/update.do');
+            $('[name="listForm"]').submit();
+        }
+    </script>
+</th:block>
+
+<div layout:fragment="content" class="container">
+    <div style="display: inline-flex">
+        <h4 th:if="${not #strings.isEmpty(resultDto.keywordNoti)}" th:text="${'[' + resultDto.keywordNoti + ']&nbsp;'}" style="color: #607d8b; word-break: keep-all;"/>
+        <h4 th:text="${resultDto.titleNoti}"></h4>
+    </div>
+    <h6 class="teal-text" th:text="${#temporals.format(resultDto.regdtNoti, 'yyyy-MM-dd')}" />
+    <p><th:block th:utext="${resultDto.contentsNoti}"></th:block></p>
+
+    <!-- 수정/삭제 -->
+    <div class="col s12 center-align">
+        <th:block sec:authorize="isAuthenticated()">
+            <a class="update-btn" onclick="javascript: goAdminUpdate();">
+                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
+            </a>
+            <a class="delete-btn">
+                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i>
+            </a>
+            <form id="deleteForm" name="deleteForm" method="post" action="/admin/noti/delete.do">
+                <input type="hidden" name="_method" value="delete"/>
+                <input type="hidden" name="seqNoti" th:value="${resultDto.seqNoti}"/>
+            </form>
+        </th:block>
+        <!--<a onclick="javascript: goList();">
+            <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">view_list</i>
+        </a>-->
+        <form name="listForm" method="get" th:action="${#authentication.getPrincipal() == 'anonymousUser' ? '/noti/list.do' : '/admin/noti/list.do'}">
+            <input type="hidden" name="page" th:value="${pagingResult.page}"/>
+            <input type="hidden" name="listSize" th:value="${pagingResult.listSize}"/>
+            <input type="hidden" name="pageSize" th:value="${pagingResult.pageSize}"/>
+            <input type="hidden" name="direction" th:value="${pagingResult.direction}"/>
+            <input type="hidden" name="sortProp" th:value="${pagingResult.sortProp}"/>
+            <input type="hidden" name="searchType" th:value="${searchDto.searchType}"/>
+            <input type="hidden" name="searchKeyword" th:value="${searchDto.searchKeyword}"/>
+            <input type="hidden" name="seqNoti" th:value="${resultDto.seqNoti}"/>
+        </form>
+    </div>
+</div>
+</html>

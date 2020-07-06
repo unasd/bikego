@@ -4,10 +4,7 @@ import kr.co.bikego.domain.entity.AsEntity;
 import kr.co.bikego.domain.entity.AttachEntity;
 import kr.co.bikego.domain.repository.AsRepository;
 import kr.co.bikego.dto.AsDto;
-import kr.co.bikego.dto.AttachDto;
 import kr.co.bikego.dto.SearchDto;
-import kr.co.bikego.test.domain.entity.CrudEntity;
-import kr.co.bikego.test.dto.CrudDto;
 import kr.co.bikego.util.AES256Util;
 import kr.co.bikego.util.SearchSpec;
 import lombok.AllArgsConstructor;
@@ -119,7 +116,6 @@ public class AsService {
         if(image != null) {
             List<AttachEntity> attachEntities = attachService.saveImage(image, imageName, imageSize, "as", asDto.getIdAttach());
         }
-        System.out.println("asDto ;; " + asDto);
         Long seqAs = asRepository.save(asDto.toEntity()).getSeqAs();
 
         return seqAs;

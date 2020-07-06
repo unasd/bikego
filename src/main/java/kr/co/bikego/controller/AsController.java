@@ -15,9 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.FlashMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,9 +23,9 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @AllArgsConstructor
@@ -87,7 +85,6 @@ public class AsController {
      */
     @PostMapping("/write.do")
     public String write(AsDto asDto, String[] image, String[] imageName, String[] imageSize) throws Exception {
-        System.out.println("write.do asDto ;; " + asDto);
         asDto.setStatAs(AsStat.A);
         asDto.setYnDel("N");
         asDto.setRegdtAs(LocalDateTime.now());
@@ -123,12 +120,14 @@ public class AsController {
     public String detail(Model model, AsDto asDto, SearchDto searchDto, final PageRequest pageable
             , HttpServletResponse response, HttpServletRequest request) throws Exception {
 
-        AsDto resultDto = null;
         List<AttachDto> attachDtoList = null;
 
-        resultDto = asService.getAsDetail(asDto.getSeqAs());
+        AsDto resultDto = asService.getAsDetail(asDto.getSeqAs());
         resultDto.setPasswordAs(request.getParameter("passwordAs"));
-        System.out.println("resultDto1 ;; " + resultDto);
+
+        if(!asService.passwordChk(asDto)) {
+            resultDto = null;
+        }
 
         if(resultDto != null) {
             attachDtoList = attachService.getAttachInfoList(resultDto.getIdAttach());
@@ -197,7 +196,6 @@ public class AsController {
 
             redirectAttr.addAttribute("seqAs", asDto.getSeqAs());
             redirectAttr.addAttribute("passwordAs", asDto.getPasswordAs());
-
             asDto.setModdtAs(LocalDateTime.now());
             asDto.setPasswordAs(passwordEncoder.encode(asDto.getPasswordAs()));
             asDto.setNoTelAs(aes.encrypt(asDto.getNoTelAs()));

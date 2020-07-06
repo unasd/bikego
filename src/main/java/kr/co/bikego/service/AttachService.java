@@ -266,4 +266,13 @@ public class AttachService {
         this.saveAttachInfo(attachDto);
     }
 
+    @Transactional
+    public void updateDelYn(String idAttach, int snFileAttach, String modifier) {
+        AttachDto attachDto = this.getAttachInfo(idAttach, snFileAttach);
+        attachDto.setYnDel("Y");
+        attachDto.setModifierAttach(modifier);
+        attachDto.setModdtAttach(LocalDateTime.now());
+        this.saveAttachInfo(attachDto);
+    }
+
 }

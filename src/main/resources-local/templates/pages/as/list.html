@@ -138,7 +138,7 @@
         </li>
     </ul>
     <div class="row">
-        <form name="listForm" method="get" action="/as/list.do">
+        <form name="listForm" method="get" th:action="${#authentication.getPrincipal() == 'anonymousUser' ? '/as/list.do' : '/admin/as/list.do'}">
             <input type="hidden" name="page" th:value="${pagingResult.page}"/>
             <input type="hidden" name="listSize" th:value="${pagingResult.listSize}"/>
             <input type="hidden" name="pageSize" th:value="${pagingResult.pageSize}"/>
