@@ -47,7 +47,6 @@ public class AsService {
         HashMap result = new HashMap();
         Page<AsEntity> asEntityPage = null;
         asEntityPage = asRepository.findAll((Specification<AsEntity>) SearchSpec.searchLike3(searchDto), pageble);
-
         List<AsEntity> asEntities = asEntityPage.getContent();
         List<AsDto> asDtoList = new ArrayList<>();
         for(AsEntity asEntity : asEntities) {

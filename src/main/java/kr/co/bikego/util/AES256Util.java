@@ -1,7 +1,9 @@
 package kr.co.bikego.util;
 
 import org.apache.tomcat.util.codec.binary.Base64;
+import sun.awt.image.BadDepthException;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -11,7 +13,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
 public class AES256Util {
-    private String iv = "bikegoSecretKey5";
+    private String iv;
     private Key keySpec;
 
     public String getIv() {
@@ -22,7 +24,7 @@ public class AES256Util {
      * 16자리의 키값을 입력하여 객체를 생성한다.
      * @throws UnsupportedEncodingException 키값의 길이가 16이하일 경우 발생
      */
-    public AES256Util() throws UnsupportedEncodingException {
+    public AES256Util(String iv) throws UnsupportedEncodingException {
         this.iv = iv.substring(0, 16);
         byte[] keyBytes = new byte[16];
         byte[] b = iv.getBytes("UTF-8");
@@ -46,7 +48,7 @@ public class AES256Util {
     public String encrypt(String str) throws NoSuchAlgorithmException,
             GeneralSecurityException, UnsupportedEncodingException{
         Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        c.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes()));
+        c.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(this.getIv().getBytes()));
         byte[] encrypted = c.doFinal(str.getBytes("UTF-8"));
         String enStr = new String(Base64.encodeBase64(encrypted));
         //import org.apache.commons.codec.binary.Base64;
@@ -64,8 +66,15 @@ public class AES256Util {
     public String decrypt(String str) throws NoSuchAlgorithmException,
             GeneralSecurityException, UnsupportedEncodingException {
         Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        c.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes()));
+        c.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(this.getIv().getBytes()));
         byte[] byteStr = Base64.decodeBase64(str.getBytes());
-        return new String(c.doFinal(byteStr), "UTF-8");
+        String decodedString = null;
+        try {
+            decodedString = new String(c.doFinal(byteStr), "UTF-8");
+        } catch(BadPaddingException e) {
+            decodedString = "different secret key";
+            e.printStackTrace();
+        }
+        return decodedString;
     }
 }

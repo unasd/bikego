@@ -38,7 +38,8 @@
             });
         });
     </script>
-    <script th:inline="javascript" sec:authorize="isAuthenticated()">
+    <script th:inline="javascript" sec:authorize="hasAuthority('ADMIN')">
+        /*관리자기능 노출방지*/
         function goAdminUpdate(){
             $('[name="listForm"]').attr('method', 'get');
             $('[name="listForm"]').attr('action', '/admin/noti/update.do');
@@ -57,11 +58,11 @@
 
     <!-- 수정/삭제 -->
     <div class="col s12 center-align">
-        <th:block sec:authorize="isAuthenticated()">
+        <th:block sec:authorize="hasAuthority('ADMIN')">
             <a class="update-btn" onclick="javascript: goAdminUpdate();">
                 <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
             </a>
-            <a class="delete-btn">
+            <a th:if="${resultDto.ynDel == 'N'}" class="delete-btn">
                 <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i>
             </a>
             <form id="deleteForm" name="deleteForm" method="post" action="/admin/noti/delete.do">
@@ -72,7 +73,8 @@
         <!--<a onclick="javascript: goList();">
             <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">view_list</i>
         </a>-->
-        <form name="listForm" method="get" th:action="${#authentication.getPrincipal() == 'anonymousUser' ? '/noti/list.do' : '/admin/noti/list.do'}">
+        <form name="listForm" method="get" th:with="role=${#authentication.getPrincipal() == 'anonymousUser' ? 'anonymousUser' : #authentication.getPrincipal().getRoleAccount()}"
+              th:action="${role == 'ADMIN' ? '/admin/noti/list.do' : '/noti/list.do'}">
             <input type="hidden" name="page" th:value="${pagingResult.page}"/>
             <input type="hidden" name="listSize" th:value="${pagingResult.listSize}"/>
             <input type="hidden" name="pageSize" th:value="${pagingResult.pageSize}"/>

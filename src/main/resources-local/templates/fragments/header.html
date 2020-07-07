@@ -7,7 +7,7 @@
         <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">
             <img src="/static/image/bikego-logo3.jpg" height="65px;" ></a>
 
-            <th:block sec:authorize="!isAuthenticated()">
+            <th:block sec:authorize="!hasAuthority('ADMIN')">
                 <!-- 일반 사용자 메뉴 -->
                 <ul class="right hide-on-med-and-down">
                     <li><a class="aaa" href="/as/list.do">AS SERVICE</a></li>
@@ -34,7 +34,7 @@
                 <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             </th:block>
 
-            <th:block sec:authorize="isAuthenticated()">
+            <th:block sec:authorize="hasAuthority('ADMIN')">
                 <!-- 관리자 메뉴 -->
                 <ul class="right hide-on-med-and-down">
                     <li><a class="aaa" href="/admin/as/list.do">AS SERVICE</a></li>
@@ -50,7 +50,7 @@
                     <li><div class="user-view" style="background-color: #000;">
                         <a href="#user" class="avatar"><img src="/static/image/bikego-logo3.jpg" height="100px;"></a>
                         <a href="#email"><span class="deep-orange-text email">master@bikego.co.kr</span></a>
-                        <a sec:authorize="isAuthenticated()" href="/admin/logout.do"><span th:text="${#authentication.getPrincipal().getNameAccount()}"></span>님 로그아웃</a>
+                        <a href="/admin/logout.do"><span th:text="${#authentication.getPrincipal().getNameAccount()}"></span>님 로그아웃</a>
                     </div></li>
                     <li><a href="/admin/as/list.do">AS SERVICE</a></li>
                     <li><a href="/as/list.do">SHOP INFO</a></li>

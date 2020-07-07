@@ -4,6 +4,7 @@ import kr.co.bikego.util.AES256Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,7 +17,11 @@ import java.io.UnsupportedEncodingException;
 
 @Configuration
 @EnableWebSecurity
+@DependsOn(value = "propertyConfig")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private PropertyConfig propertyConfig;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().disable() // cors 허용
@@ -56,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AES256Util aes256Util() throws UnsupportedEncodingException {
-        return new AES256Util();
+        return new AES256Util(propertyConfig.getAesutilIv());
     }
 
     @Bean

@@ -264,7 +264,8 @@
 </th:block>
 
 <div layout:fragment="content" class="container">
-    <form id="asForm" method="post" th:action="${#authentication.getPrincipal() == 'anonymousUser' ? '/as/update.do' : '/admin/as/update.do'}">
+    <form id="asForm" method="post" th:with="role=${#authentication.getPrincipal() == 'anonymousUser' ? 'anonymousUser' : #authentication.getPrincipal().getRoleAccount()}"
+          th:action="${role == 'ADMIN' ? '/admin/as/update.do' : '/as/update.do'}">
         <input type="hidden" name="seqAs" th:value="${resultDto.seqAs}"/>
         <input type="hidden" name="regdtAs" th:value="${resultDto.regdtAs}"/>
         <input type="hidden" name="ynDel" th:value="${resultDto.ynDel}"/>
@@ -339,7 +340,7 @@
         </div>
         <input type="file" id="img-input" class="img-input" multiple accept="image/*" style="display: none;"/>
 
-        <div sec:authorize="isAuthenticated()" class="row">
+        <div sec:authorize="hasAuthority('ADMIN')" class="row">
             <!-- 관리자만 수정할 수 있는 영역 -->
             <div class="col s12 m8 offset-m2">
                 <div class="row">
@@ -358,7 +359,7 @@
             </div>
         </div>
 
-        <div sec:authorize="!isAuthenticated()" class="row">
+        <div sec:authorize="!hasAuthority('ADMIN')" class="row">
             <input type="hidden" name="statAs" th:value="${resultDto.statAs}"/>
             <input type="hidden" name="commentAs" th:value="${resultDto.commentAs}"/>
         </div>

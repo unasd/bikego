@@ -18,6 +18,10 @@ public class PropertyConfig {
     @Getter
     String uploadPath;
 
+    @Value("${aesutil.iv}")
+    @Getter
+    String aesutilIv;
+
     @Getter
     String osName;
 

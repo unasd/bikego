@@ -81,7 +81,8 @@
             });
         });
     </script>
-    <script th:inline="javascript" sec:authorize="isAuthenticated()">
+    <script th:inline="javascript" sec:authorize="hasAuthority('ADMIN')">
+        /*관리자기능 노출방지*/
         function goAdminUpdate(){
             $('[name="listForm"]').attr('method', 'get');
             $('[name="listForm"]').attr('action', '/admin/as/update.do');
@@ -117,11 +118,11 @@
         </div>
     </div>
     <p th:inline="text" th:text="${'처리단계 : ' + resultDto.statAs.statName}"></p>
-    <p th:if="${not #strings.isEmpty(resultDto.commentAs)}" th:inline="text" th:text="${'처리내용' + resultDto.commentAs}"></p>
+    <p th:if="${not #strings.isEmpty(resultDto.commentAs)}" th:inline="text" th:text="${'처리내용 : ' + resultDto.commentAs}"></p>
 
     <!-- 수정/삭제 -->
     <div class="col s12 center-align">
-        <th:block sec:authorize="!isAuthenticated()">
+        <th:block sec:authorize="!hasAuthority('ADMIN')">
             <a class="update-btn" onclick="javascript: goUpdate();">
                 <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
             </a>
@@ -130,11 +131,11 @@
             </a>
         </th:block>
 
-        <th:block sec:authorize="isAuthenticated()">
+        <th:block sec:authorize="hasAuthority('ADMIN')">
             <a class="update-btn" onclick="javascript: goAdminUpdate();">
                 <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
             </a>
-            <a class="delete-btn">
+            <a th:if="${resultDto.ynDel == 'N'}" class="delete-btn">
                 <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i>
             </a>
         </th:block>
@@ -152,7 +153,8 @@
             <input type="hidden" name="seqAs" th:value="${resultDto.seqAs}"/>
             <input type="hidden" name="passwordAs" th:value="${resultDto.passwordAs}"/>
         </form>
-        <form id="deleteForm" name="deleteForm" method="post" th:action="${#authentication.getPrincipal() == 'anonymousUser' ? '/as/delete.do' : '/admin/as/delete.do'}">
+        <form id="deleteForm" name="deleteForm" method="post" th:with="role=${#authentication.getPrincipal() == 'anonymousUser' ? 'anonymousUser' : #authentication.getPrincipal().getRoleAccount()}"
+              th:action="${role == 'ADMIN' ? '/admin/as/delete.do' : '/as/delete.do'}">
             <input type="hidden" name="_method" value="delete"/>
             <input type="hidden" name="seqAs" th:value="${resultDto.seqAs}"/>
             <input type="hidden" name="passwordAs" th:value="${resultDto.passwordAs}"/>
