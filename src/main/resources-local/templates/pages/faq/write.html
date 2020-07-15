@@ -4,6 +4,9 @@
 <!-- page CSS -->
 <th:block layout:fragment="css">
     <style>
+        .input-field > textarea {
+            color :#ffffff;
+        }
     </style>
 </th:block>
 
@@ -11,10 +14,10 @@
 <th:block layout:fragment="script">
     <script>
         $(document).ready(function(){
-            CKEDITOR.replace('contentsNoti');
+            $('select').formSelect(); // select box 초기화
 
             let processed = false;
-            $('#noticeForm').submit(function(e){
+            $('#writeForm').submit(function(e){
                 if(!processed) {
                     if(e.preventDefault) {
                         e.preventDefault();
@@ -27,7 +30,7 @@
                 $('#confirmModal').find('p').text('저장 하시겠습니까?');
                 $('#confirmModal').find('.confirm').on('click', function(){
                     processed = true;
-                    $('#noticeForm').submit();
+                    $('#writeForm').submit();
                 })
                 $('#confirmModal').modal('open');
             });
@@ -37,19 +40,24 @@
 </th:block>
 
 <div layout:fragment="content" class="container">
-    <form id="noticeForm" action="/admin/noti/write.do" method="post">
+    <form id="writeForm" action="/admin/faq/write.do" method="post">
         <div class="input-field col s12">
-            <i class="material-icons prefix">title</i>
-            <input type="text" class="validate" id="titleNoti" name="titleNoti" required="" maxlength="100">
-            <label for="titleNoti">제목</label>
+            <i class="material-icons prefix">help</i>
+            <input type="text" class="validate" id="titleFaq" name="titleFaq" required="" maxlength="100">
+            <label for="titleFaq">FAQ 질문</label>
         </div>
         <div class="input-field col s12">
-            <i class="material-icons prefix">class</i>
-            <input type="text" class="validate" id="keywordNoti" name="keywordNoti" maxlength="100">
-            <label for="keywordNoti">키워드</label>
+            <i class="material-icons prefix">question_answer</i>
+            <textarea id="contentsFaq" name="contentsFaq" class="materialize-textarea" required=""></textarea>
+            <label for="contentsFaq">FAQ 답변</label>
         </div>
-        <div>
-            <textarea name="contentsNoti"></textarea><br>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">visibility</i>
+            <select name="ynDel" class="white-text" id="ynDel">
+                <option th:value="N" th:text="예"></option>
+                <option th:value="Y" th:text="아니오"></option>
+            </select>
+            <label for="ynDel">게시여부</label>
         </div>
         <div class="row">
             <div class="col s12 center-align">

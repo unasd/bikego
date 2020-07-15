@@ -33,7 +33,7 @@ public class NoticeEntity {
     @Column(name = "attach_id", length = 30, nullable = true)
     private String idAttach;
 
-    @Column(name = "noti_writer" ,length = 20, nullable = false, updatable = false)
+    @Column(name = "noti_writer", length = 20, nullable = false, updatable = false)
     private String writerNoti;
 
     @Column(name = "noti_regdt", nullable = false, updatable = false)

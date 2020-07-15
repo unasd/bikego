@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorator="../layout/default">
+
+<!-- page CSS -->
+<th:block layout:fragment="css">
+    <style>
+        .collapsible {
+            border: none;
+            border-top: 1px solid #607d8b;
+            margin-top: 10px;
+        }
+        .collapsible-header {
+            background-color: #000000;
+            border-bottom: 1px solid #607d8b;
+        }
+        .collapsible-body {
+            background-color: #000000;
+            border-bottom: 1px solid #607d8b;
+        }
+
+    </style>
+</th:block>
+
+<!-- page 스크립트 -->
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.collapsible').collapsible({
+                accordion:true
+            });
+        });
+    </script>
+</th:block>
+
+<div layout:fragment="content" class="container full">
+    <ul class="collapsible blue-grey-text">
+        <li th:each="resultList : ${resultList}" >
+            <div class="collapsible-header">
+                <i class="material-icons">help</i>
+                [[${resultList.titleFaq}]]
+            </div>
+            <div class="collapsible-body">
+                <i class="material-icons">question_answer</i>
+                <span>[[${resultList.contentsFaq}]]</span>
+            </div>
+        </li>
+    </ul>
+</div>
+</html>

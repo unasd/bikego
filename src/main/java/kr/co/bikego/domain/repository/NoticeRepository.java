@@ -11,7 +11,7 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Long>, Jpa
     @Transactional
     @Modifying
     @Query(value = " UPDATE noti_board " +
-                     " SET del_yn = 'Y' " +
-                   " WHERE noti_seq = :seqNoti ", nativeQuery = true)
+                      " SET del_yn = 'Y' " +
+                    " WHERE noti_seq = :seqNoti ", nativeQuery = true)
     void updateDelYn(Long seqNoti) throws Exception;
 }
