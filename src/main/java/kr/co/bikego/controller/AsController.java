@@ -23,7 +23,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -190,16 +189,13 @@ public class AsController {
     public String update(Model model, AsDto asDto, SearchDto searchDto , String[] image, String[] imageName, String[] imageSize
             , HttpServletResponse response, HttpServletRequest request , RedirectAttributes redirectAttr) throws Exception {
         if (asService.passwordChk(asDto)) {
-//            FlashMap fm = RequestContextUtils.getOutputFlashMap(request);
-//            fm.put("seqAs", asDto.getSeqAs());
-//            fm.put("passwordAs", asDto.getPasswordAs());
-
             redirectAttr.addAttribute("seqAs", asDto.getSeqAs());
             redirectAttr.addAttribute("passwordAs", asDto.getPasswordAs());
             asDto.setModdtAs(LocalDateTime.now());
             asDto.setPasswordAs(passwordEncoder.encode(asDto.getPasswordAs()));
             asDto.setNoTelAs(aes.encrypt(asDto.getNoTelAs()));
             asService.updateAs(asDto, image, imageName, imageSize);
+            return "redirect:/as/detail.do";
         } else {
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();
@@ -207,8 +203,6 @@ public class AsController {
             out.flush();
             return null;
         }
-
-        return "redirect:/as/detail.do";
     }
 
     /**
@@ -243,6 +237,7 @@ public class AsController {
     public String delete(AsDto asDto, HttpServletResponse response) throws Exception {
         if (asService.passwordChk(asDto)) {
             asService.updateYnDel(asDto.getSeqAs());
+            return "redirect:/as/list.do";
         } else {
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();
@@ -250,6 +245,5 @@ public class AsController {
             out.flush();
             return null;
         }
-        return "redirect:/as/list.do";
     }
 }

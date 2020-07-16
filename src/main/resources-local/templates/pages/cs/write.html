@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="../layout/default">
+
+<!-- page CSS -->
+<th:block layout:fragment="css">
+    <style>
+        .input-field > textarea {
+            color :#ffffff;
+        }
+    </style>
+</th:block>
+
+<!-- page 스크립트 -->
+<th:block layout:fragment="script">
+    <script>
+        $(document).ready(function(){
+            CKEDITOR.replace('contentsCs');
+
+            let processed = false;
+            $('#writeForm').submit(function(e){
+                if(!processed) {
+                    if(e.preventDefault) {
+                        e.preventDefault();
+                    }
+                } else {
+                    e.returnValue = false;
+                }
+
+                $('#confirmModal').find('h4').text('알림');
+                $('#confirmModal').find('p').text('저장 하시겠습니까?');
+                $('#confirmModal').find('.confirm').on('click', function(){
+                    $('#passwordCs').val(CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse($('#passwordCs').val())));
+                    processed = true;
+                    $('#writeForm').submit();
+                })
+                $('#confirmModal').modal('open');
+            });
+
+        });
+    </script>
+</th:block>
+
+<div layout:fragment="content" class="container">
+    <form id="writeForm" action="/cs/write.do" method="post">
+        <div class="input-field col s12">
+            <i class="material-icons prefix">title</i>
+            <input type="text" class="validate" id="titleCs" name="titleCs" required="" maxlength="100">
+            <label for="titleCs">제목</label>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">account_circle</i>
+            <input type="text" class="validate" id="writerCs" name="writerCs" required="" maxlength="20">
+            <label for="writerCs">작성자</label>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">phone</i>
+            <input type="number" inputMode="numeric" class="validate" id="noCsTel" name="noCsTel" pattern="[0-9]*" required="">
+            <label for="noCsTel">전화번호</label>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">mail</i>
+            <input type="email" class="validate" id="emailCs" name="emailCs" required="">
+            <label for="emailCs">E-mail</label>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">vpn_key</i>
+            <input type="password" class="validate" id="passwordCs" name="passwordCs" required="" maxlength="10">
+            <label for="passwordCs">비밀번호</label>
+        </div>
+        <div>
+            <textarea name="contentsCs"></textarea><br>
+        </div>
+        <div class="row">
+            <div class="col s12 center-align">
+                <button type="submit" name="action" style="all: unset;">
+                    <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+</html>
