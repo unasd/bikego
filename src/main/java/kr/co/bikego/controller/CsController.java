@@ -122,7 +122,7 @@ public class CsController {
             csDto.setPasswordCs(passwordEncoder.encode(csDto.getPasswordCs()));
             csDto.setNoCsTel(aes.encrypt(csDto.getNoCsTel()));
             csService.updateNotice(csDto);
-            return "redirect:/admin/cs/detail.do";
+            return "redirect:/cs/detail.do";
         } else {
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();
@@ -136,7 +136,7 @@ public class CsController {
     public String delete(CsDto csDto, HttpServletResponse response) throws Exception {
         if(csService.passwordChk(csDto)) {
             csService.updateYnDel(csDto.getSeqCs());
-            return "redirect:/admin/cs/list.do";
+            return "redirect:/cs/list.do";
         } else {
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();

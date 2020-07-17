@@ -8,6 +8,13 @@
         .input-field > textarea {
           color :#ffffff;
         }
+        .cs-header {
+            margin-top: 10px;
+            margin-bottom: 26px;
+            padding: 1rem;
+            border-radius: .5rem .5rem 0 0;
+            border: solid 1px;
+        }
     </style>
 </th:block>
 
@@ -22,8 +29,7 @@
         }
 
         $(document).ready(function(){
-            $('select').formSelect(); // select box 초기화
-
+            CKEDITOR.replace('contentsCs');
             let processed = false;
             $('#updateForm').submit(function(e){
                 if(!processed) {
@@ -47,28 +53,39 @@
 </th:block>
 
 <div layout:fragment="content" class="container">
-    <form id="updateForm" method="post" action="/admin/faq/update.do">
-        <input type="hidden" name="seqFaq" th:value="${resultDto.seqFaq}"/>
-        <input type="hidden" name="regdtFaq" th:value="${resultDto.regdtFaq}"/>
-        <div class="input-field col s12">
-            <i class="material-icons prefix">help</i>
-            <input type="text" class="validate" id="titleFaq" name="titleFaq" required="" maxlength="100" th:value="${resultDto.titleFaq}">
-            <label for="titleFaq">FAQ 질문</label>
+    <form id="updateForm" method="post" th:with="role=${#authentication.getPrincipal() == 'anonymousUser' ? 'anonymousUser' : #authentication.getPrincipal().getRoleAccount()}"
+          th:action="${role == 'ADMIN' ? '/admin/cs/update.do' : '/cs/update.do'}">
+        <input type="hidden" name="seqCs" th:value="${resultDto.seqCs}"/>
+        <input type="hidden" name="regdtCs" th:value="${resultDto.regdtCs}"/>
+        <div class="col s12 m12 cs-header">
+            <h6 class="form-header-text">
+                메일 또는 연락처로 문의내용 회신하겠습니다.
+            </h6>
         </div>
         <div class="input-field col s12">
-            <i class="material-icons prefix">question_answer</i>
-            <textarea id="contentsFaq" name="contentsFaq" class="materialize-textarea" required=""><th:block th:utext="${resultDto.contentsFaq}"></th:block></textarea>
-            <label for="contentsFaq">FAQ 답변</label>
+            <i class="material-icons prefix">title</i>
+            <input type="text" class="validate" id="titleCs" name="titleCs" required="" maxlength="100" th:value="${resultDto.titleCs}">
+            <label for="titleCs">제목</label>
         </div>
         <div class="input-field col s12">
-            <i class="material-icons prefix">visibility</i>
-            <select name="ynDel" class="white-text" id="ynDel">
-                <option th:value="N" th:selected="(${resultDto.ynDel == 'N'})" th:text="예"></option>
-                <option th:value="Y" th:selected="(${resultDto.ynDel == 'Y'})" th:text="아니오"></option>
-            </select>
-            <label for="ynDel">게시여부</label>
+            <i class="material-icons prefix">account_circle</i>
+            <input type="text" class="validate" id="writerCs" name="writerCs" required="" maxlength="20" th:value="${resultDto.writerCs}">
+            <label for="writerCs">작성자</label>
         </div>
-
+        <div class="input-field col s12">
+            <i class="material-icons prefix">phone</i>
+            <input type="number" inputMode="numeric" class="validate" id="noCsTel" name="noCsTel" pattern="[0-9]*" required="" th:value="${resultDto.noCsTel}">
+            <label for="noCsTel">전화번호</label>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">mail</i>
+            <input type="email" class="validate" id="emailCs" name="emailCs" required="" th:value="${resultDto.emailCs}">
+            <label for="emailCs">E-mail</label>
+        </div>
+        <div>
+            <textarea name="contentsCs"><th:block th:utext="${resultDto.contentsCs}"></th:block></textarea><br>
+        </div>
+        <input type="hidden" id="passwordCs" name="passwordCs" th:value="${resultDto.passwordCs}">
         <div class="row">
             <div class="col s12 center-align">
                 <button type="submit" name="action" style="all: unset;">
@@ -80,7 +97,7 @@
             </div>
         </div>
     </form>
-    <form name="listForm" method="get" action="/admin/faq/list.do">
+    <form name="listForm" method="get" action="/cs/list.do">
         <input type="hidden" name="page" th:value="${pagingResult.page}"/>
         <input type="hidden" name="listSize" th:value="${pagingResult.listSize}"/>
         <input type="hidden" name="pageSize" th:value="${pagingResult.pageSize}"/>

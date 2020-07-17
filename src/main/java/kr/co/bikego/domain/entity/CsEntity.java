@@ -27,7 +27,7 @@ public class CsEntity {
     @Column(columnDefinition = "TEXT", nullable = false, name = "cs_contents")
     private String contentsCs;
 
-    @Column(columnDefinition = "TEXT", nullable = false, name = "cs_reply")
+    @Column(columnDefinition = "TEXT", nullable = true, name = "cs_reply")
     private String replyCs;
 
     @Column(length = 20, nullable = false, name = "cs_tel_no")

@@ -17,6 +17,27 @@
         .collapsible-body {
             background-color: #000000;
             border-bottom: 1px solid #607d8b;
+            border: 0;
+            padding-top: 5px;
+            padding-right: 1rem;
+            padding-bottom: 0px;
+            padding-left: 1rem;
+        }
+        .categories-collapsible li.active {
+            margin-bottom: .8rem;
+            border-bottom: 1px solid #eceff1;
+        }
+        .categories-collapsible .collapsible-header i.arrow {
+            right: 2rem;
+            -webkit-transition: all .3s;
+            transition: all .3s;
+            margin-right: 0px;
+            max-height: 22px;
+        }
+        .categories-collapsible li.active i.arrow {
+            -webkit-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            transform: rotate(90deg);
         }
 
     </style>
@@ -34,8 +55,27 @@
 </th:block>
 
 <div layout:fragment="content" class="container full">
-    <ul class="collapsible blue-grey-text">
-        <li th:each="resultList : ${resultList}" >
+    <div class="row">
+        <div class="col s12">
+            <h6>FAQ</h6>
+            <ul class="collapsible categories-collapsible">
+                <li th:each="resultList : ${resultList}">
+                    <div class="collapsible-header" tabindex="0" style="margin-bottom: .5rem; background-color: #607d8b; border: none;">
+                        <i class="material-icons">help</i>
+                        <div>[[${resultList.titleFaq}]]</div>
+                        <i class="material-icons arrow">keyboard_arrow_right</i>
+                    </div>
+                    <div class="collapsible-body" style="">
+                        <p>[[${resultList.contentsFaq}]]</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+<!--    <ul class="collapsible blue-grey-text">
+        <li th:each="resultList : ${resultList}">
             <div class="collapsible-header">
                 <i class="material-icons">help</i>
                 [[${resultList.titleFaq}]]
@@ -45,6 +85,6 @@
                 <span>[[${resultList.contentsFaq}]]</span>
             </div>
         </li>
-    </ul>
+    </ul>-->
 </div>
 </html>

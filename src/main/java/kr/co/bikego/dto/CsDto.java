@@ -2,6 +2,7 @@ package kr.co.bikego.dto;
 
 import kr.co.bikego.domain.entity.CsEntity;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -22,8 +23,10 @@ public class CsDto {
     private String emailCs;
     private String passwordCs;
     private String writerCs;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime regdtCs;
     private String modifierCs;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime moddtCs;
     private String ynDel;
 

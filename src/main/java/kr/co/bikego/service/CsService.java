@@ -107,7 +107,7 @@ public class CsService {
                 .titleCs(csEntity.getTitleCs())
                 .contentsCs(csEntity.getContentsCs())
                 .replyCs(csEntity.getReplyCs())
-                .noCsTel(csEntity.getNoCsTel())
+                .noCsTel(aes.decrypt(csEntity.getNoCsTel()))
                 .emailCs(csEntity.getEmailCs())
                 .passwordCs(csEntity.getPasswordCs())
                 .writerCs(csEntity.getWriterCs())
