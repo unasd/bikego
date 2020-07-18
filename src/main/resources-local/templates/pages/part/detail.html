@@ -10,10 +10,10 @@
     <!-- 변수 셋팅 -->
     <script th:inline="javascript">
         /*<![CDATA[*/
-        var popupinfoDto = /*[[${popupinfoDto}]]*/ "";
+        var partinfoDto = /*[[${partinfoDto}]]*/ "";
         /*]]>*/
 
-        console.info(popupinfoDto)
+        console.info(partinfoDto)
         $(document).ready(function(){
             $('.slide-img').on('click', function(){
                 $('#imageModal').modal('open');
@@ -21,8 +21,8 @@
         });
 
 
-        function goEdit(popupSeq) {
-            location.href="/popup/edit.do?popupSeq="+popupSeq;
+        function goEdit(partSeq) {
+            location.href="/part/edit.do?partSeq="+partSeq;
         }
 
         $(document).ready(function(){
@@ -41,9 +41,9 @@
 </th:block>
 
 <div layout:fragment="content" class="container"  >
-        <h4 th:text="${popupinfoDto.popupTitle}" />
-        <h6 class="teal-text" th:text="${#temporals.format(popupinfoDto.popupRegdt, 'yyyy-MM-dd')}" />
-        <p><th:block th:utext="${popupinfoDto.contents}"></th:block></p>
+        <h4 th:text="${partinfoDto.partTitle}" />
+        <h6 class="teal-text" th:text="${#temporals.format(partinfoDto.partRegdt, 'yyyy-MM-dd')}" />
+        <p><th:block th:utext="${partinfoDto.contents}"></th:block></p>
 
 
         <div th:each="attachDto : ${attachDtoList}" >
@@ -57,13 +57,13 @@
 
         <div class="col s12 center-align">
 
-            <form name="delete-form" id="delete-form" th:action="@{'/popup/delete.do'}" method="post">
+            <form name="delete-form" id="delete-form" th:action="@{'/part/delete.do'}" method="post">
                 <input type="hidden" name="_method" value="delete"/>
-                <input type="hidden" name="popupSeq" th:value="${popupinfoDto.popupSeq}"/>
+                <input type="hidden" name="partSeq" th:value="${partinfoDto.partSeq}"/>
 <!--
-                <a th:href="@{'/popup/post/edit.do/' + ${popupinfoDto.popupSeq}}" id="submitBtn"><i class="small material-icons" style="color: rgba(255, 255, 255, 1);">settings</i></a>
+                <a th:href="@{'/part/post/edit.do/' + ${partinfoDto.partSeq}}" id="submitBtn"><i class="small material-icons" style="color: rgba(255, 255, 255, 1);">settings</i></a>
 -->
-                <a th:onclick="|javascript:goEdit('${popupinfoDto.popupSeq}');|"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i></a>
+                <a th:onclick="|javascript:goEdit('${partinfoDto.partSeq}');|"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i></a>
                 <a  href="#" id="delete-btn"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i></a>
             </form>
         </div>

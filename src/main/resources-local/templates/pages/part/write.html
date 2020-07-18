@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="../layout/default">
+
+<!-- page CSS -->
+<th:block layout:fragment="css">
+</th:block>
+
+<!-- page 스크립트 -->
+<th:block layout:fragment="script">
+    <script>
+        function crudSubmit(){
+            $('#partForm').submit();
+        }
+
+        $(document).ready(function(){
+            CKEDITOR.replace('contents');
+
+            $('.img-input').change(function(){
+               imgComn.drawThumnail(this);
+            });
+
+            $('.column').click(function(){
+                $('.img-input').click();
+            });
+
+            $('#submitBtn').click(function() {
+                crudSubmit();
+            });
+
+            $('#save_btn').click(function(e){
+                $('#confirmModal').find('h4').text('알림');
+                $('#confirmModal').find('p').text('저장 하시겠습니까?');
+                let removeBtn = $(this);
+                $('#confirmModal').find('.confirm').on('click', function(){
+                    document.getElementById('partForm').submit();
+                })
+                $('#confirmModal').modal('open');
+                e.stopPropagation();
+            })
+
+
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            var options = document.querySelectorAll('option');
+            var instances = M.FormSelect.init(elems, options);
+           /* var elems2 = document.querySelectorAll('.datepicker');
+            var instances2 = M.Datepicker.init(elems2, options);*/
+             elems = document.querySelectorAll('.datepicker');
+             instances = M.Datepicker.init(elems, options);
+            $('.datepicker').datepicker( {"format":'yyyy-mm-dd'} ).datepicker("setDate", new Date());
+
+        })
+
+
+
+    </script>
+    <script th:inline="javascript" th:src="@{/static/js/crud.js}"></script>
+</th:block>
+
+<div layout:fragment="content" class="container" >
+    <form id="partForm" action="/part/save.do" method="post">
+        <input type="hidden" id="delYn" name="delYn" value="N">
+        <input type="hidden" id="partUrlWindow" name="partUrlWindow" value="Y">
+        <input type="hidden" id="popYn" name="popYn" value="Y">
+        <div class="input-field col s12">
+            <i class="material-icons prefix">title</i>
+            <input type="text" class="validate" id="partTitle" name="partTitle" required="" maxlength="100">
+            <label for="partTitle">제목</label>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">account_circle</i>
+            <input type="text" id="partWriter" name="partWriter"><br>
+            <label for="partWriter">작성자</label>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">http</i>
+            <input type="text" id="partUrl" name="partUrl"><br>
+            <label for="partUrl">연결Url</label>
+        </div>
+
+        <div class="input-field col s12">
+            <i class="material-icons prefix">event_available</i>
+            <input type="text" id="partStartDt" name ="partStartDt" class="datepicker" >
+            <label >게시기간</label>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">event_busy</i>
+            <input type="text" id="partEndDt" name ="partEndDt" class="datepicker">
+            <label >종료기간</label>
+        </div>
+        <div>
+            <textarea name="contents"></textarea><br>
+        </div>
+        <div class="img-container">
+            <div class="large-slide">
+                <div id="numbertext" class="numbertext"></div>
+            </div>
+
+            <a class="prev" onclick="plusSlides(-1)">❮</a>
+            <a class="next" onclick="plusSlides(1)">❯</a>
+            <div  style="text-align: center; margin: 0 auto;" >
+                <div class="img-row" >
+                    <div class="column">파일 업로드</div>
+                </div>
+            </div>
+        </div>
+            <input type="file" id="img-input" class="img-input" multiple accept="image/*" style="display: none;"/>
+
+        <div class="row">
+            <div class="col s12 center-align">
+                <a  href="#" id="save_btn"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i></a>
+            </div>
+        </div>
+    </form>
+</div>
+</html>

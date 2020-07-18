@@ -21,4 +21,6 @@ public abstract class TimeEntity {
     @LastModifiedDate
     @Column(updatable = false ,name = "popup_moddt")
     private LocalDateTime popupModdt;
+
+
 }
