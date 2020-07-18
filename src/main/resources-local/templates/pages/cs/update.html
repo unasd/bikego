@@ -57,11 +57,6 @@
           th:action="${role == 'ADMIN' ? '/admin/cs/update.do' : '/cs/update.do'}">
         <input type="hidden" name="seqCs" th:value="${resultDto.seqCs}"/>
         <input type="hidden" name="regdtCs" th:value="${resultDto.regdtCs}"/>
-        <div class="col s12 m12 cs-header">
-            <h6 class="form-header-text">
-                메일 또는 연락처로 문의내용 회신하겠습니다.
-            </h6>
-        </div>
         <div class="input-field col s12">
             <i class="material-icons prefix">title</i>
             <input type="text" class="validate" id="titleCs" name="titleCs" required="" maxlength="100" th:value="${resultDto.titleCs}">

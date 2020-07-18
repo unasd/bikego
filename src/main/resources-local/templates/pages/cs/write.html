@@ -14,6 +14,10 @@
             border-radius: .5rem .5rem 0 0;
             border: solid 1px;
         }
+        .chip {
+            margin-top: 15px;
+            width: 100%;
+        }
     </style>
 </th:block>
 
@@ -49,10 +53,9 @@
 
 <div layout:fragment="content" class="container">
     <form id="writeForm" action="/cs/write.do" method="post">
-        <div class="col s12 m12 cs-header">
-            <h6 class="form-header-text">
-                메일 또는 연락처로 문의내용 회신하겠습니다.
-            </h6>
+        <div class="chip">
+            메일 또는 연락처로 문의내용 회신하겠습니다.
+            <i class="close material-icons">notifications_none</i>
         </div>
         <div class="input-field col s12">
             <i class="material-icons prefix">title</i>
