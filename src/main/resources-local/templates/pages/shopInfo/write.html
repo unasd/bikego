@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="../layout/default">
+
+<!-- page CSS -->
+<th:block layout:fragment="css">
+    <style>
+        .input-field > textarea {
+          color :#ffffff;
+        }
+    </style>
+</th:block>
+
+<!-- page 스크립트 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        let kakaoMap; // 지도객체
+        let marker; // 마커
+        let ps = new kakao.maps.services.Places();; // 검색 서비스
+        let geocoder = new kakao.maps.services.Geocoder();// 주소-좌표 변환 객체를 생성합니다
+
+        // 키워드 검색을 요청하는 함수입니다
+        function searchPlaces() {
+            var keyword = document.getElementById('keyword').value;
+            if (!keyword.replace(/^\s+|\s+$/g, '')) {
+                $('#alertModal').find('h4').text('');
+                $('#alertModal').find('p').text('키워드를 입력하세요!');
+                $('#alertModal').modal('open');
+                return false;
+            }
+            // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+            ps.keywordSearch( keyword, placesSearchCB);
+        }
+
+        // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+        function placesSearchCB(data, status, pagination) {
+            if (status === kakao.maps.services.Status.OK) {
+                // 정상적으로 검색이 완료됐으면
+                // 검색 목록과 마커를 표출합니다
+                var placePosition = new kakao.maps.LatLng(data[0].y, data[0].x);
+                // 지도 중심을 이동 시킵니다
+                kakaoMap.panTo(placePosition);
+                kakaoMap.setLevel(3);
+            } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+                alert('검색 결과가 존재하지 않습니다.');
+                return;
+            } else if (status === kakao.maps.services.Status.ERROR) {
+                alert('검색 결과 중 오류가 발생했습니다.');
+                return;
+            }
+        }
+
+        function searchDetailAddrFromCoords(coords, callback) {
+            // 좌표로 법정동 상세 주소 정보를 요청합니다
+            geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+        }
+
+        $(document).ready(function(){
+          var container = document.getElementById('kakaoMap');
+          var options = { //지도를 생성할 때 필요한 기본 옵션
+              center: new kakao.maps.LatLng(37.52983920869157, 126.99756873623262),
+              level: 3 //지도의 레벨(확대, 축소 정도)
+          };
+          kakaoMap = new kakao.maps.Map(container, options);
+
+            // 주소입력 input 엔터
+            $('#keyword').on('keydown', function(e) {
+              var keyCode = e.which;
+
+              if (keyCode === 13) { // Enter Key
+                e.preventDefault();
+                e.stopPropagation();
+                searchPlaces();
+              }
+            });
+
+            // 주소검색 버튼
+            $('#search').on('click', function(e) {
+              e.preventDefault();
+                searchPlaces();
+            });
+
+            // 지도를 클릭한 위치에 표출할 마커
+            marker = new kakao.maps.Marker({
+                // 지도 중심좌표에 마커 생성
+                position: kakaoMap.getCenter()
+            });
+            // 지도에 마커 표시
+            marker.setMap(kakaoMap);
+            //setCurrentLocation();
+
+            // 지도 클릭 이벤트
+            // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+            kakao.maps.event.addListener(kakaoMap, 'click', function(mouseEvent) {
+
+                // 클릭한 위도, 경도 정보를 가져옵니다
+                let latlng = mouseEvent.latLng;
+                // 클릭한 위치로 마커 이동
+                marker.setPosition(latlng);
+                let latitudeShop = latlng.getLat();
+                let longitudeShop = latlng.getLng();
+                $('#latitudeShop').val(latitudeShop);
+                $('#longitudeShop').val(longitudeShop);
+
+                searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        var detailAddr = result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
+                        $('#addr1Shop').val(detailAddr);
+                        $("#addr1Shop").parent().find("label").addClass("active");
+                    }
+                });
+            });
+
+            let processed = false;
+            $('#writeForm').submit(function(e){
+                if(!processed) {
+                    if(e.preventDefault) {
+                        e.preventDefault();
+                    }
+                } else {
+                    e.returnValue = false;
+                }
+
+                $('#confirmModal').find('h4').text('알림');
+                $('#confirmModal').find('p').text('저장 하시겠습니까?');
+                $('#confirmModal').find('.confirm').on('click', function(){
+                    processed = true;
+                    $('#writeForm').submit();
+                })
+                $('#confirmModal').modal('open');
+            });
+        });
+    </script>
+</th:block>
+
+<div layout:fragment="content" class="container">
+    <form id="writeForm" action="/admin/shopInfo/write.do" method="post">
+        <div class="input-field col s12">
+            <i class="material-icons prefix">store</i>
+            <input type="text" class="validate" id="nmShop" name="nmShop" required="" maxlength="100">
+            <label for="nmShop">매장명</label>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">location_on</i>
+            <input type="text" id="addr1Shop" name="addr1Shop" required="" maxlength="100" readonly><br>
+            <label for="addr1Shop">매장주소</label>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">location_on</i>
+            <input type="text" class="validate" id="addr2Shop" name="addr2Shop"><br>
+            <label for="addr2Shop">상세주소</label>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">phone</i>
+            <input type="number" inputMode="numeric" class="validate" id="noTelShop" name="noTelShop" pattern="[0-9]*" required="">
+            <label for="noTelShop">전화번호</label>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">content_paste</i>
+            <textarea id="commentShop" name="commentShop" class="materialize-textarea"></textarea>
+            <label for="commentShop">비고 (Etc)</label>
+        </div>
+        <input type="hidden" id="latitudeShop" name="latitudeShop" />
+        <input type="hidden" id="longitudeShop" name="longitudeShop" />
+        <div id="kakaoMap" class="asMap">
+            <input id="keyword" type="text" class="asMapInput browser-default" placeholder="검색할 주소" value=""/>
+            <button class="btn waves-effect waves-light asMapBtn" type="button" id="search">
+                <i class="material-icons right">search</i>
+            </button>
+        </div>
+        <div class="row">
+            <div class="col s12 center-align">
+                <button type="submit" name="action" style="all: unset;">
+                    <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+</html>
