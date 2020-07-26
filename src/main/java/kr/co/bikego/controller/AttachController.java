@@ -79,16 +79,22 @@ public class AttachController {
                         String fileName = file.getName();
                         byte[] bytes = file.getBytes();
 
-                        BASE64Encoder base64Encoder = new BASE64Encoder();
-                        String[] image = {base64Encoder.encode(file.getBytes())};
-                        String[] imageName = {file.getOriginalFilename()};
-                        String[] imageSize = {String.valueOf(file.getSize())};
-                        List<AttachEntity> attachEntities = attachService.saveImage(image, imageName, imageSize, "ckEditor");
+                        if(bytes.length <= 2097152) {
+                            BASE64Encoder base64Encoder = new BASE64Encoder();
+                            String[] image = {base64Encoder.encode(file.getBytes())};
+                            String[] imageName = {file.getOriginalFilename()};
+                            String[] imageSize = {String.valueOf(file.getSize())};
+                            List<AttachEntity> attachEntities = attachService.saveImage(image, imageName, imageSize, "ckEditor");
 
-                        json.addProperty("uploaded", 1);
-                        json.addProperty("fileName", file.getOriginalFilename());
-                        json.addProperty("url", "/attach/resizeImgView.do?idAttach=" + attachEntities.get(0).getIdAttach() + "&snFileAttach=" + 1); //todo: 도메인 변수처리
-
+                            json.addProperty("uploaded", 1);
+                            json.addProperty("fileName", file.getOriginalFilename());
+                            json.addProperty("url", "/attach/resizeImgView.do?idAttach=" + attachEntities.get(0).getIdAttach() + "&snFileAttach=" + 1);
+                        } else {
+                            json.addProperty("uploaded", 0);
+                            JsonObject errorMessage = new JsonObject();
+                            errorMessage.addProperty("message", "The file is too big. 2MB limit");
+                            json.add("error", errorMessage);
+                        }
                         printWriter = resp.getWriter();
                         printWriter.println(json);
                         printWriter.flush();

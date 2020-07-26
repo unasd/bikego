@@ -62,8 +62,8 @@ CKEDITOR.on('dialogDefinition', function (ev) {
         infoTab.remove('txtBorder');
         infoTab.remove('txtHSpace');
         infoTab.remove('txtVSpace');
-        infoTab.remove('txtWidth');
-        infoTab.remove('txtHeight');
+//        infoTab.remove('txtWidth');
+//        infoTab.remove('txtHeight');
         infoTab.remove('txtAlt');
         infoTab.remove('cmbAlign');
         infoTab.remove('ratioLock');
