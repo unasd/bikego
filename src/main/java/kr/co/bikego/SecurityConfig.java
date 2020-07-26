@@ -26,7 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().disable() // cors 허용
             .csrf().disable() // csrf 허용
-            .headers().frameOptions().disable();
+            .headers().contentTypeOptions().disable() // IE 이미지로딩
+                .frameOptions().disable();
 
         http.authorizeRequests()
             .antMatchers("/admin/login.do").permitAll()

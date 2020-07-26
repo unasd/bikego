@@ -77,7 +77,7 @@ function imageCommon() {
                     // 리사이즈 할 이미지 객체 생성
                     let imageObj = new Image();
                     imageObj.src = e.target.result;
-                    imageObj.onload = imageEvent => {
+                    imageObj.onload = function(e) {
 
                         let dataURL = imgComn.resizeImage(imageObj); // 이미지 리사이즈
 

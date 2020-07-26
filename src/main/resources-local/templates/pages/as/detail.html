@@ -23,6 +23,33 @@
         .slide-img {
             position: absolute;
         }
+                 /* IE10+ */
+        @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+            .img-row {
+                display: flex;
+                align-items: stretch;
+                height: 100%;
+            }
+            .column {
+                padding-bottom: 22%;
+                margin-left: 10px;
+                max-width: 25%;
+            }
+        }
+
+        /* IE9,10 */
+        @media screen and (min-width:0\0){
+            .img-row {
+                display: flex;
+                align-items: stretch;
+                height: 100%;
+            }
+            .column {
+                padding-bottom: 22%;
+                margin-left: 10px;
+                max-width: 25%;
+            }
+        }
 
         p {
             word-wrap: break-word;
