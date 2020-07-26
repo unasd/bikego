@@ -43,16 +43,12 @@ public class MainController {
         return "main/main";
     }
 
+    @GetMapping("bikego.do")
+    public String Welist(Model model) throws GeneralSecurityException, UnsupportedEncodingException {
 
+        return "main/info";
+    }
 
-
-  /*  @GetMapping("/")
-    public String list(Model model){
-        //List<CrudDto> crudList = crudService.getCrudList();
-
-        //model.addAttribute("crudList", crudList);
-        return "main/list";
-    }*/
 
 
 }

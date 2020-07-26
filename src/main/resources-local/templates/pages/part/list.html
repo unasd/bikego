@@ -63,12 +63,11 @@
 </th:block>
 
 <div layout:fragment="content" class="container full">
-    <th:block sec:authorize="hasAuthority('ADMIN')">
     <div class="col s12 right-align" style="margin: 2%;">
+    <th:block sec:authorize="hasAuthority('ADMIN')">
         <a th:href="@{/part/post.do}" class="large material-icons" style="font-size: 30px; color: rgba(38, 166, 154);">edit</a>
-    </div>
     </th:block>
-
+    </div>
 
     <ul class="collection popup-list">
         <li class="collection-item black no-border no-padding" th:each="partList : ${partList}" style="border-bottom: none;">

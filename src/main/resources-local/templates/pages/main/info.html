@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="../layout/default">
+
+<!-- page CSS -->
+<th:block layout:fragment="css">
+</th:block>
+
+
+
+
+<!-- page 스크립트 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<div layout:fragment="content" >
+
+    <div class="section no-pad-bot" id="index-banner">
+        <div class="background">
+
+       </div>
+        <script>
+            $(document).ready(function(){$('.slider').bxSlider({
+                auto: true,speed: 500,
+                pause: 4000,
+                responsive: true,
+                mode:'fade',
+                autoControls: false,
+                controls:false,
+                captions: true, //캡션사용
+                touchEnabled : (navigator.maxTouchPoints > 0),
+                pager:true,});
+            });
+
+
+            function aa() {
+                var openNewWindow = window.open("about:blank");
+                openNewWindow.location.href = "http://www.naver.com";
+            }
+
+        </script>
+
+
+
+
+        <div class="container full">
+            <ul>
+                <li>
+                    <div>
+                        <h1 class="header center orange-text">What's We</h1>
+                        <a href="#" class="full-wrapper" style="background: url(/static/image/bike-sunset.jpg); background-size: cover; background-position: center center;">
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
+
+
+    </div>
+
+
+    <div class="container">
+        <div class="section">
+
+            <!--   Icon Section   -->
+            <div class="row">
+                <div class="col s12 m4">
+                    <div class="icon-block">
+                        <h2 class="center light-blue-text"><i class="material-icons">electric_bike</i></h2>
+                        <h5 class="center">What's Bike go </h5>
+
+                        <p class="light">Bike go 저희가 하는 일을 알려드립니다. </p>
+                    </div>
+                </div>
+
+                <div class="col s12 m4">
+                    <div class="icon-block">
+                        <h2 class="center light-blue-text"><i class="material-icons">group</i></h2>
+                        <h5 class="center">고객센터</h5>
+
+                        <p class="light">불편사항 접수 및 문의사항을 남겨주시면 관리자가 빠른 시일내에 답변드리겠습니다. </p>
+                    </div>
+                </div>
+
+                <div class="col s12 m4">
+                    <div class="icon-block">
+                        <h2 class="center light-blue-text"><i class="material-icons">settings</i></h2>
+                        <h5 class="center">파츠구매</h5>
+
+                        <p class="light">필요한 파츠 구매가 필요하신 확인 부탁 드리며, 필요한 파츠가 없을경우 고객센터 혹은 관리자에게 연락 부탁 드립니다. </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br><br>
+    </div>
+</div>
+</html>
