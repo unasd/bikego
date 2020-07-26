@@ -10,16 +10,22 @@
             width: 100%;
         }
         table {
-            border: solid 1px;
+            /*border: solid;*/
             width: 100%;
             table-layout: fixed;
         }
         th{
-            border: solid 1px;
+            border-bottom:2px solid #00bfa5 ;
         }
+        td{
+            border-bottom:1px solid #FFFFFF ;
+        }
+
+
         th, td {
             padding: 10px 0 10px;
             text-align: center;
+
         }
 
         tr.active {
@@ -100,12 +106,15 @@
 </th:block>
 
 <div layout:fragment="content" class="container">
-    <div class="col s12 right-align" style="margin: 2%; min-height: 30px;">
+    <div class="col s12 right-align" style="margin: 1%; min-height: 30px;">
         <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/shopInfo/write.do}" class="large material-icons" style="font-size: 30px; color: rgba(38, 166, 154);">edit</a>
     </div>
+
     <div id="kakaoMap" class="asMap"></div>
+
+
     <div class="row table-wrapper">
-        <table class="striped">
+        <table >
             <colgroup>
                 <col width="120px">
                 <col width="300px">

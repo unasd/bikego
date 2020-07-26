@@ -25,7 +25,7 @@ public class ShopInfoController {
     @GetMapping("/list.do")
     public String list(Model model, final PageRequest pageable, SearchDto searchDto) throws Exception {
 
-        pageable.setListSize(3);
+        pageable.setListSize(4);
         pageable.setSortProp("seqShop");
         HashMap result = shopInfoService.getList(pageable.of(), searchDto);
 
