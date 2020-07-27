@@ -369,20 +369,16 @@
 
         <div sec:authorize="hasAuthority('ADMIN')" class="row">
             <!-- 관리자만 수정할 수 있는 영역 -->
-            <div class="col s12 m8 offset-m2">
-                <div class="row">
-                    <div class="input-field col s3">
-                        <select name="statAs" class="white-text">
-                            <option th:each="statOpt : ${T(kr.co.bikego.domain.entity.AsStat).values()}"
-                                    th:value="${statOpt}" th:text="${statOpt.statName}"
-                                    th:selected="(${resultDto.statAs == statOpt})"></option>
-                        </select>
-                    </div>
-                    <div class="input-field col s9" >
-                        <input style="color: #fff3e0" id="commentAs" name="commentAs" type="text" class="validate" th:value="${resultDto.commentAs}">
-                        <label for="commentAs">처리내용</label>
-                    </div>
-                </div>
+            <div class="input-field col s3">
+                <select name="statAs" class="white-text">
+                    <option th:each="statOpt : ${T(kr.co.bikego.domain.code.AsStat).values()}"
+                            th:value="${statOpt}" th:text="${statOpt.statName}"
+                            th:selected="(${resultDto.statAs == statOpt})"></option>
+                </select>
+            </div>
+            <div class="input-field col s9">
+                <input style="color: #fff3e0" id="commentAs" name="commentAs" type="text" class="validate" th:value="${resultDto.commentAs}">
+                <label for="commentAs">처리내용</label>
             </div>
         </div>
 

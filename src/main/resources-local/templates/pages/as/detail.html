@@ -115,6 +115,21 @@
             $('[name="listForm"]').attr('action', '/admin/as/update.do');
             $('[name="listForm"]').submit();
         }
+
+        function delteForever(){
+
+        }
+
+        $('#delete-forever-btn').on('click', function(){
+                $('#confirmModal').find('h4').text('알림');
+                $('#confirmModal').find('p').text('완전히 삭제 하시겠습니까?');
+                $('#confirmModal').find('.confirm').on('click', function(){
+                    $('[name="listForm"]').attr('action', '/admin/as/delete.do');
+                    $('#deleteForm').submit();
+                })
+                $('#confirmModal').modal('open');
+                e.stopPropagation();
+        });
     </script>
 </th:block>
 
@@ -163,7 +178,10 @@
                 <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
             </a>
             <a th:if="${resultDto.ynDel == 'N'}" class="delete-btn">
-                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i>
+                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete</i>
+            </a>
+            <a class="delete-forever-btn">
+                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete-forever</i>
             </a>
         </th:block>
         <!--<a onclick="javascript: goList();">

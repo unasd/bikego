@@ -1,7 +1,7 @@
 package kr.co.bikego.dto;
 
 import kr.co.bikego.domain.entity.AsEntity;
-import kr.co.bikego.domain.entity.AsStat;
+import kr.co.bikego.domain.code.AsStat;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 

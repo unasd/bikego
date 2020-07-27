@@ -64,8 +64,6 @@
             </div>
         </div>
     </div>
-    <p th:inline="text" th:text="${'처리단계 : ' + resultDto.statAs.statName}"></p>
-    <p th:if="${not #strings.isEmpty(resultDto.commentAs)}" th:inline="text" th:text="${'처리내용 : ' + resultDto.commentAs}"></p>
 
     <!-- 수정/삭제 -->
     <div class="col s12 center-align">

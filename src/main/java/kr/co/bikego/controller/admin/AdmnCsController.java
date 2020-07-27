@@ -2,8 +2,10 @@ package kr.co.bikego.controller.admin;
 
 import kr.co.bikego.dto.*;
 import kr.co.bikego.service.CsService;
+import kr.co.bikego.util.AES256Util;
 import kr.co.bikego.util.PageRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,8 @@ import java.util.HashMap;
 @AllArgsConstructor
 @RequestMapping("/admin/cs")
 public class AdmnCsController {
+    @Autowired
+    AES256Util aes;
     private CsService csService;
 
     @GetMapping("/list.do")
@@ -68,6 +72,7 @@ public class AdmnCsController {
                          RedirectAttributes redirectAttr, @AuthenticationPrincipal AccountDto accountDto) throws Exception {
 
         redirectAttr.addAttribute("seqCs", csDto.getSeqCs());
+        csDto.setNoCsTel(aes.encrypt(csDto.getNoCsTel()));
         csDto.setModdtCs(LocalDateTime.now());
         csDto.setModifierCs(accountDto.getNameAccount());
         csService.updateNotice(csDto);
@@ -77,7 +82,7 @@ public class AdmnCsController {
 
     @DeleteMapping("/delete.do")
     public String delete(CsDto csDto, HttpServletResponse response) throws Exception {
-        csService.updateYnDel(csDto.getSeqCs());
+        csService.delete(csDto.getSeqCs());
         return "redirect:/admin/cs/list.do";
     }
 }

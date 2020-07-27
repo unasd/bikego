@@ -68,6 +68,8 @@ public class AttachController {
     public void ckImgUpload(HttpServletRequest req, HttpServletResponse resp,
                                       MultipartHttpServletRequest multiFile) throws Exception {
         JsonObject json = new JsonObject();
+        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html; charset=UTF-8");
         PrintWriter printWriter = null;
         OutputStream out = null;
         MultipartFile file = multiFile.getFile("upload");
@@ -92,7 +94,7 @@ public class AttachController {
                         } else {
                             json.addProperty("uploaded", 0);
                             JsonObject errorMessage = new JsonObject();
-                            errorMessage.addProperty("message", "The file is too big. 2MB limit");
+                            errorMessage.addProperty("message", "2MB 이하의 파일을 올려주세요.");
                             json.add("error", errorMessage);
                         }
                         printWriter = resp.getWriter();

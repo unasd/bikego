@@ -1,6 +1,6 @@
 package kr.co.bikego.test;
 
-import kr.co.bikego.domain.entity.AsStat;
+import kr.co.bikego.domain.code.AsStat;
 import kr.co.bikego.domain.entity.AttachEntity;
 import kr.co.bikego.domain.repository.AttachRepository;
 import kr.co.bikego.test.domain.repository.CrudRepository;

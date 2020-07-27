@@ -15,7 +15,7 @@
             border: solid 1px;
         }
         .chip {
-            margin-top: 15px;
+            margin-top: 25px;
             width: 100%;
         }
     </style>
@@ -25,6 +25,7 @@
 <th:block layout:fragment="script">
     <script>
         $(document).ready(function(){
+            $('select').formSelect(); // select box 초기화
             CKEDITOR.replace('contentsCs');
 
             let processed = false;
@@ -55,7 +56,15 @@
     <form id="writeForm" action="/cs/write.do" method="post">
         <div class="chip">
             메일 또는 연락처로 문의내용 회신하겠습니다.
-            <i class="close material-icons">notifications_none</i>
+            <i class="material-icons" style="float: right; font-size: 16px; line-height: 32px;">notifications_none</i>
+        </div>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">local_offer</i>
+            <select name="categoryCs" id="categoryCs" class="white-text">
+                <option th:each="categoryOpt : ${T(kr.co.bikego.domain.code.CsCategory).values()}"
+                        th:value="${categoryOpt}" th:text="${categoryOpt.categoryName}"></option>
+            </select>
+            <label for="categoryCs">문의구분</label>
         </div>
         <div class="input-field col s12">
             <i class="material-icons prefix">title</i>

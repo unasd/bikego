@@ -1,8 +1,6 @@
 package kr.co.bikego.controller.admin;
 
-import kr.co.bikego.domain.entity.AsStat;
 import kr.co.bikego.dto.AccountDto;
-import kr.co.bikego.dto.AsDto;
 import kr.co.bikego.dto.SearchDto;
 import kr.co.bikego.dto.ShopInfoDto;
 import kr.co.bikego.service.ShopInfoService;

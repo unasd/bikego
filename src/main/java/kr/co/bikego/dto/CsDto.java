@@ -1,13 +1,10 @@
 package kr.co.bikego.dto;
 
+import kr.co.bikego.domain.code.CsCategory;
 import kr.co.bikego.domain.entity.CsEntity;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Getter
@@ -29,6 +26,8 @@ public class CsDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime moddtCs;
     private String ynDel;
+    private String ynReply;
+    private CsCategory categoryCs;
 
     public CsEntity toEntity() {
         CsEntity csEntity = CsEntity.builder()
@@ -44,6 +43,8 @@ public class CsDto {
                 .modifierCs(modifierCs)
                 .moddtCs(moddtCs)
                 .ynDel(ynDel)
+                .ynReply(ynReply)
+                .categoryCs(categoryCs)
                 .build();
 
         return csEntity;
@@ -51,7 +52,8 @@ public class CsDto {
 
     @Builder
     public CsDto(Long seqCs, String titleCs, String contentsCs, String replyCs, String noCsTel, String emailCs,
-                    String passwordCs, String writerCs, LocalDateTime regdtCs, String modifierCs, LocalDateTime moddtCs, String ynDel) {
+                String passwordCs, String writerCs, LocalDateTime regdtCs, String modifierCs, LocalDateTime moddtCs,
+                 String ynDel, String ynReply, CsCategory categoryCs) {
         this.seqCs = seqCs;
         this.titleCs = titleCs;
         this.contentsCs = contentsCs;
@@ -64,5 +66,7 @@ public class CsDto {
         this.modifierCs = modifierCs;
         this.moddtCs = moddtCs;
         this.ynDel = ynDel;
+        this.ynReply = ynReply;
+        this.categoryCs = categoryCs;
     }
 }

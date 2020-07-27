@@ -2,7 +2,6 @@ package kr.co.bikego.service;
 
 import kr.co.bikego.domain.entity.CsEntity;
 import kr.co.bikego.domain.repository.CsRepository;
-import kr.co.bikego.dto.AsDto;
 import kr.co.bikego.dto.CsDto;
 import kr.co.bikego.dto.SearchDto;
 import kr.co.bikego.util.AES256Util;
@@ -55,6 +54,8 @@ public class CsService {
                     .modifierCs(csEntity.getModifierCs())
                     .moddtCs(csEntity.getModdtCs())
                     .ynDel(csEntity.getYnDel())
+                    .ynReply(csEntity.getYnReply())
+                    .categoryCs(csEntity.getCategoryCs())
                     .build();
 
             dtoList.add(csDto);
@@ -87,6 +88,8 @@ public class CsService {
                     .modifierCs(csEntity.getModifierCs())
                     .moddtCs(csEntity.getModdtCs())
                     .ynDel(csEntity.getYnDel())
+                    .ynReply(csEntity.getYnReply())
+                    .categoryCs(csEntity.getCategoryCs())
                     .build();
 
             dtoList.add(csDto);
@@ -98,8 +101,8 @@ public class CsService {
         return result;
     }
 
-    public CsDto getDetail(Long seqFaq) throws  Exception {
-        Optional<CsEntity> entityWrapper = csRepository.findById(seqFaq);
+    public CsDto getDetail(Long seqCs) throws  Exception {
+        Optional<CsEntity> entityWrapper = csRepository.findById(seqCs);
         CsEntity csEntity = entityWrapper.get();
 
         CsDto csDto = CsDto.builder()
@@ -115,6 +118,8 @@ public class CsService {
                 .modifierCs(csEntity.getModifierCs())
                 .moddtCs(csEntity.getModdtCs())
                 .ynDel(csEntity.getYnDel())
+                .ynReply(csEntity.getYnReply())
+                .categoryCs(csEntity.getCategoryCs())
                 .build();
 
         return csDto;
@@ -122,8 +127,17 @@ public class CsService {
 
     @Transactional
     public Long updateNotice(CsDto csDto) {
-        Long seqFaq = csRepository.save(csDto.toEntity()).getSeqCs();
-        return seqFaq;
+        Long seqCs = csRepository.save(csDto.toEntity()).getSeqCs();
+        return seqCs;
+    }
+
+    @Transactional
+    public Long updateNoticeClient(CsDto csDto) throws Exception {
+        CsDto oldData = this.getDetail(csDto.getSeqCs());
+        csDto.setYnReply(oldData.getYnReply());
+        csDto.setReplyCs(oldData.getReplyCs());
+        Long seqCs = csRepository.save(csDto.toEntity()).getSeqCs();
+        return seqCs;
     }
 
     @Transactional
@@ -134,5 +148,10 @@ public class CsService {
     public boolean passwordChk(CsDto csDto) throws Exception {
         return passwordEncoder.matches(csDto.getPasswordCs(),
                 Optional.ofNullable(this.getDetail(csDto.getSeqCs())).map(CsDto::getPasswordCs).orElse(""));
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        csRepository.deleteById(id);
     }
 }

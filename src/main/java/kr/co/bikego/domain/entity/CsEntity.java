@@ -1,5 +1,6 @@
 package kr.co.bikego.domain.entity;
 
+import kr.co.bikego.domain.code.CsCategory;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -54,9 +55,17 @@ public class CsEntity {
     @Column(length = 1, nullable = false, name = "del_yn")
     private String ynDel;
 
+    @Column(length = 1, nullable = false, name = "reply_yn")
+    private String ynReply;
+
+    @Column(length = 1, nullable = false, name = "cs_category")
+    @Enumerated(EnumType.STRING)
+    private CsCategory categoryCs;
+
     @Builder
     public CsEntity(Long seqCs, String titleCs, String contentsCs, String replyCs, String noCsTel, String emailCs,
-                    String passwordCs, String writerCs, LocalDateTime regdtCs, String modifierCs, LocalDateTime moddtCs, String ynDel) {
+                    String passwordCs, String writerCs, LocalDateTime regdtCs, String modifierCs, LocalDateTime moddtCs,
+                    String ynDel, String ynReply, CsCategory categoryCs) {
         this.seqCs = seqCs;
         this.titleCs = titleCs;
         this.contentsCs = contentsCs;
@@ -69,5 +78,7 @@ public class CsEntity {
         this.modifierCs = modifierCs;
         this.moddtCs = moddtCs;
         this.ynDel = ynDel;
+        this.ynReply = ynReply;
+        this.categoryCs = categoryCs;
     }
 }

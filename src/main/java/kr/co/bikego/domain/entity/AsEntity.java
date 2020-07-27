@@ -1,5 +1,6 @@
 package kr.co.bikego.domain.entity;
 
+import kr.co.bikego.domain.code.AsStat;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

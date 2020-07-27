@@ -52,6 +52,7 @@ public class CsController {
     @PostMapping("/write.do")
     public String write(CsDto csDto) throws Exception {
         csDto.setYnDel("N");
+        csDto.setYnReply("N");
         csDto.setPasswordCs(passwordEncoder.encode(csDto.getPasswordCs()));
         csDto.setNoCsTel(aes.encrypt(csDto.getNoCsTel()));
         csDto.setRegdtCs(LocalDateTime.now());
@@ -121,7 +122,7 @@ public class CsController {
             csDto.setModdtCs(LocalDateTime.now());
             csDto.setPasswordCs(passwordEncoder.encode(csDto.getPasswordCs()));
             csDto.setNoCsTel(aes.encrypt(csDto.getNoCsTel()));
-            csService.updateNotice(csDto);
+            csService.updateNoticeClient(csDto);
             return "redirect:/cs/detail.do";
         } else {
             response.setContentType("text/html; charset=UTF-8");

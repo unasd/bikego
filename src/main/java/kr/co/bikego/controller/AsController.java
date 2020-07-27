@@ -1,6 +1,6 @@
 package kr.co.bikego.controller;
 
-import kr.co.bikego.domain.entity.AsStat;
+import kr.co.bikego.domain.code.AsStat;
 import kr.co.bikego.dto.AsDto;
 import kr.co.bikego.dto.AttachDto;
 import kr.co.bikego.dto.SearchDto;

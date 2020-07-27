@@ -1,4 +1,4 @@
-package kr.co.bikego.domain.entity;
+package kr.co.bikego.domain.code;
 
 public enum AsStat {
     A("접수"),

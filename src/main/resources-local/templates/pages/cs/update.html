@@ -29,6 +29,7 @@
         }
 
         $(document).ready(function(){
+            $('select').formSelect(); // select box 초기화
             CKEDITOR.replace('contentsCs');
             let processed = false;
             $('#updateForm').submit(function(e){
@@ -58,6 +59,15 @@
         <input type="hidden" name="seqCs" th:value="${resultDto.seqCs}"/>
         <input type="hidden" name="regdtCs" th:value="${resultDto.regdtCs}"/>
         <div class="input-field col s12">
+            <i class="material-icons prefix">local_offer</i>
+            <select name="categoryCs" id="categoryCs" class="white-text">
+                <option th:each="categoryOpt : ${T(kr.co.bikego.domain.code.CsCategory).values()}"
+                        th:value="${categoryOpt}" th:text="${categoryOpt.categoryName}"
+                        th:selected="(${resultDto.categoryCs == categoryOpt})"></option>
+            </select>
+            <label for="categoryCs">문의구분</label>
+        </div>
+        <div class="input-field col s12">
             <i class="material-icons prefix">title</i>
             <input type="text" class="validate" id="titleCs" name="titleCs" required="" maxlength="100" th:value="${resultDto.titleCs}">
             <label for="titleCs">제목</label>
@@ -81,6 +91,28 @@
             <textarea name="contentsCs"><th:block th:utext="${resultDto.contentsCs}"></th:block></textarea><br>
         </div>
         <input type="hidden" id="passwordCs" name="passwordCs" th:value="${resultDto.passwordCs}">
+        <div sec:authorize="hasAuthority('ADMIN')" class="row">
+            <!-- 관리자만 수정할 수 있는 영역 -->
+            <div class="input-field col s3">
+                <select name="ynReply" class="white-text" id="ynReply">
+                    <option th:value="N" th:selected="(${resultDto.ynReply == 'N'})" th:text="대기"></option>
+                    <option th:value="Y" th:selected="(${resultDto.ynReply == 'Y'})" th:text="완료"></option>
+                </select>
+                <label for="ynReply">답변여부</label>
+            </div>
+            <div class="input-field col s9">
+                <input style="color: #fff3e0" id="replyCs" name="replyCs" type="text" class="validate" th:value="${resultDto.replyCs}">
+                <label for="replyCs">답변</label>
+            </div>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">delete_outline</i>
+                <select name="ynDel" class="white-text" id="ynDel">
+                    <option th:value="N" th:selected="(${resultDto.ynDel == 'N'})" th:text="예"></option>
+                    <option th:value="Y" th:selected="(${resultDto.ynDel == 'Y'})" th:text="아니오"></option>
+                </select>
+                <label for="ynDel">게시여부</label>
+            </div>
+        </div>
         <div class="row">
             <div class="col s12 center-align">
                 <button type="submit" name="action" style="all: unset;">

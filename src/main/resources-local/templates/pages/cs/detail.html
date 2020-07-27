@@ -36,6 +36,7 @@
         }
 
         $(document).ready(function(){
+            $('select').formSelect(); // select box 초기화
             // 삭제처리
             $('.delete-btn').click(function(e){
                 $('#confirmModal').find('h4').text('알림');
@@ -59,8 +60,11 @@
 </th:block>
 
 <div layout:fragment="content" class="container">
-    <div style="display: inline-flex">
-        <h4 th:text="${resultDto.titleCs}"></h4>
+    <div style="display: inline-flex; align-items: center;">
+<!--        <h4 th:if="${not #strings.isEmpty(resultDto.categoryCs)}" th:text="${'[' + resultDto.categoryCs.categoryName + ']&nbsp;'}" style="color: #607d8b; word-break: keep-all;"/>-->
+<!--        <h4 th:text="${resultDto.titleCs}"></h4>-->
+        <h4 th:text="${'[' + resultDto.categoryCs.categoryName + ']&nbsp;'+resultDto.titleCs}" style="display: inline;"></h4>
+        <i th:if="${resultDto.ynDel == 'Y'}" class="material-icons blue-grey-text lighten-5" style="color: red !important;">delete_outline</i>
     </div>
     <h6 class="teal-text" th:text="${#temporals.format(resultDto.regdtCs, 'yyyy-MM-dd')}" />
     <div class="">
@@ -77,6 +81,8 @@
     </div>
     <p><th:block th:utext="${resultDto.contentsCs}"></th:block></p>
 
+    <p th:if="${resultDto.ynReply == 'Y' or #authorization.expression('hasAuthority(''ADMIN'')')}" th:inline="text" th:text="${'답변 : ' + resultDto.replyCs}"></p>
+
     <!-- 수정 -->
     <div class="col s12 center-align">
         <th:block sec:authorize="!hasAuthority('ADMIN')">
@@ -84,13 +90,16 @@
                 <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
             </a>
             <a class="delete-btn">
-                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i>
+                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete</i>
             </a>
         </th:block>
 
         <th:block sec:authorize="hasAuthority('ADMIN')">
             <a class="update-btn" onclick="javascript: goAdminUpdate();">
                 <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
+            </a>
+            <a class="delete-btn">
+                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_forever</i>
             </a>
         </th:block>
         <!--<a onclick="javascript: goList();">
