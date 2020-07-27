@@ -57,16 +57,17 @@
 <div layout:fragment="content" class="container full">
     <div class="row">
         <div class="col s12">
-            <h6>FAQ</h6>
+            <h4>FAQ</h4>
             <ul class="collapsible categories-collapsible">
                 <li th:each="resultList : ${resultList}">
                     <div class="collapsible-header" tabindex="0" style="margin-bottom: .5rem; background-color: #607d8b; border: none;">
-                        <i class="material-icons">help</i>
+                        <i class="material-icons">sentiment_satisfied_alt</i>
                         <div>[[${resultList.titleFaq}]]</div>
                         <i class="material-icons arrow">keyboard_arrow_right</i>
                     </div>
                     <div class="collapsible-body" style="">
-                        <p>[[${resultList.contentsFaq}]]</p>
+
+                        <p> <i class="material-icons">support_agent</i> [[${resultList.contentsFaq}]]</p>
                     </div>
                 </li>
             </ul>
