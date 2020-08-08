@@ -2,8 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="../layout/default">
 
 <!-- page CSS -->
-<th:block layout:fragment="css">
-</th:block>
+
+
+    <th:block layout:fragment="css">
+       <style>
+               .collapsible-header {
+                   -webkit-text-fill-color: transparent;
+                   -webkit-text-stroke-width: 1px;
+                   -webkit-text-stroke-color: #fff;
+                   line-height: 0.3;
+                   font-family: fantasy;
+                   font-weight: 900;
+               }
+
+        </style>
+    </th:block>
 
 
 
@@ -71,7 +84,7 @@
             <ul>
                 <li>
                     <div>
-                        <h2 class="header center white-text ">AS Service</h2>
+                        <h2 class="collapsible-header">AS Service</h2>
                         <a href="/as/list.do" class="full-wrapper" style="background: url(/static/image/AS-service.jpg); background-size: cover; background-position: center center;">
                             <h5 class="header col s12 light description"></h5>
                         </a>

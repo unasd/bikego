@@ -7620,8 +7620,8 @@ input[type=range]::-ms-thumb {
   text-align: left;
   color: #fff;
   display: inline-block;
-  font-size: 3rem!important;
-  letter-spacing: 0.015rem;
+  font-size: 36px;
+  letter-spacing: -0.2rem;
   text-align: left;
   line-height: 0.3;
 
