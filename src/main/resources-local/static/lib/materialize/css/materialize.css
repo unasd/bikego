@@ -2582,8 +2582,8 @@ html {
 }
 
 *, *:before, *:after {
-  -webkit-box-sizing: inherit;
-          box-sizing: inherit;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
 }
 
 button,
