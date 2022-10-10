@@ -121,7 +121,9 @@
                     </div>
                     <div align="right" style="padding-right: 5px;">
                         <a sec:authorize="hasAuthority('ADMIN')" class="waves-effect waves-light btn-small" th:href="@{/admin/as/detail.do(seqAs=${asList.seqAs})}">more</a>
-                        <a sec:authorize="!hasAuthority('ADMIN')" class="waves-effect waves-light btn-small modal-trigger" href="#passwordModal" th:data="${asList.seqAs}">more</a>
+                        <!--/* 20221010 업체조회 가능하도록 수정 */-->
+                        <a sec:authorize="hasAuthority('VIEWER')" class="waves-effect waves-light btn-small" th:href="@{/as/detail.do(seqAs=${asList.seqAs})}">more</a>
+                        <a sec:authorize="isAnonymous()" class="waves-effect waves-light btn-small modal-trigger" href="#passwordModal" th:data="${asList.seqAs}">more</a>
                     </div>
                 </div>
             </div>

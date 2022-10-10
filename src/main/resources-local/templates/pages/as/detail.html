@@ -152,7 +152,7 @@
 
     <!-- 수정/삭제 -->
     <div class="col s12 center-align">
-        <th:block sec:authorize="!hasAuthority('ADMIN')">
+        <th:block sec:authorize="isAnonymous()">
             <a class="update-btn" onclick="javascript: goUpdate();">
                 <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
             </a>
