@@ -1,6 +1,7 @@
 package kr.co.bikego.controller;
 
 import kr.co.bikego.domain.code.AsStat;
+import kr.co.bikego.dto.AccountDto;
 import kr.co.bikego.dto.AsDto;
 import kr.co.bikego.dto.AttachDto;
 import kr.co.bikego.dto.SearchDto;
@@ -11,6 +12,7 @@ import kr.co.bikego.util.PageRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -117,15 +119,24 @@ public class AsController {
      */
     @GetMapping("/detail.do")
     public String detail(Model model, AsDto asDto, SearchDto searchDto, final PageRequest pageable
-            , HttpServletResponse response, HttpServletRequest request) throws Exception {
+            , HttpServletResponse response, HttpServletRequest request, @AuthenticationPrincipal AccountDto accountDto) throws Exception {
 
         List<AttachDto> attachDtoList = null;
 
         AsDto resultDto = asService.getAsDetail(asDto.getSeqAs());
         resultDto.setPasswordAs(request.getParameter("passwordAs"));
 
-        if(!asService.passwordChk(asDto)) {
-            resultDto = null;
+        // 20221010 업체조회 가능하도록 수정
+        if(accountDto == null) {
+            // accountDto 가 없으면 패스워드 체크
+            if(!asService.passwordChk(asDto)) {
+                resultDto = null;
+            }
+        } else {
+            // accountDto 가 있으면 권한체크
+            if(!accountDto.getRoleAccount().equals("VIEWER")) {
+                resultDto = null;
+            }
         }
 
         if(resultDto != null) {

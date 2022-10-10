@@ -32,11 +32,11 @@ public class LoginController {
     public String saveAccount(){
         AccountDto accountDto = new AccountDto();
 
-        accountDto.setIdAccount("tweeksAdmin");
+        accountDto.setIdAccount("tweeks");
 //        accountDto.setPasswordAccount(passwordEncoder.encode("null")); //
         accountDto.setNameAccount("관리자");
         accountDto.setEmailAccount("master@bikego.co.kr");
-        accountDto.setRoleAccount("ADMIN");
+        accountDto.setRoleAccount("tweeks");
 
         accountService.saveAccount(accountDto);
 
