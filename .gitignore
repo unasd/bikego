@@ -1,4 +1,5 @@
 /.idea/
 /target/
+*/target/*
 /bikego.iml
 /src/main/resources-prod/
