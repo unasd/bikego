@@ -39,7 +39,7 @@
                         <h4 th:if="${not #strings.isEmpty(noticeList.keywordNoti)}" th:text="${'[' + noticeList.keywordNoti + ']&nbsp;'}" style="color: #607d8b; word-break: keep-all"/>
                         <h4 th:text="${noticeList.titleNoti}" style="display: inline;"></h4>
                     </div>
-                    <i th:if="${noticeList.ynDel == 'Y'}" class="material-icons blue-grey-text lighten-5" style="color: red !important;">delete_outline</i>
+                    <i th:if="${noticeList.ynDel == 'Y'}" class="material-icons blue-grey-text lighten-5" style="color: red !important;">delete</i>
                     <div class="blue-grey-text lighten-5">
                         <i class="material-icons" style="float: left; margin-right: 3px;">account_circle</i>
                         <p style="padding-top: 2px;">[[${noticeList.writerNoti}]]</p>
@@ -52,6 +52,28 @@
             </div>
         </li>
     </ul>
+    <th:block th:if="${not #lists.isEmpty(noticeList)}">
+        <ul class="pagination">
+            <th:block th:if="${pagingResult.hasPrevious}">
+                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page-1}');|"><i class="material-icons">chevron_left</i></a></li>
+            </th:block>
+            <th:block th:unless="${pagingResult.hasPrevious}">
+                <li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
+            </th:block>
+
+            <li th:each="pageCount : ${#numbers.sequence(pagingResult.startPage, pagingResult.endPage)}" th:class="${pagingResult.page == pageCount ? 'active' : 'waves-effect'}">
+                <th:block th:if="${pagingResult.page == pageCount}"><a th:text="${pageCount}"></a></th:block>
+                <th:block th:unless="${pagingResult.page == pageCount}"><a th:onclick="|javascript:goPage('${pageCount}');|" th:text="${pageCount}"></a></th:block>
+            </li>
+
+            <th:block th:if="${pagingResult.hasNext}">
+                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page+1}');|"><i class="material-icons">chevron_right</i></a></li>
+            </th:block>
+            <th:block th:unless="${pagingResult.hasNext}">
+                <li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
+            </th:block>
+        </ul>
+    </th:block>
     <div class="row">
         <form name="listForm" method="get" th:with="role=${#authentication.getPrincipal() == 'anonymousUser' ? 'anonymousUser' : #authentication.getPrincipal().getRoleAccount()}"
               th:action="${role == 'ADMIN' ? '/admin/noti/list.do' : '/noti/list.do'}">
@@ -83,27 +105,5 @@
             </div>
         </form>
     </div>
-    <th:block th:if="${not #lists.isEmpty(noticeList)}">
-        <ul class="pagination">
-            <th:block th:if="${pagingResult.hasPrevious}">
-                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page-1}');|"><i class="material-icons">chevron_left</i></a></li>
-            </th:block>
-            <th:block th:unless="${pagingResult.hasPrevious}">
-                <li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
-            </th:block>
-
-            <li th:each="pageCount : ${#numbers.sequence(pagingResult.startPage, pagingResult.endPage)}" th:class="${pagingResult.page == pageCount ? 'active' : 'waves-effect'}">
-                <th:block th:if="${pagingResult.page == pageCount}"><a th:text="${pageCount}"></a></th:block>
-                <th:block th:unless="${pagingResult.page == pageCount}"><a th:onclick="|javascript:goPage('${pageCount}');|" th:text="${pageCount}"></a></th:block>
-            </li>
-
-            <th:block th:if="${pagingResult.hasNext}">
-                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page+1}');|"><i class="material-icons">chevron_right</i></a></li>
-            </th:block>
-            <th:block th:unless="${pagingResult.hasNext}">
-                <li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
-            </th:block>
-        </ul>
-    </th:block>
 </div>
 </html>

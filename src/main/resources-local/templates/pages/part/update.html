@@ -155,6 +155,18 @@
             })
 
 
+            $('#delete-btn').click(function(e){
+                $('#confirmModal').find('h4').text('');
+                $('#confirmModal').find('p').text('삭제 하시겠습니까?');
+                let removeBtn = $(this);
+                $('#confirmModal').find('.confirm').on('click', function(){
+                    document.getElementById('delete-form').submit();
+                })
+                $('#confirmModal').modal('open');
+                e.stopPropagation();
+            })
+
+
         });
 
 
@@ -275,10 +287,15 @@
 
 
                 <i class="medium material-icons cursor update-btn" style="color: rgba(255, 255, 255, 1);">save_alt</i>
-
+                <a  href="#" id="delete-btn"><i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_forever</i></a>
             </div>
         </div>
 
+    </form>
+
+    <form name="delete-form" id="delete-form" th:action="@{'/part/delete.do'}" method="post">
+        <input type="hidden" name="_method" value="delete"/>
+        <input type="hidden" name="partSeq" th:value="${partinfoDto.partSeq}"/>
     </form>
 </div>
 </html>

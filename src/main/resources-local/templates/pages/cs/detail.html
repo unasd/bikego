@@ -64,7 +64,7 @@
 <!--        <h4 th:if="${not #strings.isEmpty(resultDto.categoryCs)}" th:text="${'[' + resultDto.categoryCs.categoryName + ']&nbsp;'}" style="color: #607d8b; word-break: keep-all;"/>-->
 <!--        <h4 th:text="${resultDto.titleCs}"></h4>-->
         <h4 th:text="${'[' + resultDto.categoryCs.categoryName + ']&nbsp;'+resultDto.titleCs}" style="display: inline;"></h4>
-        <i th:if="${resultDto.ynDel == 'Y'}" class="material-icons blue-grey-text lighten-5" style="color: red !important;">delete_outline</i>
+<!--        <i th:if="${resultDto.ynDel == 'Y'}" class="material-icons blue-grey-text lighten-5" style="color: red !important;">delete</i>-->
     </div>
     <h6 class="teal-text" th:text="${#temporals.format(resultDto.regdtCs, 'yyyy-MM-dd')}" />
     <div class="">
@@ -81,7 +81,12 @@
     </div>
     <p><th:block th:utext="${resultDto.contentsCs}"></th:block></p>
 
-    <p th:if="${resultDto.ynReply == 'Y' or #authorization.expression('hasAuthority(''ADMIN'')')}" th:inline="text" th:text="${'답변 : ' + resultDto.replyCs}"></p>
+
+    <div th:if="${resultDto.ynReply == 'Y'}" class="blue-grey-text lighten-5">
+        <i class="material-icons" style="float: left; margin-right: 3px;">check_box</i>
+        <p>답변완료</p>
+    </div>
+    <p class="blue-grey-text lighten-5" th:if="${resultDto.ynReply == 'Y' or #authorization.expression('hasAuthority(''ADMIN'')')}" th:inline="text" th:text="${resultDto.replyCs}"></p>
 
     <!-- 수정 -->
     <div class="col s12 center-align">
@@ -98,9 +103,6 @@
             <a class="update-btn" onclick="javascript: goAdminUpdate();">
                 <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
             </a>
-            <a class="delete-btn">
-                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_forever</i>
-            </a>
         </th:block>
         <!--<a onclick="javascript: goList();">
             <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">view_list</i>
@@ -116,8 +118,7 @@
             <input type="hidden" name="seqCs" th:value="${resultDto.seqCs}"/>
             <input type="hidden" name="passwordCs" th:value="${resultDto.passwordCs}"/>
         </form>
-        <form id="deleteForm" name="deleteForm" method="post" th:with="role=${#authentication.getPrincipal() == 'anonymousUser' ? 'anonymousUser' : #authentication.getPrincipal().getRoleAccount()}"
-              th:action="${role == 'ADMIN' ? '/admin/cs/delete.do' : '/cs/delete.do'}">
+        <form id="deleteForm" name="deleteForm" method="post" action="/cs/delete.do">
             <input type="hidden" name="_method" value="delete"/>
             <input type="hidden" name="seqCs" th:value="${resultDto.seqCs}"/>
             <input type="hidden" name="passwordCs" th:value="${resultDto.passwordCs}"/>

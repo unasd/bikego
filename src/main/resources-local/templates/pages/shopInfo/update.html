@@ -63,6 +63,7 @@
         }
 
         $(document).ready(function(){
+            $('select').formSelect();
             let container = document.getElementById('kakaoMap');
             let options;
             if(resultDto.latitudeShop) {
@@ -193,6 +194,14 @@
                 <i class="material-icons right">search</i>
             </button>
         </div>
+        <div class="input-field col s12" style="margin-top: 1.5rem;">
+            <i class="material-icons prefix">visibility</i>
+            <select name="ynDel" class="white-text" id="ynDel">
+                <option th:value="N" th:selected="(${resultDto.ynDel == 'N'})" th:text="예"></option>
+                <option th:value="Y" th:selected="(${resultDto.ynDel == 'Y'})" th:text="아니오"></option>
+            </select>
+            <label for="ynDel">게시여부</label>
+        </div>
 
         <div class="row">
             <div class="col s12 center-align">
@@ -200,7 +209,7 @@
                     <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i>
                 </button>
                 <a class="delete-btn">
-                    <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i>
+                    <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_forever</i>
                 </a>
                 <!--<a onclick="javascript: goList();">
                     <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">view_list</i>

@@ -102,18 +102,10 @@
     <ul class="collection popup-list">
         <li class="collection-item black no-border no-padding" th:each="asList : ${asList}" style="border-bottom: none;">
             <div class="row">
-                <!--<div class="col s12 m6 thumbnail" style="max-height: 300px; overflow: hidden;">
-                    <th:block th:if="${#lists.isEmpty(asList.idAttach)}">
-                        <img src="https://www.bianchi.com/wp-content/uploads/2020/05/BIANCHI-PARTICOLARI-02-09-19175182-634x452.jpg" alt="" style="width: 100%; height: auto;" />
-                    </th:block>
-                    <th:block th:unless="${#lists.isEmpty(asList.idAttach)}">
-                        <img th:src="'/attach/resizeImgView.do?idAttach=' + ${asList.idAttach} + '&snFileAttach=1'" alt="" style="width: 100%; height: auto;" />
-                    </th:block>
-                </div>-->
                 <div class="col s12 m6 desc">
                     <h6 class="teal-text" th:text="${#temporals.format(asList.regdtAs, 'yyyy-MM-dd')}" />
                     <h4 th:text="${asList.titleAs}" style="display: inline;"></h4>
-                    <i th:if="${asList.ynDel == 'Y'}" class="material-icons blue-grey-text lighten-5" style="color: red !important;">delete_outline</i>
+                    <i th:if="${asList.ynDel == 'Y'}" class="material-icons blue-grey-text lighten-5" style="color: red !important;">delete</i>
 <!--                    <div class="blue-grey-text lighten-5" th:text="${asList.writerAs}" />-->
                     <div class="blue-grey-text lighten-5">
                         <i class="material-icons" style="float: left; margin-right: 3px;">account_circle</i>
@@ -129,14 +121,34 @@
                     </div>
                     <div align="right" style="padding-right: 5px;">
                         <a sec:authorize="hasAuthority('ADMIN')" class="waves-effect waves-light btn-small" th:href="@{/admin/as/detail.do(seqAs=${asList.seqAs})}">more</a>
-                        <!--/* 20221010 업체조회 가능하도록 수정 */-->
-                        <a sec:authorize="hasAuthority('VIEWER')" class="waves-effect waves-light btn-small" th:href="@{/as/detail.do(seqAs=${asList.seqAs})}">more</a>
-                        <a sec:authorize="isAnonymous()" class="waves-effect waves-light btn-small modal-trigger" href="#passwordModal" th:data="${asList.seqAs}">more</a>
+                        <a sec:authorize="!hasAuthority('ADMIN')" class="waves-effect waves-light btn-small modal-trigger" href="#passwordModal" th:data="${asList.seqAs}">more</a>
                     </div>
                 </div>
             </div>
         </li>
     </ul>
+    <th:block th:if="${not #lists.isEmpty(asList)}">
+        <ul class="pagination">
+            <th:block th:if="${pagingResult.hasPrevious}">
+                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page-1}');|"><i class="material-icons">chevron_left</i></a></li>
+            </th:block>
+            <th:block th:unless="${pagingResult.hasPrevious}">
+                <li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
+            </th:block>
+
+            <li th:each="pageCount : ${#numbers.sequence(pagingResult.startPage, pagingResult.endPage)}" th:class="${pagingResult.page == pageCount ? 'active' : 'waves-effect'}">
+                <th:block th:if="${pagingResult.page == pageCount}"><a th:text="${pageCount}"></a></th:block>
+                <th:block th:unless="${pagingResult.page == pageCount}"><a th:onclick="|javascript:goPage('${pageCount}');|" th:text="${pageCount}"></a></th:block>
+            </li>
+
+            <th:block th:if="${pagingResult.hasNext}">
+                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page+1}');|"><i class="material-icons">chevron_right</i></a></li>
+            </th:block>
+            <th:block th:unless="${pagingResult.hasNext}">
+                <li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
+            </th:block>
+        </ul>
+    </th:block>
     <div class="row">
         <form name="listForm" method="get" th:with="role=${#authentication.getPrincipal() == 'anonymousUser' ? 'anonymousUser' : #authentication.getPrincipal().getRoleAccount()}"
               th:action="${role == 'ADMIN' ? '/admin/as/list.do' : '/as/list.do'}">
@@ -147,7 +159,6 @@
             <input type="hidden" name="sortProp" th:value="${pagingResult.sortProp}"/>
             <input type="hidden" name="seqAs">
             <input type="hidden" name="passwordAs">
-
             <div class="row">
                 <div class="col s12 m8 offset-m2">
                     <div class="row">
@@ -172,28 +183,6 @@
             </div>
         </form>
     </div>
-    <th:block th:if="${not #lists.isEmpty(asList)}">
-        <ul class="pagination">
-            <th:block th:if="${pagingResult.hasPrevious}">
-                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page-1}');|"><i class="material-icons">chevron_left</i></a></li>
-            </th:block>
-            <th:block th:unless="${pagingResult.hasPrevious}">
-                <li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
-            </th:block>
-
-            <li th:each="pageCount : ${#numbers.sequence(pagingResult.startPage, pagingResult.endPage)}" th:class="${pagingResult.page == pageCount ? 'active' : 'waves-effect'}">
-                <th:block th:if="${pagingResult.page == pageCount}"><a th:text="${pageCount}"></a></th:block>
-                <th:block th:unless="${pagingResult.page == pageCount}"><a th:onclick="|javascript:goPage('${pageCount}');|" th:text="${pageCount}"></a></th:block>
-            </li>
-
-            <th:block th:if="${pagingResult.hasNext}">
-                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page+1}');|"><i class="material-icons">chevron_right</i></a></li>
-            </th:block>
-            <th:block th:unless="${pagingResult.hasNext}">
-                <li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
-            </th:block>
-        </ul>
-    </th:block>
     <!-- 패스워드 모달 -->
     <div id="passwordModal" class="modal">
         <div class="modal-content">

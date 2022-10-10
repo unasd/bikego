@@ -115,26 +115,14 @@
             $('[name="listForm"]').attr('action', '/admin/as/update.do');
             $('[name="listForm"]').submit();
         }
-
-        function delteForever(){
-
-        }
-
-        $('#delete-forever-btn').on('click', function(){
-                $('#confirmModal').find('h4').text('알림');
-                $('#confirmModal').find('p').text('완전히 삭제 하시겠습니까?');
-                $('#confirmModal').find('.confirm').on('click', function(){
-                    $('[name="listForm"]').attr('action', '/admin/as/delete.do');
-                    $('#deleteForm').submit();
-                })
-                $('#confirmModal').modal('open');
-                e.stopPropagation();
-        });
     </script>
 </th:block>
 
 <div layout:fragment="content" class="container">
-    <h4 th:text="${resultDto.titleAs}"></h4>
+    <div style="display: inline-flex; align-items: center;">
+        <h4 th:text="${resultDto.titleAs}"></h4>
+<!--        <i th:if="${resultDto.ynDel == 'Y'}" class="material-icons blue-grey-text lighten-5" style="color: red !important; padding-top: 14px;">delete</i>-->
+    </div>
     <h6 class="teal-text" th:text="${#temporals.format(resultDto.regdtAs, 'yyyy-MM-dd')}" />
     <div class="">
         <i class="material-icons" style="float: left; margin-right: 3px;">account_circle</i>
@@ -159,8 +147,8 @@
             </div>
         </div>
     </div>
-    <p th:inline="text" th:text="${'처리단계 : ' + resultDto.statAs.statName}"></p>
-    <p th:if="${not #strings.isEmpty(resultDto.commentAs)}" th:inline="text" th:text="${'처리내용 : ' + resultDto.commentAs}"></p>
+    <p class="blue-grey-text lighten-5" th:inline="text" th:text="${'처리단계 : ' + resultDto.statAs.statName}"></p>
+    <p class="blue-grey-text lighten-5" th:if="${not #strings.isEmpty(resultDto.commentAs)}" th:inline="text" th:text="${'처리내용 : ' + resultDto.commentAs}"></p>
 
     <!-- 수정/삭제 -->
     <div class="col s12 center-align">
@@ -169,19 +157,13 @@
                 <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
             </a>
             <a class="delete-btn">
-                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i>
+                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete</i>
             </a>
         </th:block>
 
         <th:block sec:authorize="hasAuthority('ADMIN')">
             <a class="update-btn" onclick="javascript: goAdminUpdate();">
                 <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
-            </a>
-            <a th:if="${resultDto.ynDel == 'N'}" class="delete-btn">
-                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete</i>
-            </a>
-            <a class="delete-forever-btn">
-                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete-forever</i>
             </a>
         </th:block>
         <!--<a onclick="javascript: goList();">
@@ -198,8 +180,7 @@
             <input type="hidden" name="seqAs" th:value="${resultDto.seqAs}"/>
             <input type="hidden" name="passwordAs" th:value="${resultDto.passwordAs}"/>
         </form>
-        <form id="deleteForm" name="deleteForm" method="post" th:with="role=${#authentication.getPrincipal() == 'anonymousUser' ? 'anonymousUser' : #authentication.getPrincipal().getRoleAccount()}"
-              th:action="${role == 'ADMIN' ? '/admin/as/delete.do' : '/as/delete.do'}">
+        <form id="deleteForm" name="deleteForm" method="post" action="/as/delete.do">
             <input type="hidden" name="_method" value="delete"/>
             <input type="hidden" name="seqAs" th:value="${resultDto.seqAs}"/>
             <input type="hidden" name="passwordAs" th:value="${resultDto.passwordAs}"/>

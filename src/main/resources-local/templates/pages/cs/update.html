@@ -51,6 +51,20 @@
             });
         });
     </script>
+    <script th:inline="javascript" sec:authorize="hasAuthority('ADMIN')">
+        $(document).ready(function(){
+            // 삭제처리
+            $('.delete-btn').click(function(e){
+                $('#confirmModal').find('h4').text('알림');
+                $('#confirmModal').find('p').text('삭제 하시겠습니까?');
+                $('#confirmModal').find('.confirm').on('click', function(){
+                    $('#deleteForm').submit();
+                })
+                $('#confirmModal').modal('open');
+                e.stopPropagation();
+            });
+        });
+    </script>
 </th:block>
 
 <div layout:fragment="content" class="container">
@@ -105,7 +119,7 @@
                 <label for="replyCs">답변</label>
             </div>
             <div class="input-field col s12">
-                <i class="material-icons prefix">delete_outline</i>
+                <i class="material-icons prefix">visibility</i>
                 <select name="ynDel" class="white-text" id="ynDel">
                     <option th:value="N" th:selected="(${resultDto.ynDel == 'N'})" th:text="예"></option>
                     <option th:value="Y" th:selected="(${resultDto.ynDel == 'Y'})" th:text="아니오"></option>
@@ -118,6 +132,9 @@
                 <button type="submit" name="action" style="all: unset;">
                     <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i>
                 </button>
+                <a sec:authorize="hasAuthority('ADMIN')" class="delete-btn">
+                    <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_forever</i>
+                </a>
                 <!--<a onclick="javascript: goList();">
                     <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">view_list</i>
                 </a>-->
@@ -132,6 +149,10 @@
         <input type="hidden" name="sortProp" th:value="${pagingResult.sortProp}"/>
         <input type="hidden" name="searchType" th:value="${searchDto.searchType}"/>
         <input type="hidden" name="searchKeyword" th:value="${searchDto.searchKeyword}"/>
+    </form>
+    <form sec:authorize="hasAuthority('ADMIN')" id="deleteForm" name="deleteForm" method="post" action="/admin/cs/delete.do">
+        <input type="hidden" name="_method" value="delete"/>
+        <input type="hidden" name="seqCs" th:value="${resultDto.seqCs}"/>
     </form>
 </div>
 </html>

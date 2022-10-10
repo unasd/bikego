@@ -16,26 +16,11 @@
         /*]]>*/
         function goList(){
             $('[name="listForm"]').attr('method', 'get');
-            $('[name="listForm"]').attr('action', '/admin/noti/list.do');
-            $('[name="listForm"]').submit();
-        }
-        function goUpdate(){
-            $('[name="listForm"]').attr('method', 'get');
-            $('[name="listForm"]').attr('action', '/admin/noti/update.do');
             $('[name="listForm"]').submit();
         }
 
         $(document).ready(function(){
-            // 삭제처리
-            $('.delete-btn').click(function(e){
-                $('#confirmModal').find('h4').text('알림');
-                $('#confirmModal').find('p').text('삭제 하시겠습니까?');
-                $('#confirmModal').find('.confirm').on('click', function(){
-                    $('#deleteForm').submit();
-                })
-                $('#confirmModal').modal('open');
-                e.stopPropagation();
-            });
+
         });
     </script>
     <script th:inline="javascript" sec:authorize="hasAuthority('ADMIN')">
@@ -62,13 +47,6 @@
             <a class="update-btn" onclick="javascript: goAdminUpdate();">
                 <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">settings</i>
             </a>
-            <a th:if="${resultDto.ynDel == 'N'}" class="delete-btn">
-                <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_outline</i>
-            </a>
-            <form id="deleteForm" name="deleteForm" method="post" action="/admin/noti/delete.do">
-                <input type="hidden" name="_method" value="delete"/>
-                <input type="hidden" name="seqNoti" th:value="${resultDto.seqNoti}"/>
-            </form>
         </th:block>
         <!--<a onclick="javascript: goList();">
             <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">view_list</i>

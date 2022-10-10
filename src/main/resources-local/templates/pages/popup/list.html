@@ -88,6 +88,28 @@
             </div>
         </li>
     </ul>
+    <th:block th:if="${not #lists.isEmpty(popupList)}">
+        <ul class="pagination">
+            <th:block th:if="${pagingResult.hasPrevious}">
+                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page-1}');|"><i class="material-icons">chevron_left</i></a></li>
+            </th:block>
+            <th:block th:unless="${pagingResult.hasPrevious}">
+                <li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
+            </th:block>
+
+            <li th:each="pageCount : ${#numbers.sequence(pagingResult.startPage, pagingResult.endPage)}" th:class="${pagingResult.page == pageCount ? 'active' : 'waves-effect'}">
+                <th:block th:if="${pagingResult.page == pageCount}"><a th:text="${pageCount}"></a></th:block>
+                <th:block th:unless="${pagingResult.page == pageCount}"><a th:onclick="|javascript:goPage('${pageCount}');|" th:text="${pageCount}"></a></th:block>
+            </li>
+
+            <th:block th:if="${pagingResult.hasNext}">
+                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page+1}');|"><i class="material-icons">chevron_right</i></a></li>
+            </th:block>
+            <th:block th:unless="${pagingResult.hasNext}">
+                <li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
+            </th:block>
+        </ul>
+    </th:block>
     <div class="row" align="center">
         <form name="listForm" method="get" action="/popup/list.do">
             <input type="hidden" name="page" th:value="${pagingResult.page}"/>
@@ -118,28 +140,6 @@
             </div>
         </form>
     </div>
-    <th:block th:if="${not #lists.isEmpty(popupList)}">
-        <ul class="pagination">
-            <th:block th:if="${pagingResult.hasPrevious}">
-                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page-1}');|"><i class="material-icons">chevron_left</i></a></li>
-            </th:block>
-            <th:block th:unless="${pagingResult.hasPrevious}">
-                <li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
-            </th:block>
-
-            <li th:each="pageCount : ${#numbers.sequence(pagingResult.startPage, pagingResult.endPage)}" th:class="${pagingResult.page == pageCount ? 'active' : 'waves-effect'}">
-                <th:block th:if="${pagingResult.page == pageCount}"><a th:text="${pageCount}"></a></th:block>
-                <th:block th:unless="${pagingResult.page == pageCount}"><a th:onclick="|javascript:goPage('${pageCount}');|" th:text="${pageCount}"></a></th:block>
-            </li>
-
-            <th:block th:if="${pagingResult.hasNext}">
-                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page+1}');|"><i class="material-icons">chevron_right</i></a></li>
-            </th:block>
-            <th:block th:unless="${pagingResult.hasNext}">
-                <li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
-            </th:block>
-        </ul>
-    </th:block>
 
 </div>
 </html>

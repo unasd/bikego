@@ -48,6 +48,7 @@
 
         let kakaoMap; // 지도객체
         let marker; // 마커
+        let infowindow; // 주소표현 인포윈도
 
         function goPage(page){
             $('[name="listForm"]').children('[name="page"]').val(page);
@@ -84,10 +85,13 @@
                     $(this).addClass('active');
                 /*[/]*/
 
-                let latitudeAs = $(this).attr('data-lat');
-                let longitudeAs = $(this).attr('data-lon');
+                let latitudeShop = $(this).attr('data-lat');
+                let longitudeShop = $(this).attr('data-lon');
+                let nmShop = $(this).attr('data-nm');
+                let addrShop = $(this).attr('data-addr');
+                let iwContent = '<div style="padding:5px; color: #000000; max-width:250px;"><b>'+ nmShop +'</b><br>'+ addrShop +'</div>';
                 // 지도 이동
-                let currentPosition = new kakao.maps.LatLng(latitudeAs, longitudeAs);
+                let currentPosition = new kakao.maps.LatLng(latitudeShop, longitudeShop);
                 kakaoMap.panTo(currentPosition);
 
                 if(typeof(marker) == 'undefined') {
@@ -99,6 +103,17 @@
                 } else {
                     marker.setPosition(currentPosition);
                 }
+
+                if(typeof(infowindow) == 'undefined') {
+                    infowindow = new kakao.maps.InfoWindow({
+                        position : marker.getPosition(),
+                        content : iwContent
+                    });
+                } else {
+                    infowindow.setPosition(marker.getPosition());
+                    infowindow.setContent(iwContent);
+                }
+                infowindow.open(kakaoMap, marker);
             });
 
         });
@@ -109,30 +124,27 @@
     <div class="col s12 right-align" style="margin: 1%; min-height: 30px;">
         <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/shopInfo/write.do}" class="large material-icons" style="font-size: 30px; color: rgba(38, 166, 154);">edit</a>
     </div>
-
     <div id="kakaoMap" class="asMap"></div>
-
-
     <div class="row table-wrapper">
         <table >
             <colgroup>
                 <col width="120px">
-                <col width="300px">
                 <col width="120px">
-                <col sec:authorize="hasAuthority('ADMIN')" width="50px">
+<!--                <col width="300px">-->
             </colgroup>
             <thead>
             <tr>
                 <th class="one wide">매장명</th>
-                <th class="ten wide">매장주소</th>
                 <th class="two wide">TEL</th>
-                <th sec:authorize="hasAuthority('ADMIN')" class="two wide">위치</th>
+<!--                <th class="ten wide">매장주소</th>-->
             </tr>
             </thead>
 
             <tbody>
             <!-- CONTENTS !-->
-            <tr th:each="resultList : ${resultList}" th:class="${#authorization.expression('hasAuthority(''ADMIN'')') ? '' : 'shopLoc'}" th:data-lat="${resultList.latitudeShop}" th:data-lon="${resultList.longitudeShop}">
+            <tr th:each="resultList : ${resultList}" th:class="${#authorization.expression('hasAuthority(''ADMIN'')') ? '' : 'shopLoc'}"
+                th:data-lat="${resultList.latitudeShop}" th:data-lon="${resultList.longitudeShop}"
+                th:data-nm="${resultList.nmShop}" th:data-addr="${resultList.addr1Shop + ' ' + resultList.addr2Shop}">
                 <td>
                     <th:block sec:authorize="!hasAuthority('ADMIN')">
                         <span th:text="${resultList.nmShop}"></span>
@@ -143,11 +155,16 @@
                         </a>
                     </th:block>
                 </td>
-                <td><span th:text="${resultList.addr1Shop + ' ' + resultList.addr2Shop}"></span></td>
-                <td><span th:text="${resultList.noTelShop}"></span></td>
-                <td sec:authorize="hasAuthority('ADMIN')" th:class="${#authorization.expression('hasAuthority(''ADMIN'')') ? 'shopLoc' : ''}" th:data-lat="${resultList.latitudeShop}" th:data-lon="${resultList.longitudeShop}">
-                    <i class="material-icons">explore</i>
+                <td th:class="${#authorization.expression('hasAuthority(''ADMIN'')') ? 'shopLoc' : ''}"
+                    th:data-lat="${resultList.latitudeShop}" th:data-lon="${resultList.longitudeShop}"
+                    th:data-nm="${resultList.nmShop}" th:data-addr="${resultList.addr1Shop + ' ' + resultList.addr2Shop}">
+                    <span th:text="${resultList.noTelShop}"></span>
                 </td>
+<!--                <td th:class="${#authorization.expression('hasAuthority(''ADMIN'')') ? 'shopLoc' : ''}"-->
+<!--                    th:data-lat="${resultList.latitudeShop}" th:data-lon="${resultList.longitudeShop}"-->
+<!--                    th:data-nm="${resultList.nmShop}" th:data-addr="${resultList.addr1Shop + ' ' + resultList.addr2Shop}">-->
+<!--                    <span th:text="${resultList.addr1Shop + ' ' + resultList.addr2Shop}"></span>-->
+<!--                </td>-->
             </tr>
             </tbody>
         </table>

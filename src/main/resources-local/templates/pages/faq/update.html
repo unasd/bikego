@@ -42,6 +42,17 @@
                 })
                 $('#confirmModal').modal('open');
             });
+
+            // 삭제처리
+            $('.delete-btn').click(function(e){
+                $('#confirmModal').find('h4').text('알림');
+                $('#confirmModal').find('p').text('삭제 하시겠습니까?');
+                $('#confirmModal').find('.confirm').on('click', function(){
+                    $('#deleteForm').submit();
+                })
+                $('#confirmModal').modal('open');
+                e.stopPropagation();
+            });
         });
     </script>
 </th:block>
@@ -74,6 +85,9 @@
                 <button type="submit" name="action" style="all: unset;">
                     <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">save_alt</i>
                 </button>
+                <a class="delete-btn">
+                    <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">delete_forever</i>
+                </a>
                 <!--<a onclick="javascript: goList();">
                     <i class="medium material-icons" style="color: rgba(255, 255, 255, 1);">view_list</i>
                 </a>-->
@@ -88,6 +102,10 @@
         <input type="hidden" name="sortProp" th:value="${pagingResult.sortProp}"/>
         <input type="hidden" name="searchType" th:value="${searchDto.searchType}"/>
         <input type="hidden" name="searchKeyword" th:value="${searchDto.searchKeyword}"/>
+    </form>
+    <form id="deleteForm" name="deleteForm" method="post" action="/admin/faq/delete.do">
+        <input type="hidden" name="_method" value="delete"/>
+        <input type="hidden" name="seqFaq" th:value="${resultDto.seqFaq}"/>
     </form>
 </div>
 </html>

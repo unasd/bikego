@@ -38,18 +38,40 @@
                     <div style="display: inline-flex">
                         <h4 th:text="${resultList.titleFaq}" style="display: inline;"></h4>
                     </div>
-                    <i th:if="${resultList.ynDel == 'Y'}" class="material-icons blue-grey-text lighten-5" style="color: red !important;">delete_outline</i>
+                    <i th:if="${resultList.ynDel == 'Y'}" class="material-icons blue-grey-text lighten-5" style="color: red !important;">delete</i>
                     <div class="blue-grey-text lighten-5">
                         <i class="material-icons" style="float: left; margin-right: 3px;">account_circle</i>
                         <p style="padding-top: 2px;">[[${resultList.writerFaq}]]</p>
                     </div>
                     <div align="right" style="padding-right: 5px;">
-                        <a sec:authorize="hasAuthority('ADMIN')" class="waves-effect waves-light btn-small" th:href="@{/admin/faq/detail.do(seqFaq=${resultList.seqFaq})}">more</a>
+                        <a sec:authorize="hasAuthority('ADMIN')" class="waves-effect waves-light btn-small" th:href="@{/admin/faq/update.do(seqFaq=${resultList.seqFaq})}">more</a>
                     </div>
                 </div>
             </div>
         </li>
     </ul>
+    <th:block th:if="${not #lists.isEmpty(resultList)}">
+        <ul class="pagination">
+            <th:block th:if="${pagingResult.hasPrevious}">
+                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page-1}');|"><i class="material-icons">chevron_left</i></a></li>
+            </th:block>
+            <th:block th:unless="${pagingResult.hasPrevious}">
+                <li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
+            </th:block>
+
+            <li th:each="pageCount : ${#numbers.sequence(pagingResult.startPage, pagingResult.endPage)}" th:class="${pagingResult.page == pageCount ? 'active' : 'waves-effect'}">
+                <th:block th:if="${pagingResult.page == pageCount}"><a th:text="${pageCount}"></a></th:block>
+                <th:block th:unless="${pagingResult.page == pageCount}"><a th:onclick="|javascript:goPage('${pageCount}');|" th:text="${pageCount}"></a></th:block>
+            </li>
+
+            <th:block th:if="${pagingResult.hasNext}">
+                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page+1}');|"><i class="material-icons">chevron_right</i></a></li>
+            </th:block>
+            <th:block th:unless="${pagingResult.hasNext}">
+                <li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
+            </th:block>
+        </ul>
+    </th:block>
     <div class="row">
         <form name="listForm" method="get" action="/admin/faq/list.do">
             <input type="hidden" name="page" th:value="${pagingResult.page}"/>
@@ -80,27 +102,5 @@
             </div>
         </form>
     </div>
-    <th:block th:if="${not #lists.isEmpty(resultList)}">
-        <ul class="pagination">
-            <th:block th:if="${pagingResult.hasPrevious}">
-                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page-1}');|"><i class="material-icons">chevron_left</i></a></li>
-            </th:block>
-            <th:block th:unless="${pagingResult.hasPrevious}">
-                <li class="disabled"><a><i class="material-icons">chevron_left</i></a></li>
-            </th:block>
-
-            <li th:each="pageCount : ${#numbers.sequence(pagingResult.startPage, pagingResult.endPage)}" th:class="${pagingResult.page == pageCount ? 'active' : 'waves-effect'}">
-                <th:block th:if="${pagingResult.page == pageCount}"><a th:text="${pageCount}"></a></th:block>
-                <th:block th:unless="${pagingResult.page == pageCount}"><a th:onclick="|javascript:goPage('${pageCount}');|" th:text="${pageCount}"></a></th:block>
-            </li>
-
-            <th:block th:if="${pagingResult.hasNext}">
-                <li class="waves-effect"><a th:onclick="|javascript:goPage('${pagingResult.page+1}');|"><i class="material-icons">chevron_right</i></a></li>
-            </th:block>
-            <th:block th:unless="${pagingResult.hasNext}">
-                <li class="disabled"><a><i class="material-icons">chevron_right</i></a></li>
-            </th:block>
-        </ul>
-    </th:block>
 </div>
 </html>

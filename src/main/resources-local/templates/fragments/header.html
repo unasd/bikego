@@ -10,29 +10,21 @@
             <th:block sec:authorize="!hasAuthority('ADMIN')">
                 <!-- 일반 사용자 메뉴 -->
                 <ul class="right hide-on-med-and-down">
-                    <li><a class="/as/list.do" href="/as/list.do">AS 요청</a></li>
+                    <li><a class="/as/list.do" href="/as/list.do">AS 서비스</a></li>
                     <li><a href="/shopInfo/list.do">매장정보</a></li>
                     <li><a href="/faq/list.do">자주받는질문</a></li>
                     <li><a href="/noti/list.do">공지사항</a></li>
                     <li><a href="/cs/list.do">고객센터</a></li>
                     <li><a href="/part/list.do">부품구매</a></li>
                     <li><a href="/bikego.do">바이크고</a></li>
-                    <th:block sec:authorize="hasAuthority('VIEWER')">
-                    <!-- 업체 사용자 -->
-                    <li><a href="/admin/logout.do" style="color: #26a69a">VIEWER LOGOUT</a></li>
-                    </th:block>
                 </ul>
 
                 <ul id="nav-mobile" class="sidenav">
                     <li><div class="user-view" style="background-color: #000;">
                         <a href="#user" class="avatar"><img src="/static/image/bikego-logo3.jpg" height="100px;"></a>
                         <a href="mailto:master@bikego.co.kr" ><span class="deep-orange-text email">master@bikego.co.kr</span></a>
-                        <th:block sec:authorize="hasAuthority('VIEWER')">
-                            <!-- 업체 사용자 -->
-                            <a href="/admin/logout.do" style="color: #26a69a">VIEWER LOGOUT</a>
-                        </th:block>
                     </div></li>
-                    <li><a class="/as/list.do" href="/as/list.do">AS 요청</a></li>
+                    <li><a class="/as/list.do" href="/as/list.do">AS 서비스</a></li>
                     <li><a href="/shopInfo/list.do">매장정보</a></li>
                     <li><a href="/faq/list.do">자주받는질문</a></li>
                     <li><a href="/noti/list.do">공지사항</a></li>
@@ -46,14 +38,15 @@
             <th:block sec:authorize="hasAuthority('ADMIN')">
                 <!-- 관리자 메뉴 -->
                 <ul class="right hide-on-med-and-down">
-                    <li><a class="/as/list.do" href="/as/list.do">AS 요청</a></li>
+                    <li><a class="/as/list.do" href="/as/list.do">AS 서비스</a></li>
                     <li><a href="/shopInfo/list.do">매장정보</a></li>
                     <li><a href="/faq/list.do">자주받는질문</a></li>
                     <li><a href="/noti/list.do">공지사항</a></li>
                     <li><a href="/cs/list.do">고객센터</a></li>
                     <li><a href="/part/list.do">부품구매</a></li>
                     <li><a href="/popup/list.do">팝업관리</a></li>
-                    <li><a href="/admin/logout.do" style="color: #26a69a">ADMIN LOGOUT</a></li>
+                    <li><a href="/admin/logout.do" style="color: #26a69a">LOGOUT</a></li>
+
                 </ul>
 
                 <ul id="nav-mobile2" class="sidenav">
@@ -62,7 +55,7 @@
                         <a href="mailto:master@bikego.co.kr"><span class="deep-orange-text email">master@bikego.co.kr</span></a>
                         <a href="/admin/logout.do" style="color: #26a69a">ADMIN LOGOUT</a>
                     </div></li>
-                    <li><a class="/as/list.do" href="/as/list.do">AS 요청</a></li>
+                    <li><a class="/as/list.do" href="/as/list.do">AS 서비스</a></li>
                     <li><a href="/shopInfo/list.do">매장정보</a></li>
                     <li><a href="/faq/list.do">자주받는질문</a></li>
                     <li><a href="/noti/list.do">공지사항</a></li>
