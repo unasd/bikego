@@ -126,17 +126,17 @@ public class CsService {
     }
 
     @Transactional
-    public Long updateNotice(CsDto csDto) {
+    public Long updateCs(CsDto csDto) throws Exception {
+        CsDto oldData = this.getDetail(csDto.getSeqCs());
+        csDto.setYnReply(oldData.getYnReply());
+        csDto.setReplyCs(oldData.getReplyCs());
         Long seqCs = csRepository.save(csDto.toEntity()).getSeqCs();
         return seqCs;
     }
 
     @Transactional
-    public Long updateNoticeClient(CsDto csDto) throws Exception {
-        CsDto oldData = this.getDetail(csDto.getSeqCs());
-        csDto.setYnReply(oldData.getYnReply());
-        csDto.setReplyCs(oldData.getReplyCs());
-        Long seqCs = csRepository.save(csDto.toEntity()).getSeqCs();
+    public Long updateCsAdmin(CsDto csDto) throws Exception {
+        Long seqCs = ((CsEntity)this.csRepository.save(csDto.toEntity())).getSeqCs();
         return seqCs;
     }
 

@@ -94,9 +94,8 @@ public class AdmnFaqController {
         redirectAttr.addAttribute("seqFaq", faqDto.getSeqFaq());
         faqDto.setModdtFaq(LocalDateTime.now());
         faqDto.setModifierFaq(accountDto.getNameAccount());
-        faqService.updateNotice(faqDto, image, imageName, imageSize);
-
-        return "redirect:/admin/faq/detail.do";
+        this.faqService.updateNotice(faqDto, image, imageName, imageSize);
+        return "redirect:/admin/faq/update.do";
     }
 
     @DeleteMapping("/delete.do")

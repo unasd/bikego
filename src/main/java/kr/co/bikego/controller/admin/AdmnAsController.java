@@ -152,8 +152,7 @@ public class AdmnAsController {
 
     @DeleteMapping("/delete.do")
     public String delete(AsDto asDto, HttpServletResponse response) throws Exception {
-        asService.updateYnDel(asDto.getSeqAs());
-
+        this.asService.delete(asDto.getSeqAs());
         return "redirect:/admin/as/list.do";
     }
 }

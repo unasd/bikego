@@ -132,4 +132,9 @@ public class FaqService {
     public void updateYnDel(Long seqFaq) throws Exception {
         faqRepository.updateDelYn(seqFaq);
     }
+
+    @Transactional
+    public void delete(Long id) throws Exception {
+        this.faqRepository.deleteById(id);
+    }
 }

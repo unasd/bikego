@@ -101,7 +101,7 @@ public class AdmnShopInfoController {
 
     @DeleteMapping("/delete.do")
     public String delete(ShopInfoDto shopInfoDto, HttpServletResponse response) throws Exception {
-        shopInfoService.updateYnDel(shopInfoDto.getSeqShop());
+        this.shopInfoService.delete(shopInfoDto.getSeqShop());
         return "redirect:/admin/shopInfo/list.do";
     }
 }

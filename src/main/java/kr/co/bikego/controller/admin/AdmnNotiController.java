@@ -112,7 +112,7 @@ public class AdmnNotiController {
 
     @DeleteMapping("/delete.do")
     public String delete(NoticeDto noticeDto, HttpServletResponse response) throws Exception {
-        noticeService.updateYnDel(noticeDto.getSeqNoti());
+        this.noticeService.delete(noticeDto.getSeqNoti());
         return "redirect:/admin/noti/list.do";
     }
 }

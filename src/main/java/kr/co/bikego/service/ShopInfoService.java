@@ -99,4 +99,9 @@ public class ShopInfoService {
     public void updateYnDel(Long seqShop) throws Exception {
         shopInfoRepository.updateYnDel(seqShop);
     }
+
+    @Transactional
+    public void delete(Long id) throws Exception {
+        this.shopInfoRepository.deleteById(id);
+    }
 }

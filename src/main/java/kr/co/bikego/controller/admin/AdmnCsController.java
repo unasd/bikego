@@ -75,8 +75,7 @@ public class AdmnCsController {
         csDto.setNoCsTel(aes.encrypt(csDto.getNoCsTel()));
         csDto.setModdtCs(LocalDateTime.now());
         csDto.setModifierCs(accountDto.getNameAccount());
-        csService.updateNotice(csDto);
-
+        this.csService.updateCsAdmin(csDto);
         return "redirect:/admin/cs/detail.do";
     }
 

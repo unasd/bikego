@@ -122,7 +122,7 @@ public class CsController {
             csDto.setModdtCs(LocalDateTime.now());
             csDto.setPasswordCs(passwordEncoder.encode(csDto.getPasswordCs()));
             csDto.setNoCsTel(aes.encrypt(csDto.getNoCsTel()));
-            csService.updateNoticeClient(csDto);
+            csService.updateCs(csDto);
             return "redirect:/cs/detail.do";
         } else {
             response.setContentType("text/html; charset=UTF-8");

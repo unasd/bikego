@@ -106,4 +106,9 @@ public class NoticeService {
     public void updateYnDel(Long seqNoti) throws Exception {
         noticeRepository.updateDelYn(seqNoti);
     }
+
+    @Transactional
+    public void delete(Long id) throws Exception {
+        this.noticeRepository.deleteById(id);
+    }
 }
