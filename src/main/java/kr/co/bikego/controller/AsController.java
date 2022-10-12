@@ -205,6 +205,7 @@ public class AsController {
             asDto.setModdtAs(LocalDateTime.now());
             asDto.setPasswordAs(passwordEncoder.encode(asDto.getPasswordAs()));
             asDto.setNoTelAs(aes.encrypt(asDto.getNoTelAs()));
+            if (asDto.getYnDel() == null) asDto.setYnDel("N");
             asService.updateAs(asDto, image, imageName, imageSize);
             return "redirect:/as/detail.do";
         } else {
