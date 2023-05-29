@@ -129,13 +129,17 @@
         <table >
             <colgroup>
                 <col width="120px">
-                <col width="120px">
+                <th:block sec:authorize="hasAuthority('ADMIN')">
+                    <col width="120px">
+                </th:block>
 <!--                <col width="300px">-->
             </colgroup>
             <thead>
             <tr>
                 <th class="one wide">매장명</th>
-                <th class="two wide">TEL</th>
+                <th:block sec:authorize="hasAuthority('ADMIN')">
+                    <th class="two wide">TEL</th>
+                </th:block>
 <!--                <th class="ten wide">매장주소</th>-->
             </tr>
             </thead>
@@ -155,11 +159,13 @@
                         </a>
                     </th:block>
                 </td>
-                <td th:class="${#authorization.expression('hasAuthority(''ADMIN'')') ? 'shopLoc' : ''}"
-                    th:data-lat="${resultList.latitudeShop}" th:data-lon="${resultList.longitudeShop}"
-                    th:data-nm="${resultList.nmShop}" th:data-addr="${resultList.addr1Shop + ' ' + resultList.addr2Shop}">
-                    <span th:text="${resultList.noTelShop}"></span>
-                </td>
+                <th:block sec:authorize="hasAuthority('ADMIN')">
+                    <td th:class="${#authorization.expression('hasAuthority(''ADMIN'')') ? 'shopLoc' : ''}"
+                        th:data-lat="${resultList.latitudeShop}" th:data-lon="${resultList.longitudeShop}"
+                        th:data-nm="${resultList.nmShop}" th:data-addr="${resultList.addr1Shop + ' ' + resultList.addr2Shop}">
+                        <span th:text="${resultList.noTelShop}"></span>
+                    </td>
+                </th:block>
 <!--                <td th:class="${#authorization.expression('hasAuthority(''ADMIN'')') ? 'shopLoc' : ''}"-->
 <!--                    th:data-lat="${resultList.latitudeShop}" th:data-lon="${resultList.longitudeShop}"-->
 <!--                    th:data-nm="${resultList.nmShop}" th:data-addr="${resultList.addr1Shop + ' ' + resultList.addr2Shop}">-->
