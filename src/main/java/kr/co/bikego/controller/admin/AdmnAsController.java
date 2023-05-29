@@ -129,7 +129,7 @@ public class AdmnAsController {
 
         asDto.setModdtAs(LocalDateTime.now());
         asDto.setNoTelAs(aes.encrypt(asDto.getNoTelAs()));
-        asService.updateAs(asDto, image, imageName, imageSize);
+        asService.updateAsAdmin(asDto);
 
         return "redirect:/admin/as/detail.do";
     }
